@@ -6,6 +6,7 @@ import argparse
 import json
 import re
 import unicodedata
+from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
@@ -17,11 +18,18 @@ from validate_session import (
     meaningful_nodes,
     normalized_visible_text,
     parse_html,
+    split_theme_blocks,
     validate as validate_session,
     validate_html_top_contract,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+# Reading pages share one Markdown type block (Luz-Design references/md-type.css; this skill's references/md-type.css is a copy).
+# The rule stylesheet and the reading-page templates carry the same text between these markers; hw_render_plan.py reads the copy at run time.
+MD_START = "/* luz-md-type:start"
+MD_END = "/* luz-md-type:end */"
+MD_MASTER = ROOT.parent / "Luz-Design" / "references" / "md-type.css"
+READING_TEMPLATES = ("module-intake.html", "system-architecture.html", "system-design.html")
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 HTML_LINK_RE = re.compile(r'(?:href|src)="([^"]+)"')
 REQUIRED = [
@@ -33,6 +41,7 @@ REQUIRED = [
     "WORKFLOW.md",
     "agents/openai.yaml",
     "references/guidelines.css",
+    "references/md-type.css",
     "references/templates.txt",
     "scripts/new_session.py",
     "scripts/add_mode.py",
@@ -53,6 +62,7 @@ REQUIRED = [
     "references/agent-design.html",
     "references/website-design.html",
     "references/function-list-design.html",
+    "references/platform-console-design.html",
     "references/hardware-design.html",
     "references/handoff.md",
     "references/handoff.schema.json",
@@ -71,6 +81,14 @@ REQUIRED = [
     "references/cards.json",
     "scripts/check_interaction.py",
     "scripts/test_check_interaction.py",
+    "scripts/features_check.py",
+    "scripts/test_features_check.py",
+    "scripts/hw_export.py",
+    "scripts/test_hw_export.py",
+    "scripts/test_md_type.py",
+    "scripts/test_rule_visual_lint.py",
+    "scripts/entrances_check.py",
+    "scripts/test_entrances_check.py",
 ]
 RULE_PAGES = [
     ("ui-standards.html", "ui", "界面通用规范"),
@@ -81,8 +99,8 @@ RULE_PAGES = [
     ("website-design.html", "website", "网站设计规范"),
     ("function-list-design.html", "flist", "系统功能列表规范"),
     ("commerce-design.html", "commerce", "交易与营销界面规范"),
-    ("ui-recipes.html", "recipes", "界面实现参考"),
     ("config-design.html", "config", "远程配置规范"),
+    ("platform-console-design.html", "console", "智能体平台配置台设计规范"),
     ("hardware-design.html", "hardware", "硬件设计规范"),
 ]
 TEMPLATE_NAMES = ("brief.md", "research.md", "module-intake.html", "system-architecture.html", "system-design.html", "visual-board.html", "interactive-prototype.html", "approvals.json", "manifest.json",)
@@ -102,6 +120,20 @@ RULE_SECTIONS = [
     "handoff",
 ]
 INLINE_ICON_DRAWING_TAGS = {"path", "circle", "rect", "line", "polyline", "polygon", "ellipse"}
+# Rule pages decide what a screen contains and does; its look, composition, motion and sizes are Luz-Design's
+# (references/ui-ownership.md there). A paragraph, list item or table cell that names a visual value must carry a pointer to
+# the visual standard, so a number or a colour cannot slip back into a rule page. Code samples (<code>, <kbd>, <pre>) are not read.
+VISUAL_TERM_RE = re.compile(
+    r"圆角|阴影|(?<!逐)渐变|描边|线宽|缓动|字号|字重|(?<![进执运银排流现并平])行高(?!亮)|栅格|色板|配色|品牌色|毛玻璃|发丝线|主色|插画风格"
+)
+HEX_COLOUR_RE = re.compile(r"#[0-9A-Fa-f]{6}(?![0-9A-Fa-f])")
+MOTION_DURATION_RE = re.compile(r"\d+\s*(?:[–-]\s*\d+\s*)?毫秒")
+MOTION_WORD_RE = re.compile(r"动画|过渡|淡入|淡出|位移|缩放|展开|收起|滑入|滑出|弹入|回弹|FLIP|上移")
+VISUAL_POINTER_RE = re.compile(r"视觉设计规范|文件设计规范|Luz-Design|ui-ownership|视觉技能")
+VISUAL_BLOCK_TAGS = {"p", "li", "td", "th"}
+VISUAL_SKIP_TAGS = {"script", "style", "code", "kbd", "pre"}
+# Pages outside the check: the hardware list and the remote-configuration rules carry no interface look.
+VISUAL_LINT_SKIP = {"hardware-design.html", "config-design.html"}
 HUMAN_TEXT_ATTRIBUTES = (
     "aria-label",
     "alt",
@@ -163,6 +195,61 @@ def prose_text(node) -> str:
     return re.sub(r"\s+", " ", "".join(parts)).strip()
 
 
+class VisualBlockCollector(HTMLParser):
+    """The text of every paragraph, list item and table cell of a page; a nested list item is its own block."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.open_blocks: list[str] = []
+        self.parts: list[str] = []
+        self.blocks: list[str] = []
+        self.skip = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in VISUAL_SKIP_TAGS:
+            self.skip += 1
+        if tag in VISUAL_BLOCK_TAGS:
+            self.flush()
+            self.open_blocks.append(tag)
+
+    def handle_endtag(self, tag):
+        if tag in VISUAL_SKIP_TAGS and self.skip:
+            self.skip -= 1
+        if tag in VISUAL_BLOCK_TAGS:
+            self.flush()
+            if self.open_blocks:
+                self.open_blocks.pop()
+
+    def handle_data(self, data):
+        if self.open_blocks and not self.skip:
+            self.parts.append(data)
+
+    def flush(self) -> None:
+        text = re.sub(r"\s+", " ", "".join(self.parts)).strip()
+        self.parts = []
+        if text:
+            self.blocks.append(text)
+
+
+def visual_value_findings(html: str) -> list[tuple[str, str]]:
+    """(what was found, the block) for every block that states a visual value and has no pointer to the visual standard."""
+    collector = VisualBlockCollector()
+    collector.feed(html)
+    collector.flush()
+    found = []
+    for block in collector.blocks:
+        if VISUAL_POINTER_RE.search(block):
+            continue
+        hits = sorted(set(VISUAL_TERM_RE.findall(block)))
+        if HEX_COLOUR_RE.search(block):
+            hits.append("色值")
+        if MOTION_DURATION_RE.search(block) and MOTION_WORD_RE.search(block):
+            hits.append("动画时长")
+        if hits:
+            found.append(("、".join(hits), block))
+    return found
+
+
 def local_targets(text: str, html: bool = False) -> list[str]:
     """Local link targets. In HTML only href and src attributes link; script and style bodies and comments are code, so
     a `](` in a prototype script is not a Markdown link. In Markdown, code spans and fences are skipped."""
@@ -221,6 +308,11 @@ def validate_rule_page(
         start = max(0, latin.start() - 18)
         end = min(len(visible), latin.end() + 34)
         errors.append(f"visible Latin letters outside <code>/<kbd> are not allowed in {rel}: {visible[start:end]!r}")
+
+    if path.name not in VISUAL_LINT_SKIP:
+        for hits, block in visual_value_findings(text):
+            errors.append(f"visual value without a pointer to the visual standard in {rel} [{hits}]: {block[:60]!r}; "
+                          "write 见视觉设计规范某节 instead (Luz-Design references/ui-ownership.md)")
 
     for node in iter_nodes(body):
         for attr in HUMAN_TEXT_ATTRIBUTES:
@@ -316,6 +408,39 @@ def validate_rule_page(
             errors.append(f"{rel} missing section edit boundaries: {section}")
 
 
+def md_block(text: str) -> str | None:
+    """The text from the start marker to the end marker, or None when a marker is missing."""
+    start, end = text.find(MD_START), text.find(MD_END)
+    if start < 0 or end < start:
+        return None
+    return text[start:end + len(MD_END)]
+
+
+def md_type_copy_text() -> str:
+    copy = ROOT / "references" / "md-type.css"
+    return copy.read_text(encoding="utf-8") if copy.is_file() else ""
+
+
+def md_type_errors() -> list[str]:
+    """references/md-type.css is the master's copy, and the rule stylesheet carries the same block between the markers."""
+    errors: list[str] = []
+    copy_path = ROOT / "references" / "md-type.css"
+    if not copy_path.is_file():
+        return ["references/md-type.css is missing (a copy of Luz-Design references/md-type.css)"]
+    copy = copy_path.read_text(encoding="utf-8")
+    block = md_block(copy)
+    if block is None:
+        return ["references/md-type.css has no luz-md-type markers"]
+    if MD_MASTER.is_file() and MD_MASTER.read_text(encoding="utf-8") != copy:
+        errors.append("references/md-type.css differs from Luz-Design references/md-type.css; run "
+                      "py -X utf8 D:/Codes/Luz-Design/scripts/sync_md_type.py --only Luz-System --write")
+    css_path = ROOT / "references" / "guidelines.css"
+    if css_path.is_file() and md_block(css_path.read_text(encoding="utf-8")) != block:
+        errors.append("references/guidelines.css must carry the Markdown type block of references/md-type.css between its luz-md-type markers; run "
+                      "py -X utf8 D:/Codes/Luz-Design/scripts/sync_md_type.py --only Luz-System --write")
+    return errors
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Validate the flattened Luz System skill and root-level sessions.")
     parser.add_argument("--strict-production", action="store_true", help="Require strict session structure and live source verification")
@@ -405,14 +530,21 @@ def main(argv: list[str] | None = None) -> int:
                 compact = re.sub(r"\s+", "", icon_rules).lower()
                 if token not in compact:
                     errors.append(f"rule stylesheet icon style missing {token}")
-        heading_style = re.search(r"h2\s*\{([^}]*)\}", css_body, re.S)
-        heading_rules = heading_style.group(1) if heading_style else ""
-        compact_heading = re.sub(r"\s+", "", heading_rules).lower()
-        if "display:flex" not in compact_heading or "align-items:center" not in compact_heading:
+        # The Markdown type block also sets a plain h2; the rule that aligns the section icon is a later h2 rule.
+        heading_rules = ["".join(re.sub(r"\s+", "", m.group(1)).lower().split())
+                         for m in re.finditer(r"(?<![\w.#-])h2\s*\{([^}]*)\}", css_body, re.S)]
+        if not any("display:flex" in rules and "align-items:center" in rules for rules in heading_rules):
             errors.append("rule stylesheet must align h2 icons and text vertically")
+        if not re.search(r"(?<![\w.#-])h2\s*\{[^}]*border-bottom:\s*0", css_body, re.S):
+            errors.append("rule stylesheet must turn off the h2 bottom line of the Markdown type block (each section already has a section line)")
 
+    errors.extend(md_type_errors())
+
+    # An engineering project inside examples/ (package.json: its node_modules, its build output and its Vite entry pages) is not a document of the skill.
+    skip_parts = {".git", "__pycache__", ".pytest_cache", "node_modules", "dist"}
+    entry_page = lambda path: path.suffix.lower() == ".html" and (path.parent / "package.json").is_file()  # noqa: E731
     for path in ROOT.rglob("*"):
-        if any(part in {".git", "__pycache__", ".pytest_cache"} for part in path.parts):
+        if any(part in skip_parts for part in path.parts) or entry_page(path):
             continue
         if path.is_file() and path.suffix.lower() in {".md", ".html"}:
             text = path.read_text(encoding="utf-8")
@@ -422,14 +554,19 @@ def main(argv: list[str] | None = None) -> int:
             if path.suffix.lower() == ".html" and "<!doctype html>" not in text.lower():
                 errors.append(f"HTML missing doctype: {path.relative_to(ROOT)}")
             if path.suffix.lower() == ".html" and re.search(r"color-scheme\s*:\s*dark", text, re.I):
-                errors.append(f"dark color scheme is not allowed: {path.relative_to(ROOT)}")
+                # Reading pages stay light. An example prototype is a product interface: its dark theme blocks may declare the dark scheme,
+                # the rest of its style sheet may not (Luz-Design visual-design.html 深色与浅色两套主题).
+                inline_css = chr(10).join(re.findall(r"<style[^>]*>(.*?)</style>", text, re.S | re.I))
+                outside_dark_blocks = split_theme_blocks(inline_css)[0]
+                if "examples" not in path.relative_to(ROOT).parts or re.search(r"color-scheme\s*:\s*dark", outside_dark_blocks, re.I):
+                    errors.append(f"dark color scheme is not allowed: {path.relative_to(ROOT)}")
             if path.suffix.lower() == ".html" and "{{" not in text:
                 root = parse_html(path, errors)
                 if root is not None:
                     validate_html_top_contract(root, str(path.relative_to(ROOT)), errors)
 
     for path in ROOT.rglob("*"):
-        if not path.is_file() or any(part in {".git", "__pycache__", ".pytest_cache"} for part in path.parts):
+        if not path.is_file() or any(part in skip_parts for part in path.parts):
             continue
         if path.suffix.lower() not in {".md", ".txt", ".json", ".py", ".html", ".yaml", ".yml"}:
             continue
@@ -457,6 +594,10 @@ def main(argv: list[str] | None = None) -> int:
         for value in re.findall(r"font-size:\s*([0-9.]+)px", templates.get(name, "")):
             if float(value) < 14:
                 errors.append(f"{name} contains a font size below 14px")
+    master = md_block(md_type_copy_text())
+    for name in READING_TEMPLATES:
+        if name in templates and md_block(templates[name]) != master:
+            errors.append(f"template {name} must carry the Markdown type block of references/md-type.css (reading page: body 18 on a desktop, 16 on a phone)")
     if "module-intake.html" in templates and "{{MODULE_ITEMS}}" not in templates["module-intake.html"]:
         errors.append("module-intake.html must contain a copyable module placeholder")
     if "visual-board.html" in templates and 'data-artifact="visual-board"' not in templates["visual-board.html"]:

@@ -7,6 +7,7 @@ LuzCrawl 在 `D:\Codes\Luz-Crawl`，命令从该目录运行，完整规则见�
 按 Luz-Crawl 的 SKILL.md 调用协议：`doctor` → `begin "<系统名>硬件选型调研" --new`（得到 `folder`）→ `experience --query "<品类或场景>"` → 之后每条命令带 `--out <folder>`。读取顺序（先静默、再最小化的可见浏览器、最后才请用户登录）、并发、停放与续接都以 Luz-Crawl 为准，本页不复述。
 
 - 一个选型需求只建一个任务目录；子 Agent 只用主线程给的 `folder`，不得自己 `begin`。
+- 任务目录是 `<输出根>\NNN_主题`，其下 `raw\` 存放爬取的全部内容（每个页面一份存档，`content.json` 直接在存档目录里），总结 html 与 `raw\` 同级；`hw_crawl_digest.py` 新旧布局都能读。
 
 ## 2 先查经验库
 

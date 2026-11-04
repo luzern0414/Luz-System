@@ -25,6 +25,15 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "agent-content-breathing-room",
+      "kind": "preference",
+      "text": "智能体回答、结果卡片与输入区使用居中版心和一致的响应式左右留白；桌面适当加宽边距，手机至少保留16像素，密集表格在容器内滚动。",
+      "why": "用户要求在现有布局基础上增加两侧空白，兼顾回答阅读与表格列宽。",
+      "uses": 1,
+      "first_seen": "2026-10-30",
+      "last_confirmed": "2026-10-30"
+    },
+    {
       "key": "agent-model-decides-program-runs",
       "kind": "preference",
       "text": "智能体开发：模型只做决策，程序控制运行；死循环最简单直接限制执行轮次，超过直接报错；工具分级：单一结果工具执行后不再传它的工具定义、权限禁止再调，多种结果工具写清边界；工具参数错误不只回错误信息，要回当前参数、错误原因和怎么改",
@@ -37,32 +46,46 @@
       "key": "agent-must-use-sse",
       "kind": "preference",
       "text": "智能体的回复、思考与工具进度、阶段与耗时、排队位置、审批请求、结果与错误一律用服务器推送事件（SSE）推送：统一事件名 run.queued、run.started、stage.*、step.*、message.delta、approval.*、run.completed、run.failed、run.cancelled、ping，各带 id、run_id、ts、elapsed_ms；Last-Event-ID 续传、retry 约 3 秒、结束后 204、15 秒心跳、代理关缓冲；首个事件 1 秒内；只认三个结束事件，连接关闭不算成功；不用轮询或整段返回，只有语音等双向实时才用 WebSocket 并写明理由",
-      "why": "用户 2026-10-29 要求智能体必须使用 SSE；依据 WHATWG 服务器推送事件、MDN、Anthropic 流式与错误文档、Nginx 代理缓冲（Luz-Crawl 017）；规则在 agent-design.html 运行时与可靠性",
+      "why": "用户 2026-10-29 要求智能体必须使用 SSE；依据 WHATWG 服务器推送事件、MDN、Anthropic 流式与错误文档、Nginx 代理缓冲；规则在 agent-design.html 运行时与可靠性",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "agent-platform-console-scope",
+      "kind": "preference",
+      "text": "智能体平台要有可视化配置台：排队与容量、定时任务、风险预警前端处理后结构化回传智能体、规则引擎与量化标准、绩效与单据核算由后台配置并让智能体实时读取、智能体协同、知识库搭建、可视化业务流编排（对标 Coze），每个环节可配置可优化；规则写在 platform-console-design.html",
+      "why": "用户 2026-11-02 要求全面排查并补充到 skill 中",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
       "key": "agent-progress-above-answer",
       "kind": "preference",
-      "text": "智能体的进度卡（状态、总用时、当前阶段、预计剩余与已等时长）跟在智能体当前回答的上方随回答前进，不吸顶在页面最上方；停止只在输入区（发送键变为停止），进度卡不放第二个停止",
-      "why": "用户 2026-10-29 要求进度不要放在最顶部，放在智能体回答的上方；与教训 run-timing-said-once 合并为一处停止",
-      "uses": 2,
+      "text": "智能体的进度卡（状态、总用时、当前阶段、预计剩余与已等时长）跟在智能体当前回答的上方随回答前进，不吸顶在页面最上方；总用时与已等时长只在进度卡写一次，审批卡、项目页与工作台不重复同一时长；停止只在输入区（发送键变为停止），进度卡不放第二个停止",
+      "why": "用户 2026-10-29 要求进度不要放在最顶部，放在智能体回答的上方；一页一个事实说一次、一个动作一个入口",
+      "uses": 3,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "智能体的进度卡（状态、总用时、当前阶段、预计剩余与停止）跟在智能体当前回答的上方随回答前进，不吸顶在页面最上方",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
     },
     {
       "key": "agent-queue-and-failure",
       "kind": "preference",
       "text": "智能体排队与防失败：全局、每用户、每会话三级并发上限，每会话同时一个运行；队列满返回 429 带 Retry-After，界面显示第几位、预计开始并可取消；发送带 request_id 幂等，按钮变停止，运行中再发进待发送队列；只对 429、529、5xx、断网重试，指数退避加抖动最多 3 次，无幂等键的写操作不自动重试；熔断时告知预计恢复时间；检查点断点续跑，失败保留部分结果并从失败处重试，取消回滚未提交写入；每轮用量、工具次数、步骤与时长有上限；错误写影响、下一步与请求编号",
-      "why": "用户 2026-10-29 规格；依据 Azure 队列削峰、重试与熔断模式，Stripe 幂等请求，Anthropic 速率限制与错误（Luz-Crawl 017）",
+      "why": "用户 2026-10-29 规格；依据 Azure 队列削峰、重试与熔断模式，Stripe 幂等请求，Anthropic 速率限制与错误",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "ai-decision-agent-copy",
+      "kind": "preference",
+      "text": "写作先理解对象、独立用途与具体痛点，再提炼清晰精准的标题；不用问句、口号或含糊过程动作，同级标题保持一致的概括层级。服务目录优先采用行业常见、高频、用途完整、可独立理解和交付的业务场景，优先能直接产出业务结果的工作；不把细小步骤包装成产品，不生造陌生服务名。咨询、导购等条目需有明确用途和结果，不以泛泛问答或建议充数。名称写清业务对象与用途，形态按需选择系统、小程序或智能体，规则处理和设备控制按需用系统表达；此类目录先系统和小程序、后智能体。正文精简具体，交代必要依据、动作、输出与边界，不套句式、不新增事实。统一的是思考与表达标准，版式、表头、列数、条目数量和命名后缀随任务决定，不固定为文档模板。",
+      "why": "用户指出部分咨询、导购智能体用途较弱，应换成对应行业高频使用的功能；延续常见完整场景、具体痛点、清晰同级标题和不固定文档格式的既有要求。",
+      "uses": 2,
+      "first_seen": "2026-10-31",
+      "last_confirmed": "2026-11-02"
     },
     {
       "key": "b2b-purchase-content-scan",
@@ -94,15 +117,29 @@
     {
       "key": "b2b-tool-graphite",
       "kind": "preference",
-      "text": "面向企业用户的工具类后台（数据、获客、采购等）：默认头像可统一用圆形发丝边框里的线性人像图标，不用卡通动物（仍禁止首字母等文字头像，见 ui-standards.html 头像）；视觉稿给 2–3 个配色方向用真实数据画同一组页面让用户选；研究报告等表格产物在智能体对话区按全宽展开，对话文字仍为 760",
-      "why": "用户 2026-10-29 认为一个获客工具后台的卡通头像与立体图案幼稚、不够高级，要求平面重建，选定石墨方向",
-      "uses": 2,
+      "text": "面向企业用户的工具类后台（数据、获客、采购等）：默认头像按“默认头像”一条（扁平人像，不用线性人像图标和卡通动物，仍禁止首字母等文字头像，见 ui-standards.html 头像）；视觉稿给 2–3 个配色方向用真实数据画同一组页面让用户选；研究报告等表格产物在智能体对话区按全宽展开，对话文字仍为 760",
+      "why": "用户 2026-11-04：人像图标可以换成随机头像",
+      "uses": 3,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "B2B 数据与获客类后台：默认头像用圆形发丝边框里的线性人像，不用卡通动物；视觉稿给 2–3 个配色方向用真实数据画同一组页面让用户选；研究报告等表格产物在智能体对话区按全宽展开，对话文字仍为 760",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "backend-workbench-noise-reduction",
+      "kind": "preference",
+      "text": "后台工作台按信息降噪做：卡片式模块化加大面积留白与低饱和柔和底色；趋势用图形并在峰值与异常点加提示气泡；核心指标放左上第一落点（大字号、涨跌色、百分比）；列表背景中性，状态用小彩点或标签。配色克制是硬规则：页面里的颜色只取所选主题的色阶与共用状态色，不为每张卡片配不同色相的图标块、图表系列与头像，不用卡通插画与首字母头像；渲染后用 audit_rendered.py 的主题配色检查核对",
+      "why": "用户 2026-11-04 看到石墨主题的后台原型多色（紫、青、粉）、有卡通插画与彩色头像，说太丑，要求按信息降噪的 B 端工作台思路重做；主题库的石墨主题本来写明避免卡通形象与彩色底块，但没有渲染后的检查挡住",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "business-logic-propose-then-confirm",
+      "kind": "preference",
+      "text": "业务逻辑先给出拟定方案再请客户确认或修改，只问只有客户才有的定制信息，不问每个项目都一样的通用内容；密钥密码只问是否已通过安全渠道发送",
+      "why": "用户 2026-11-02：业务逻辑确认表取代旧的客户信息收集表",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
     },
     {
       "key": "business-settings-in-admin",
@@ -114,26 +151,31 @@
       "last_confirmed": "2026-10-30"
     },
     {
+      "key": "client-files-pdf-excel-only",
+      "kind": "preference",
+      "text": "交给客户的文件只有 PDF 和 Excel（Word 只是方案说明书的排版源，HTML 只给评审与开发）；每份文件自己写完整、不提及其他文件；事实写在数据文件里，成品是派生物，不手改",
+      "why": "用户 2026-11-02 确认的最新标准，来自 Luz-Project 客户文档规范与 Luz-Design 文件设计规范",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
       "key": "commerce-ui-commercial-grade",
       "kind": "preference",
-      "text": "交易界面按商用小程序做：现价加划线价与到手价标签，商品卡营销信息不超过三层，菜单顶部券条，悬浮购物车栏写配送费与满减进度，规格写推荐与售罄，优惠弹窗与公告弹窗有优先级、频率与后台配置；规则在 commerce-design.html，组件骨架在 templates.txt 的 commerce-kit.html",
-      "why": "用户 2026-10-29：不像可商用的精美产品，例如点单要原价划线再显示折扣价、要有活动，并补充优惠弹窗与公告弹窗；提供了咖啡与茶饮点单小程序录屏",
-      "uses": 1,
+      "text": "交易界面按商用小程序做：现价加划线价与到手价标签，商品卡营销信息不超过三层，菜单顶部券条，悬浮购物车栏写配送费与满减进度，规格写推荐与售罄，优惠弹窗与公告弹窗有优先级、频率与后台配置；规则在 commerce-design.html，效果的画法在 Luz-Design 的 ui-recipes.html，组件骨架在 Luz-Design 的 templates.txt 的 commerce-kit.html",
+      "why": "用户 2026-10-29：不像可商用的精美产品，例如点单要原价划线再显示折扣价、要有活动，并补充优惠弹窗与公告弹窗",
+      "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "commercial-miniprogram-density",
       "kind": "preference",
-      "text": "小程序用紧凑字阶：商品名与列表名 14 加 600，主对象大卡片 16，页面主标题 18 加 600，列表与卡片价格 16–18 加 600、详情页价格 22 加 700，描述、规格、“状态 · 时间”第二行与标签、划线价 12，货币符号与小数 12，智能体消息 14/22，每屏只留一个大数字；营销区（首页、活动页、会员与积分商城推荐位）可以错落、一大两小、出框与图形化标题字，功能区（菜单列表、表单、订单、设置、后台）对齐等高",
-      "why": "用户 2026-10-29 看过商用小程序录屏后确认紧凑字阶，并决定只在营销区放开不规则排版；数值以 Luz-Design visual-design.html 七级字体角色为准",
-      "uses": 3,
+      "text": "小程序字阶按微信官方字号与系统标准字号取值：正文、按钮、表单、商品名与列表项名、导航栏标题 16（名与标题 600），门店名与区块标题 18/600，页面主标题与详情页价格 22/700，描述、规格、第二行与图标下的说明 14，标签、角标、时间、划线价、货币符号与小数 12，列表与卡片价格 16–18/600，大号数字 28/700 每屏一个；字号随微信字体大小七档（0.94 到 1.4，最后一档是关怀模式）等比放大、间距不变；营销区可以错落、一大两小、出框，功能区对齐等高",
+      "why": "用户 2026-11-04 要求小程序的字按官方推荐或主流设计适配、不能太小；官方常用字号 22、17、15、14、12，标准字号 iOS 17、Android 16；取代 2026-10-29 的紧凑字阶（正文 14、描述 12）",
+      "uses": 4,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "小程序用紧凑字阶：商品名与列表名 14 加粗，主对象大卡片 16，描述、规格、“状态 · 时间”第二行与标签、划线价 12，价格数字 16–18 加粗而货币符号与小数 12，智能体消息 14/22，每屏只留一个大数字；营销区（首页、活动页、会员与积分商城推荐位）可以错落、一大两小、出框与手写标题，功能区（菜单列表、表单、订单、设置、后台）对齐等高",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "dashboard-computed-metrics",
@@ -148,7 +190,7 @@
       "key": "default-view-important-first",
       "kind": "preference",
       "text": "每个列表写明默认视图并先显示最需要处理或最有价值的子集（订单已支付、线索待跟进、工单待处理、会员有效、评价待回复），“全部”作可选项；状态标签按处理顺序排列，0 数量弱化，终态排后",
-      "why": "用户 2026-10-28 要求，商机雷达后台实测",
+      "why": "用户 2026-10-28 要求，获客工具后台实测",
       "uses": 1,
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-28"
@@ -217,6 +259,15 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "light-and-dark-themes-required",
+      "kind": "preference",
+      "text": "所有前端（后台、小程序、手机网页、网站、智能体界面及其原型）都要有深色与浅色两套主题：默认跟随系统，可手动切换（跟随系统、浅色、深色），浅色是设计与验收的基准，深色按“更暗的底、更亮的前景、品牌色取同色相更亮的一阶”做，不是反相；原型的场景配置面板全局里有“外观”项；阅读型网页不做深色",
+      "why": "用户 2026-11-04：补充，所有前端需要有深色浅色的主题色；取代之前“深色只在用户明确要求时才做”的规则",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
       "key": "list-pagination-default-20",
       "kind": "preference",
       "text": "后台与网站里可能超过一页的列表都要分页：默认每页 20 条，可选 10/20/50/100 条/页，分页条在表格下方靠右（共 N 条、条/页、上一页、页码、下一页，超过 7 页折叠），页码与条数写进地址并记住用户选择；小程序与移动端滚动加载，每批 20 条",
@@ -224,6 +275,15 @@
       "uses": 1,
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-28"
+    },
+    {
+      "key": "no-blue-focus-box",
+      "kind": "preference",
+      "text": "文本框（输入、选择、文本域、可输入的组件库字段）获得焦点或被点击时严格禁止出现蓝色或主色选中框、外发光、粗描边与浏览器默认轮廓：聚焦只把 1 像素边加深到次要文字色；点击任何控件都不出现焦点框，键盘 Tab 到达才出现 2 像素中性轮廓；移动端关点按高亮；渲染后用 audit_rendered.py 的聚焦框检查与 check_document.py 的静态检查挡住",
+      "why": "用户 2026-11-04：点击文本框时会显示蓝色的选中框，严格禁止此类多余的显示，太丑了",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "no-title-repeat-nav",
@@ -241,11 +301,7 @@
       "why": "用户 2026-10-29：系统拍照上传的照片不要限制大小，因为用户侧无法修改；数据统一前端接收，后台压缩",
       "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "用户无法自行改小的文件（系统相机拍的照片、相册原图）上传时不限制大小、不提示过大：前端先压缩（长边约 2048），服务端再统一缩放与重新编码，只留远高于手机原图的防滥用上限；能换文件的合同与文档才限制大小并在选择前写明",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
     },
     {
       "key": "purchase-rules",
@@ -257,17 +313,22 @@
       "last_confirmed": "2026-10-30"
     },
     {
+      "key": "reading-page-md-hierarchy",
+      "kind": "preference",
+      "text": "阅读型网页（报告、规范页、检索结论、设计文档）的文字层级做成 Markdown 渲染的样子：桌面正文 18、手机 16；一级标题 36/28，二级 28/24 且标题下一道细线，三级 22/20，四级 18/16，表格 16/14，辅助 14；母本 Luz-Design references/md-type.css，各技能用 sync_md_type.py 同步同一段，不各写各的",
+      "why": "用户 2026-11-04：HTML 的字体偏小、不好看，桌面端要大、手机端可以小一点，层级做成 md 格式、分清楚、美观",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
       "key": "remote-config-hot-update",
       "kind": "preference",
       "text": "会变的数字、开关与名单不写死，写在配置文件里由服务端热加载，不在后台展示、不做配置中心页面（除非用户另行要求）；客户端从配置接口拉取并内置默认值兜底；经营内容（营业时间、起送价、公告、券）仍在后台维护；实现细则交给开发技能的配置文件与日志规范",
       "why": "用户 2026-10-29：配置不展示在后台，但是可以通过代码热更新，或者修改配置文件更新",
       "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "小程序与 App 的运行参数（上传上限、超时、轮询间隔、功能开关、最低可用版本、智能体上限）进后台配置中心热生效，不写死：注册表定类型默认范围与生效方式，前后端共用一份，发布可灰度回滚有审计，客户端内置默认值、先用缓存再异步拉新；小程序代码更新用 UpdateManager 提示重启，App 热更新不下载改变功能的代码",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
     },
     {
       "key": "research-component-libraries",
@@ -279,6 +340,15 @@
       "last_confirmed": "2026-10-28"
     },
     {
+      "key": "stable-display-no-jump-no-flash",
+      "kind": "preference",
+      "text": "前端要稳定显示，不跳屏、不闪烁：图片与异步块先占位且同尺寸，新内容不推开已有内容，主滚动区保留滚动条槽，外观在绘制前设好，骨架屏出现后至少停留 500 毫秒，动画只用透明度与位移；用 audit_stability.py 在真实浏览器里量累计布局偏移（不超过 0.05）、底色闪烁与可视宽度变化，浅色深色各一遍",
+      "why": "2026-11-04 用户要求前端稳定显示不跳屏不闪烁；检索与自己的样板页实测",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
       "key": "store-open-close-one-click",
       "kind": "preference",
       "text": "有门店的系统后台必须能一键开业与停业：营业状态只存一份；停业后小程序可浏览不可下单并有公告，服务端在下单、发起支付、支付回调三处校验并处理在途订单，设备按登记的停业动作统一下发并回报；开业前做开业检查",
@@ -288,13 +358,22 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "ui-adaptive-readable-text",
+      "kind": "preference",
+      "text": "原型随窗口自适应、文字不能太小：小程序手机框按窗口放大，字号随微信字体大小七档缩放；具体字号见 commercial-miniprogram-density 与 reading-page-md-hierarchy",
+      "why": "用户 2026-11-04 先答“改成自适应，字体不能太小”，再要求小程序字按官方推荐或主流设计、HTML 桌面字要大手机可小、层级做成 md 格式",
+      "uses": 2,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
       "key": "一个入口",
       "kind": "preference",
       "text": "同一页面通向同一目的地只放一个入口；功能分核心、信息、营销、辅助四层；同一事实在卡片与页面内只说一次",
       "why": "用户纠正",
-      "uses": 1,
+      "uses": 2,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-10-31"
     },
     {
       "key": "一物一图",
@@ -357,11 +436,7 @@
       "why": "用户多次纠正；2026-10-29 要求补立体感，并决定入口图标、插画与装饰元素可以生成（与 Luz-Design visual-design.html 层级与立体感、图像生成一致）",
       "uses": 3,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "界面扁平为主：纯色面与统一线宽的线条，立体感靠五级层级阴影、1 像素发丝线与按钮底边；图标线宽 2、图标块可双色，插画多层扁平，每屏至多一张品牌主卡；不用立体图标、渐变、纹理、玻璃、发光与彩色投影",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
     },
     {
       "key": "表格居中",
@@ -370,11 +445,7 @@
       "why": "用户 2026-10-28 纠正，替换原“表头与数据全部居中”",
       "uses": 2,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28",
-      "previous": {
-        "text": "表头与数字、金额、状态、日期等短数据居中，只有会换行的长文本左对齐；组合单元格居中后左对齐",
-        "replaced_at": "2026-10-28"
-      }
+      "last_confirmed": "2026-10-28"
     },
     {
       "key": "配置闭环",
@@ -397,11 +468,11 @@
     {
       "key": "默认头像",
       "kind": "preference",
-      "text": "无照片时用按用户标识固定的卡通动物，未登录或系统用户用线性图标；严禁首字母、姓氏等文字头像",
-      "why": "用户纠正",
-      "uses": 1,
+      "text": "无照片时用按用户标识随机取得并固定的默认头像（消费类用统一风格的卡通动物，企业工具后台用统一风格、低饱和的扁平人像，同一个人始终同一张），未登录或系统用户用线性图标；严禁首字母、姓氏等文字头像（用户纠正）",
+      "why": "用户 2026-11-04：人像图标可以换成随机头像",
+      "uses": 2,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "admin-prototype-page-structure",
@@ -410,20 +481,52 @@
       "why": "会员管理列表页评测：旧版 check_document 在 --allow interface 下仍拦 nav，agent 只好用 div 加 role 绕开；已改为界面模式允许外壳",
       "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "后台原型要同时通过 validate_session 与 check_document：h1 写品牌图案加系统名且文字直接写在 h1 内，h1 后紧跟 section，section 第一项是 h2；外壳用 div 加 role=navigation 与 console、topbar 类名，不用 nav、aside、header 标签；范围只有一个菜单页时不画单项侧栏，用 h2 页面名标明位置",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "alert-resume-validation-order",
+      "kind": "lesson",
+      "text": "预警或审批处理结果回传智能体必须结构化并按固定顺序校验：身份与权限、租户、幂等 request_id、状态可处理、版本号乐观锁、过期、参数 schema、写审计、恢复；阻断式复用审批的暂停与恢复、不新增运行状态；过期 410、已被处理或版本已变 409、同一 request_id 重复提交返回同一结果；恢复时节点从头重跑，中断点前不得有写操作",
+      "why": "LangGraph 中断与 OpenAI Agents SDK 人在回路文档：快照未认证需核验审批人，副作用工具用幂等键",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
     },
     {
       "key": "arch-html-inline-style",
       "kind": "lesson",
       "text": "架构等审阅页不要写内联 style：校验器把多个内联样式拼接后按 font 声明检查，会把 margin、padding 误判为字号；数据字段名避开 更新时间、生成时间、SHA-256、示例数据 等被 check_document 拦截的元数据词",
-      "why": "008 会话架构页首次校验失败",
+      "why": "架构审阅页首次校验失败",
       "uses": 1,
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-28"
+    },
+    {
+      "key": "audit-browser-hides-scrollbars",
+      "kind": "lesson",
+      "text": "Playwright 的无头浏览器默认带 --hide-scrollbars，滚动条不占宽度，滚动条出现导致的整页左右跳量不出来；稳定显示检查要用 ignore_default_args 去掉这个参数",
+      "why": "写 audit_stability.py 的“滚动条后出现”测试时，页面明明变长了可视宽度没变",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "audit-walk-popper-states",
+      "kind": "lesson",
+      "text": "audit_rendered --walk 要走到下拉、日期面板、筛选标签的关闭键和菜单面板再测：日期面板头部按钮与 el-tag 关闭键默认不足 24 像素，下拉里的次要文字在悬停底上对比不足 4.5，需要自己加高并改深一档",
+      "why": "walk 三轮都靠这些状态才暴露问题，初始页面审计看不到",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "avatar-slot-where-person-is-object",
+      "kind": "lesson",
+      "text": "头像位只放在人作为对象出现的位置（账号入口、账号表、所属销售列、录入人、账号信息），同一客户的时间线条目不重复，登录时输入的账号文字不放，图表与下拉不放；客户是公司，只写客户行有一个对象标识位；头像紧挨姓名时是装饰，替代文字为空，窄屏只剩头像时按钮名称写账号菜单加姓名与角色。",
+      "why": "给后台加头像位时归纳",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "b2b-date-column-width",
@@ -435,6 +538,168 @@
       "last_confirmed": "2026-10-30"
     },
     {
+      "key": "brand-card-graphite-vs-checker",
+      "kind": "lesson",
+      "text": "品牌主卡用石墨（深色中性）时 check_document 会报“深色中性品牌卡”错误：规则卡要求品牌卡取有色相的主色；先在报告里写成规则冲突交用户决定，不改类名绕过；品牌卡里的文字规则要写成 .brand-card 的后代选择器，检查器才按卡底色算对比度。",
+      "why": "手机原型视觉重做：check_document 从 12 个错误降到只剩这 1 个",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "chart-share-vs-ranking",
+      "kind": "lesson",
+      "text": "客户行业这类分类分布，先问这张图回答什么：回答哪个最多就是排名，用横向条形标注数值；规则卡写占比用环图（5 类以内）与条形不冲突，因为题目不同；超过 8 类合并其他且其他可点进明细，只有 1 类改一句文字。",
+      "why": "退回意见要求避免环形图",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "check-document-static-markup-controls",
+      "kind": "lesson",
+      "text": "check_document 只读静态 HTML 里的元素来认定控件，脚本生成的按钮与选中块若用类名选择器（如 .btn.main、.chip[aria-pressed]）会被报成深色大块；把选择器写成以 button 开头（button.btn.main）即可按控件放行；侧栏抽屉的属性名与类名避开 drawer，用 data-menu。",
+      "why": "后台原型首次检查 16 个错误，改选择器前缀与属性名后 0 错误 0 警告，视觉不变。",
+      "uses": 1,
+      "first_seen": "2026-11-03",
+      "last_confirmed": "2026-11-03"
+    },
+    {
+      "key": "component-library-static-check-noise",
+      "kind": "lesson",
+      "text": "组件库的样式整份进成品后，check_document 会按静态 HTML 判定控件，整库引入 Element Plus 有约 270 条误报；按用到的组件引入 style/css，构建期插件删掉未用变体并把 font-weight var、700、12 与 13 号字、过冲曲线、字距改成合规字面值，选中态改浅底，可降到 0 错误",
+      "why": "后台原型用 Element Plus 单文件构建的实测：整库引入 270 条，按需引入加变体裁剪后 0 错误 11 条警告",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "component-library-static-checker-gap",
+      "kind": "lesson",
+      "text": "check_document 只读样式文本和静态标记：库样式里的 font-weight: var(--x) 会被判越界，深色实心控件要在静态标记里找得到按钮元素才放行；做法是构建期把字重变量写成数值、去掉没用到的实心变体与图标字体，并在构建后用真实浏览器把初始界面预渲染写回文件的标记之间（页面脚本接管时整块替换），不要改类名骗检查。",
+      "why": "手机原型接入 Vant，check_document 从 41 个错误降到 0 错 0 警告",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "composer-one-slot-state-machine",
+      "kind": "lesson",
+      "text": "智能体输入区的发送、停止、语音三个入口共用同一位置的一个主按钮，状态由“是否运行中 × 输入框是否有内容 × 附件是否上传中”计算，不并排两个按钮；输入法组合期间回车只确认候选词，发送失败恢复原文。",
+      "why": "AI Elements、assistant-ui、Open WebUI、LibreChat 都用同槽位互斥渲染；MDN 建议回车处理同时判断 isComposing 与 keyCode 229；Safari 曾先结束组合再派发确认回车。",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "config-boundary-console-vs-file",
+      "kind": "lesson",
+      "text": "平台配置台与远程配置的边界：运行硬上限（全局并发、队列长度、轮次、超时、熔断）留在配置文件、热加载、评审，配置台只读显示；业务配置（租户配额、规则集、计划任务、预警策略、业务流、知识库、团队）进配置台，版本化、可审批、可回滚，发布发 config.published，在途运行固定读取时的版本",
+      "why": "用户 2026-11-02 要求排队、定时、规则等可视化配置，与 2026-10-29 运行参数不在后台展示的决定分开处理",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "confirmed-logic-without-feature-id",
+      "kind": "lesson",
+      "text": "业务逻辑确认里已确认、但功能清单没有对应编号的界面需求（如管理员可查看的登录失败记录、保存期限提示、额度提醒），界面功能说明不自己加页面，列进决定记录请用户决定归属并走需求变更。",
+      "why": "功能集合不许增减",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "crawl-preflight-one-failure-blocks-run",
+      "kind": "lesson",
+      "text": "Luz-Crawl 前置检索的 run 对 search 与 capture 每条命令设 300 秒上限，任何一条超时或失败整次记录变为 blocked 且已读来源不进记录；联网慢时先只传 --url 官方原文（不放 --query），查询要少且 --read 1，失败后换掉出问题的网址重跑。",
+      "why": "界面功能说明阶段的 Bing 搜索两次超时，整次记录 blocked",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "css-var-resolved-where-declared",
+      "kind": "lesson",
+      "text": "CSS 变量里的 var() 在声明它的元素上就代入并按值继承：Vant 的组件变量写在 :root 上，只在下层改基础字号传不到组件变量，要在下层把要缩放的组件变量重新声明一遍；make-mini-type.mjs 从已装的 Vant 里读出全部字号与行高变量生成这段",
+      "why": "做小程序随微信字体大小缩放时，在 .phone 上改 --van-font-size-md 对 --van-cell-font-size 无效",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "css-zoom-breaks-popper-position",
+      "kind": "lesson",
+      "text": "整体 CSS zoom 会让 Element Plus 的下拉等弹出层错位（位置被乘两次）：只缩放不含弹出定位库的容器（小程序手机框），后台用字号令牌与布局断点自适应",
+      "why": "在 1920 宽的后台根节点试 zoom 1.2，下拉面板离开选择框约 160 像素；手机框 zoom 后首页轮播、标签栏、弹层都正常",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "dark-accent-ink-contrast",
+      "kind": "lesson",
+      "text": "深色下首字头像若用点缀 mid 做底、实色阶做字，紫色只有 4.0:1；改用 tint 做底才够 4.5:1。每个模块的实色阶要在 mid 与 tint 上各量一遍。初始页不出现头像，只有逐状态 --walk 才测得到，深色也要跑 --walk。",
+      "why": "深色逐状态审计发现",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "dark-checker-quirks",
+      "kind": "lesson",
+      "text": "check_document 把 color-mix 写的半透明底当成不透明首色，浅色值要保留 rgba 写法；它按最后一处定义解析变量，有深色块后浅色色值会掉出调色板，需在 :root 重申默认值（如图标面色 --acc-mid）。audit_palette 的色相预算与模块点缀色、首字头像在两种主题下同样不过，是规则冲突，要记录。",
+      "why": "深色主题验收中遇到的检查器行为",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "dark-popup-surfaces-and-soft-fills",
+      "kind": "lesson",
+      "text": "深色里对话框与底部面板取第 4 级表面时，弹层里单元格、输入框、折叠、按钮、标签栏的底色变量也要设成同一表面，否则出现一条更深的带；大面积点缀浅底（问候块、节点卡）深色下取浅底与卡片面各一半混合，整块用会成亮紫亮品红。",
+      "why": "深色截图两轮自评",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "dark-scheme-flash-needs-head-script",
+      "kind": "lesson",
+      "text": "原型入口页的 head 里要放同步脚本，绘制前设好深色类与 color-scheme，否则深色下首帧先出浅色底；用 Luz-Design 的 audit_stability.py --scheme dark 抓。",
+      "why": "底座后台原型深色下 357 毫秒处底色由 0.90 突变到 0.01，补脚本后通过",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "dark-theme-library-vars-and-palette-audit",
+      "kind": "lesson",
+      "text": "深色主题：组件库在自己的类上定义局部变量时，只覆盖 :root 压不过，要在 html.dark 下重定义（Element Plus 的 --el-color-white 取“主色上的字色”）；点缀色上的文字深色下取 solid 阶不取 press 阶（press 更暗，落在 tint 上不足 4.5:1）；Git Bash 手敲 audit_palette 的 --hash \"#/页\" 会被 MSYS 改成路径，工具空跑出 ok，要设 MSYS_NO_PATHCONV=1 或用 Python 子进程传参。",
+      "why": "首个深色 --walk 查出 press 阶文字对比不足；用 Python 子进程重跑 audit_palette 后，Git Bash 手敲得到的 ok 全是空跑",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "delete-confirm-vs-undo-window",
+      "kind": "lesson",
+      "text": "功能清单规定删除前必须确认且恢复归管理员时，不再给销售即时撤销窗口（否则等于赋予销售恢复权限），在确认框正文写明后果与由谁恢复，并在决定记录里说明与删除后 5 秒可撤销规则的取舍。",
+      "why": "洽谈记录删除与恢复分属销售与管理员",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "demo-seed-reset-and-invariants",
+      "kind": "lesson",
+      "text": "页面懒补的演示数据，重置演示数据时要连同多出来的键一起清掉（先删键再赋值）；种子数据本身必须满足跨页数字不变量（订单金额=小计-优惠、退款不超实付、卡次数=扣次记录、余额不为负），用 check_data.py 逐页访问后核对。",
+      "why": "多个页面作者各自在页面里补种子，resetDemo 用 Object.assign 清不掉；种子卡的扣次记录被写死最多 6 条而已用次数最多 11 条，两端数字对不上。",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
       "key": "disabled-variant-specificity",
       "kind": "lesson",
       "text": "置灰样式写在主按钮、危险按钮、文字按钮等变体规则之后并同时覆盖 :hover，否则只读或已注销时红色危险按钮仍像可点；浏览器验收要截图核对每个变体的禁用态，量浮层尺寸前等入场动画结束",
@@ -444,6 +709,96 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "element-plus-hidden-columns-and-heights",
+      "kind": "lesson",
+      "text": "el-table 会在隐藏区调用单元格插槽，插槽里读 row.a.b 要用可选链，测试选择器限定 .el-table__body-wrapper；el-button 与 el-select 的高度是字面值 32px 不跟 --el-component-size，手机宽度要另写 height 与 min-height 为 40 才过 40 像素点击区域",
+      "why": "audit_rendered 390 宽报按钮 32 像素；Playwright 第一个 .row-link 是隐藏副本",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "empty-state-action-vs-cross-tab-entry",
+      "kind": "lesson",
+      "text": "空状态要求写一个行动，与标签只由标签栏切换、其他标签的空状态不得重复一级入口冲突时：标签栏同屏可见，空状态文字指向标签名而不放按钮，并把取舍写进决定记录交用户确认。",
+      "why": "我的客户为空时，新建洽谈已是标签栏第一项",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "face-data-not-over-internet",
+      "kind": "lesson",
+      "text": "人脸信息应存于人脸识别设备内、不得通过互联网对外传输，除非法律另有规定或取得单独同意（人脸识别办法第 8 条）；“私有平台”不是例外，后台向设备下发人脸与边缘网关缓存名单都要有单独同意作依据",
+      "why": "旧硬件协议页写“设备本地或私有平台”，与第 8 条不符；条文已核对网信办原文",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "finance-doc-types-one-engine",
+      "kind": "lesson",
+      "text": "财务单据（费用报销、领款、对公付款申请、借款、现金支出）共用一套提交、审批、付款、凭证、台账引擎，差异只放在单据模板与审批配置；借款通过报销冲抵；开票申请属收款方向，单独成模块并复用往来对账的收款数据，不并入报销。",
+      "why": "客户补充付款审批与发票申请审批时，按资金方向和单据差异判断合并还是独立",
+      "uses": 1,
+      "first_seen": "2026-11-03",
+      "last_confirmed": "2026-11-03"
+    },
+    {
+      "key": "frontend-spec-structured-source-and-check-html",
+      "kind": "lesson",
+      "text": "界面功能说明用一份结构化数据一次生成 JSON、Markdown 和带 data- 属性的检查用页面，再用 check_interaction.py 核对；检查脚本只认 P-、A-、N-、C-、S-、D-、FL-、F- 加三位以上数字的编号，功能编号要映射成 F-；同名动作在不同页面的功能集合要一致，否则给警告。",
+      "why": "28 页 84 个动作的契约靠手写会漏，数据驱动能反复重跑",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "function-list-card-is-called-by-project",
+      "kind": "lesson",
+      "text": "Luz-Project 的 client_flow 在 proposal 与 client-intake 阶段直接调用 context.py function-list，所以该卡必须同时带客户功能清单、业务逻辑写法与项目专属问题，改卡名要同步 Project",
+      "why": "2026-11-02 审计 Project 的 SKILL_CARDS",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "handoff-schema-ahead-of-dev",
+      "kind": "lesson",
+      "text": "本技能的 handoff.schema.json 比 Luz-Dev 的契约多一个可选 platform 对象，两份不再逐字节相同；改契约先改 Luz-Dev，再同步回来，或在 handoff.md 写明偏差",
+      "why": "2026-11-02 审计比对",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "hardware-80-percent-is-house-margin",
+      "kind": "lesson",
+      "text": "PoE 预算 80% 是本技能的设计余量，不是 IEEE 要求，交换机按设备等级的最大功率预留；UPS 30 分钟也是自取值，规范里的数字是断电开启执行装置备用电源不少于 48 小时（GB 55029-2022）",
+      "why": "供应商文档只把 80% 当默认告警阈值；规范转载文本待对照正式文本",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "hardware-service-catalog",
+      "kind": "lesson",
+      "text": "介绍软硬件结合项目时，以常见、完整的业务场景命名，写清软件如何联动门禁、电控、收银或设备启停，并说明收费核对、求助或故障处理等具体用途；保留人工处理异常的去向，避免只罗列设备或泛称智能化。条目数量和放置位置按当前文档决定。",
+      "why": "用户要求服务目录补充无人自助类项目；项目说明需要同时体现软件用途、硬件动作和实际痛点。",
+      "uses": 1,
+      "first_seen": "2026-11-01",
+      "last_confirmed": "2026-11-01"
+    },
+    {
+      "key": "hold-to-talk-pointer-and-keyboard",
+      "kind": "lesson",
+      "text": "按住说话用组件库的按钮（Vant Button）加原生 pointerdown、pointerup、pointerleave、pointercancel、keydown、keyup、blur 事件做：鼠标移出用 pointerleave 取消，触摸有隐式捕获，要在 pointermove 里按按钮矩形判断是否移出、松开时放弃；空格与回车 keydown 开始（忽略 repeat 并阻止默认，免得 keyup 合成点击）、keyup 结束、blur 取消；计时放在 aria-hidden 里，状态区用 role=status 加 aria-live=polite，只在状态变化时播报，不要每秒播报；按钮 touch-action: none，阻止 contextmenu；转写中用库按钮的 loading，额度用尽用禁用样式加 aria-disabled。",
+      "why": "手机原型补录音上传转写，鼠标、触摸（指针事件）、空格、回车四种操作逐项实测通过",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
       "key": "icon-label-consistency",
       "kind": "lesson",
       "text": "图标目录的说明文字要与页面上同一图标旁的对象名一致或互相包含；确属不同对象就另画一个图标，例如项目问答用问号气泡，与对话分开",
@@ -451,6 +806,24 @@
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "library-defaults-fixed-in-theme-layer",
+      "kind": "lesson",
+      "text": "组件库自带的不合规默认值（12/13px、字重 500、按钮写死 32px 高、字体变量、标签对比度）统一在主题生成器与外壳 CSS 里修一次，页面作者不用 :deep 或覆盖库变量各改各的；手机宽度下控件高度用 ConfigProvider 的 size=large，而不是 --el-component-size。",
+      "why": "底座原型 10 个页面作者各自碰到同一批库默认值问题，都报给主会话；--el-component-size 对 Element Plus 按钮无效（按钮高度是字面量 32px），large 尺寸才是库自己的 40px。",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "list-change-no-jump",
+      "kind": "lesson",
+      "text": "列表新增、删除、重排、加载更多、流式追加的动画只在用户操作的时刻出现，周围内容不跳位、滚动位置不丢，并带减少动态效果分支；实时新内容用“有 N 条新内容”条，不插进用户正在看的视口。",
+      "why": "MDN 滚动锚定、use-stick-to-bottom（上滑即取消粘底）、NN/g 保存滚动位置与加载更多指南。",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
     },
     {
       "key": "log-audit-in-architecture",
@@ -465,19 +838,90 @@
       "key": "luzcrawl-nngroup-rate-limit",
       "kind": "lesson",
       "text": "NN/g 连续采集 5–6 篇后返回 429，后续条目被跳过；每批 NN/g 不超过 4 篇并放在批次最前，被拦后停在该站不换入口",
-      "why": "Luz-Crawl 任务 016 采集 NN/g 时触发限流（交互闭环调研）",
+      "why": "Luz-Crawl 采集 NN/g 时触发限流（交互闭环调研）",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "mini-tabbar-flex-squeeze",
+      "kind": "lesson",
+      "text": "手机框是 flex 列时，底部标签栏要设 flex:none，否则长页面会把它从 50px 压到 38px，低于 40px 触控目标。",
+      "why": "Home 样板页在真实审计里标签栏项高 38px，改 --van-tabbar-height 无效（ConfigProvider 的主题类重定义了该变量），量出计算高度后发现是被压缩。",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "mini-verify-at-care-mode",
+      "kind": "lesson",
+      "text": "小程序字号改动要在关怀模式（1.4 倍）下把每页再打开一遍：按钮文字不折行不裁切、按钮随文字变宽、无横向滚动；verify.py 的 --care 做这一遍；字号门检查按角色分档（小程序正文 16，图标下说明与小号按钮 14）",
+      "why": "标准档通过后，1.4 倍下“选规格”按钮折成两行、结算按钮文字被裁",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "multistore-switch-selection",
+      "kind": "lesson",
+      "text": "门店选择器必须显示实际生效的门店；取消切换立即还原原生选择框，加载期间清除旧权限和私有页面。",
+      "why": "后台新增与取消切换反例复核",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "nav-levels-cap-and-icons",
+      "kind": "lesson",
+      "text": "多级目录先数条目再选方案：层级上限 3、常态 2，图标只给一级项，祖先项只加深文字不加底；需要第 4 级时先重构信息架构（类型变筛选、子类变页内标签页），再加全局搜索，不加层。",
+      "why": "苹果侧栏一般最多两层、Carbon 左侧面板不支持三层、PatternFly 可做 2 或 3 层、NN/g 下拉超过两层不可取。",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "ops-reminders-one-status-page",
+      "kind": "lesson",
+      "text": "备份、证书、额度、待确认清除这类提醒管理员的运维事项并入一个运行状态页，用标签分块，侧栏只留一个入口加提醒标记，标签上的数量与侧栏标记同源；待确认清除逐条处理、不设批量，不可恢复的清除不给撤销，暂缓给固定的再提醒周期。",
+      "why": "补三个提醒与查看类功能时归纳",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "page-pattern-entrances-one-row-per-fn",
+      "kind": "lesson",
+      "text": "page_pattern.py 的入口表要求一个功能一行，同一个 fn 重复会报错：多端或同端多入口时按端拆成多份，同端第一行为主、其余写进该行的 also；记录级与页内动作要标 task 且 entry 为 in-page，标成 tool 会被建议放进我的。首页骨架对不适用的应用类型要在决定记录里写清楚。",
+      "why": "界面功能说明的入口表试跑 brief 与 plan",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
       "key": "photo-card-contrast",
       "kind": "lesson",
       "text": "照片主卡按 0.35–0.5 黑色遮罩压白字时，先量文字区域的亮度：明亮的环境照片在 0.5 遮罩下只有约 3.7:1，要选偏暗、低调的照片，或改成主色块加照片分栏让白字不压在照片上",
-      "why": "008 卡片方案预览实测，会议桌照片第 90 百分位亮度换算",
+      "why": "卡片方案预览实测，会议桌照片第 90 百分位亮度换算",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "preflight-crawl-before-system",
+      "kind": "lesson",
+      "text": "系统方案先完成真实来源检索、正文阅读和结论登记，再写功能逻辑、前端与后端三视图；通用架构资料不能替代专项业务调研。",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "press-and-hold-button-must-not-move",
+      "kind": "lesson",
+      "text": "按住说话这类按住才有效的按钮，状态文字要放在按钮下方、按钮位置固定：状态一变文字行数变化会把按钮顶上去，指针被移出按钮就当成取消，真机上手指一按就取消。",
+      "why": "手机原型视觉重做后上传专项 7 项失败，把状态区挪到按钮下面后恢复 44/44",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "prototype-acceptance-record",
@@ -492,23 +936,37 @@
       "key": "prototype-non-action-controls",
       "kind": "lesson",
       "text": "对话框放在 dialog 元素或 role=dialog 容器里：提交这一动作的按键（编辑框的保存、生成框的生成）绑打开它的动作号，不算同页第二个入口；通用确认框的确认，以及取消、关闭、完成这类只收起对话框的按键，用 button 加 data-control（confirm、cancel、close、done）；导航用链接。不要改用 a role=button 绕开，没有动作编号的 role=button 会给警告；控件能否用实色按元素认定，类名随意",
-      "why": "008 原型用 a[role=button] 绕开旧校验，逐条核对后多数是动作在弹层里的第二步提交；旧版一入口检查把对话框里的同号按键算成第二个入口，已改",
+      "why": "原型用 a[role=button] 绕开旧校验，逐条核对后多数是动作在弹层里的第二步提交；旧版一入口检查把对话框里的同号按键算成第二个入口，已改",
       "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "原型里不属于架构动作的控件（确认框的确认与取消、弹层的完成）用带 role=button 的链接，样式选择器写明 [role=button]；写成普通类名的实色链接会被判为大面积深色底",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
     },
     {
       "key": "prototype-panel-and-icons",
       "kind": "lesson",
       "text": "原型配置面板若未写入架构，用单选与复选控件实现，避免无动作编号的按钮；check_document 把 svg 后第一段文字当图标含义，图标按钮要带可见文字，同一插画不在多处复用，头像用 img；全局加 [hidden]{display:none!important} 防止按钮样式覆盖隐藏",
-      "why": "008 原型多轮校验与浏览器验收；001 会员管理列表页再次采用",
+      "why": "原型多轮校验与浏览器验收；会员管理列表页再次采用",
       "uses": 2,
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "prototype-panel-stays-usable-with-dialog",
+      "kind": "lesson",
+      "text": "原型的场景面板在原型框外，不要因为框内对话框打开就把面板设为 inert；面板里选场景时先关掉框内对话框与浮层，否则不可关闭的对话框（首次改密、初始密码）会让评审者卡死；用 data-off 属性隐藏模块，不要复用 hidden，以免覆盖元素原本的隐藏状态。",
+      "why": "场景逐项点击验收时，首次登录改密对话框挡住面板导致后续场景点不到；模块开关用 hidden 时把草稿提示条错误显示出来。",
+      "uses": 1,
+      "first_seen": "2026-11-03",
+      "last_confirmed": "2026-11-03"
+    },
+    {
+      "key": "prototype-parallel-authors-gate-first",
+      "kind": "lesson",
+      "text": "把页面分给并行作者之前，先让样板页通过真实可用的验收脚本；否则作者拿到的是空检的通过，共用问题要事后逐个通知、逐个重审。",
+      "why": "底座原型重做先派发了 10 个页面作者，之后才发现审计空检，需要补发更正并让全部作者重新构建验证。",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "prototype-reuse-board-css",
@@ -520,10 +978,37 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "prototype-validator-drift",
+      "kind": "lesson",
+      "text": "写项目原型前先在项目的校验脚本里用实际参数跑一遍 _prototype_errors，不要只信任务书：校验器可能在任务期间新增要求（例如 prototype 块要写 library 且构建文件要有至少 6 种该组件库的组件），与“不用外部库”的任务书冲突时写进冲突清单交给用户，不改类名去骗检查。",
+      "why": "2026-11 某后台原型：dev_documents.py 在任务书之后加了 library 要求，原型按任务书手写控件，函数返回 1 条 library 错误。",
+      "uses": 1,
+      "first_seen": "2026-11-03",
+      "last_confirmed": "2026-11-03"
+    },
+    {
+      "key": "reading-page-banned-words-in-spec",
+      "kind": "lesson",
+      "text": "规格里的产品文案进阅读页后会被 check_document 按阅读引导与生产元数据拦截：回到顶部、发布时间、版本号、来源加冒号都会报错；文案阶段就改成返回页首、上线日期、版本、出处，免得回头改数据。",
+      "why": "界面功能说明阅读页检查出 10 条错误",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "required-error-layout-shift-on-blur",
+      "kind": "lesson",
+      "text": "必填错误不要在失焦时就出现在输入框下：错误行会把下面的建议列表或麦克风按钮顶下去，手指按下时输入框失焦、布局移动，点击落空；错误只在点保存之后显示，保存键用禁用样式加 aria-disabled（点它会在缺项旁提示并聚焦），底部常驻一行还缺什么，保存中用库的 loading。",
+      "why": "手机原型的客户建议点击测试发现点不中建议项",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
       "key": "research-source-recheck-before-publish",
       "kind": "lesson",
       "text": "平台驱动 Luz-System 会话时，调研来源可能在调研后被站点临时封锁（如 HTTP 423），发布前要复核来源、失败重试一次、仍不可达则从经验库替换同类来源再跑 strict 校验",
-      "why": "02 真实联调首次发布被 strict 拦截；2026-10-29 从 Luz-Dev 经验库迁入",
+      "why": "平台联调首次发布被 strict 拦截；2026-10-29 从 Luz-Dev 经验库迁入",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
@@ -532,37 +1017,55 @@
       "key": "reuse-knowledge-only-sources",
       "kind": "lesson",
       "text": "experience.py reuse 遇到只有 Luz-Crawl 原始路径、没有会话快照的来源（如 SRC-078/079/106）会中断整批，复用前先确认 snapshot 带 session 字段，并分小批复用",
-      "why": "008 会话复用时 KeyError session",
+      "why": "复用时 KeyError session",
       "uses": 1,
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-28"
     },
     {
-      "key": "rule-card-size-budget",
+      "key": "rule-calc-config-driven",
       "kind": "lesson",
-      "text": "规则卡的规则原文每张不超过 35 KB：规范页新增小节后先量 context.make_card 的第 3 部分，超了就把整层换成具体小节、把阶段专用的小节移到对应卡或拆卡（如 agent-ui 与 agent-runtime-ui、交互闭环卡 interaction），不用 max_chars 截断规则",
-      "why": "2026-10-29 加入交互闭环与智能体运行时规则后 system-design、agent-ui 等卡超出 35 KB",
+      "text": "核算类数字由规则引擎按配置版本算，模型只取数、解释、复核；阶梯必须显式选分档累计或整体计价（同一阶梯表 6 件分别是 41.5 与 39）；结果记录配置版本与输入快照以便复算；在途运行固定读取时的版本，续跑发现版本已变先重算并显示新旧差异；无权字段显示无权查看而不是零",
+      "why": "Stripe 阶梯定价示例；用户要求绩效与单据核算由后台配置并让智能体实时读取",
       "uses": 1,
-      "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
     },
     {
-      "key": "run-timing-said-once",
+      "key": "rule-card-size-budget",
       "kind": "lesson",
-      "text": "智能体对话页的总用时与已等时长只在任务进度头写一次，审批卡、项目页与工作台不重复同一时长；停止只放在输入区（发送键变停止），进度头不再放第二个停止",
-      "why": "一页一个事实说一次、一个动作一个入口",
-      "uses": 1,
+      "text": "规则卡的规则正文每张 8–35 KB，不提高上限、不用 max_chars 截断：规范页新增小节后先量 context.make_card 的第 3 部分；整层被引用的小节下加新子标题会撑爆原卡，改为逐个小节引用（按 h4 引用时同级后续 h4 不会带上，要逐个列出）、新规则放新 h4 并另建规则卡；被多张卡共用的表新增行会撑爆旧卡，把新增内容放进独立 h3，原表只留一行指向它，新卡单独引用该 h3；通用小节可让给别的卡并在 tools 里指路",
+      "why": "agent-ui 引用整层“五、组件”，加输入区状态机后超限，改为逐个小节引用并新增 agent-composer；加客户文件与隐私小节后 function-list、system-design、miniprogram、admin-form 卡超限，逐卡裁剪后通过 test_context；平台配置台新增 8 张卡时 system-design 卡因架构清单加 7 行超限，改为独立 h3 后恢复",
+      "uses": 5,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "rule-page-check-document",
+      "kind": "lesson",
+      "text": "Luz-Design 的 check_document.py 对规则页的内容也适用：短单元格或无句号的短行里出现“提示词”“数据来源”“版本：”、完整时间戳、“备注：”前缀会报错，规则页缺标签页图标也报错；写规则页时用“提示模板”“取数来源”、不放完整时间戳、给页面加内联 SVG 标签页图标，现有旧规则页同样有这些报错",
+      "why": "2026-11-02 新建 platform-console-design.html 时逐条修到 0 error",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
     },
     {
       "key": "session-revision-archive",
       "kind": "lesson",
       "text": "已批准会话要修订架构时，把下游系统设计、视觉板、原型与发布页打包为 raw/99-delivery/revision-N.zip（不留散落 HTML，否则校验器会按页面规则扫描），MANIFEST 模式退回 system、各阶段 sha 置空并保留全部阶段键，再逐级重新审批",
-      "why": "008 会话架构修订 2",
+      "why": "架构修订时归纳",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "sheet-with-nested-picker-becomes-subpage",
+      "kind": "lesson",
+      "text": "底部弹层里要再弹选择器、语音输入和软键盘叠放时，改成二级页（与同类表单同构，顶部返回加页名），弹层只留真正的短决策。",
+      "why": "退回意见：更新客户情况弹层里有行业选择器与语音",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "small-fill-selector-naming",
@@ -571,20 +1074,124 @@
       "why": "修订 4.2 视觉板首次检查报 13 个错误，按这三类改名后通过",
       "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "界面里的小块实色（进度条填充、阶段点、数字角标、播放键）在选择器里写明 -mark、-bar i、.badge 或 button，12 号辅助字的选择器带 caption、tag、time 等标记；否则检查器判为大面积深色或正文过小",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "small-text-gate-by-role",
+      "kind": "lesson",
+      "text": "字号门检查按角色判（控件、字段标签、表格单元格、标题、菜单文字必须 14 以上，标签角标注释可 12），不按 12 像素占比；新门先用旧构建证明报得出来",
+      "why": "旧构建上门检查报出按钮、商品卡标题、复选框标签、标签页计数共 4 类 12 像素文字，新构建为零",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "stack-claims-need-a-source",
+      "kind": "lesson",
+      "text": "评估用户给的技术栈时，每一条“自带什么”的说法都要对官方清单核实再下结论；这次“uView Plus 自带图表”与官方组件清单不符。没读到原文的判断要写明是经验而不是来源",
+      "why": "核对 uview-plus 官方组件清单时发现图表不在清单里",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "state-text-needs-bearing-action",
+      "kind": "lesson",
+      "text": "状态表里写到的刷新数据、重试加载、返回这类动作，页面必须有同名动作或写明重新读取方式的组件；用脚本逐页核对状态文字里的动作名与动作表，不靠人眼。二级页的返回要有导航栏组件和动作，路由守卫表要和页面清单的路由逐个对上。",
+      "why": "Design 退回清单里多条都是状态或导航写了却没有承担者",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "system-design-table-cells",
       "kind": "lesson",
       "text": "系统设计页模块内容区按标签规则逐格检查：表头加 cell-label，单元格加 cell-value，长文本按分号拆成不超过 30 字的 line-value 行，避免 详情、原因、步骤、提示、流程、指南、备注、点击查看 等词，内容区外层用 module-content",
-      "why": "008 会话系统设计页多轮校验失败后归纳",
+      "why": "系统设计页多轮校验失败后归纳",
       "uses": 1,
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-28"
+    },
+    {
+      "key": "theme-rules-need-a-rendered-check",
+      "kind": "lesson",
+      "text": "主题库里的禁止项（石墨主题的避免卡通形象、彩色底块、焦点不用蓝色）没有渲染后的检查就会被页面违反：组件库只检查控件来源，不检查配色与装饰，要有按主题量计算后颜色的检查，色相超出主题的色阶与共用状态色就报",
+      "why": "石墨后台原型用了紫、青、粉三种装饰色相、卡通插画、彩色首字母头像，聚焦时还是蓝色框，审计与文档检查都放行",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "two-state-label-by-kind",
+      "kind": "lesson",
+      "text": "两态控件的标签按三类写：开关用设置项名称且不改名；状态型按钮（收藏、关注）固定名称并用 aria-pressed；动作互换型（播放与暂停、发送与停止、展开与收起）名称写下一步动作且不用 aria-pressed。",
+      "why": "NN/g 说两态按钮应改标签、W3C APG 说切换按钮标签不应变化，两者按“状态型与动作互换型”分界后不再冲突。",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "universal-search-agent",
+      "kind": "lesson",
+      "text": "搜索 Agent 的澄清、补充重规划、路径表和表格结果必须共用同一份 SSE 运行状态。",
+      "why": "获客工具的通用搜索验收",
+      "uses": 2,
+      "first_seen": "2026-10-30",
+      "last_confirmed": "2026-10-30"
+    },
+    {
+      "key": "unselected-optional-feature-out-of-interface",
+      "kind": "lesson",
+      "text": "客户或用户决定本期不做的可选功能，从界面数据里整个拿掉（页面、动作、组件、状态、文案键、数据需求），不留默认不出现的开关；覆盖检查对它不要求入口，并反向检查界面里没有它的任何痕迹。",
+      "why": "某导出功能客户答复不需要，用户决定本期不做",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "vant-dark-theme-wiring",
+      "kind": "lesson",
+      "text": "Vant 深色：ConfigProvider 的 theme 取生效主题（显式选择，否则 matchMedia 并监听）；库给 <html> 加 van-theme-dark，自带深色变量与 :root 同特异度，自己的 --van-* 覆盖写成令牌引用并放在库样式之后。共享令牌里写死浅色的库变量（输入框文字色、单元格边线、链接色）深色下不变，会出现深灰字看不见，要改成令牌引用。.van-theme-dark .van-empty 自带 opacity .5，要还原。",
+      "why": "手机原型深色主题自评中发现的坑",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "vant-focus-frame-field-underline",
+      "kind": "lesson",
+      "text": "Vant 输入框聚焦框：输入框与多行输入本身没有边框，聚焦后只能 outline:none 再用 .van-field:focus-within::after 把底部 1px 发丝线加深到次要文字色；库的 [class*=van-]:focus-visible 与 input[class*=van-] 特异度比全局 :focus-visible 高，写 body input[class*=van-]:focus-visible{outline:none} 才压得住（步进器输入就中过）；非文本框键盘焦点保留 2px 墨色外框偏移 2px，单元格与标签栏项偏移取 -2px 以免被卡片裁掉。audit_rendered 的聚焦探测不看 ::after，聚焦线颜色要用脚本 Tab 逐站点量取。",
+      "why": "audit_rendered 聚焦框规则：文本框聚焦不得有彩色框、光晕、粗描边，只把 1px 边加深到次要文字色",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "vant-h5-prototype-integration",
+      "kind": "lesson",
+      "text": "手机原型用 Vant 4：Locale.use('zh-CN', zhCN) 装中文语言包；主题全部写在 :root 的 --van-* 变量里映射到令牌（字阶 xs、sm 也要改成 14）；图标用各组件的 #icon、#right-icon、#left-icon 插槽放内联 SVG，不用库自带的图标字体；按钮里图标加文字时默认插槽会被包进行内的 span.van-button__text，svg 为 block 会换行，给 .van-button__text 设 inline-flex 加 gap，或改用 #icon 插槽。",
+      "why": "2026-11 某手机原型：audit_rendered --library vant 初始页与 48 个状态逐步审计均通过",
+      "uses": 2,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "vant-keyboard-and-dialog-gaps",
+      "kind": "lesson",
+      "text": "Vant 的可点击单元格、标签、单选、多选只响应点击，要补 Enter 与空格；Dialog 与 Popup 只给 role=dialog 并聚焦弹层本身，没有焦点陷阱、Esc 关闭、关闭后焦点回到触发元素和 aria-modal，aria-labelledby 还被写成标题文字而不是元素 id，要在包装组件里补齐并让背景 inert；弹层要留在手机框内，就把框设为 contain: layout paint，并把 teleport 指向框里的元素对象（挂载后再取，库的 teleport 不支持 defer）。",
+      "why": "手机原型逐页键盘验收：Tab 与 Shift+Tab 在框内循环、Esc 关闭、焦点回到触发元素",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "verify-gate-must-fail-loud",
+      "kind": "lesson",
+      "text": "验收脚本调起子检查时，子进程没跑起来（路径错、输出为空）必须按失败报告，不能当通过；新写的检查要先拿已知有缺陷的版本验证它真能报出问题。",
+      "why": "2026-11-03 底座原型 verify.py 的 --audit 路径少上溯一级，子进程启动失败后输出为空，脚本对所有页面（含未做完的样板页）都打印 verify: ok，样板页被汇报为零问题，实际有 38 处小字号与字重等问题；修复后用修复前的构建重跑 check_data.py 能抓到 8 张卡次数不一致，才算有效。",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "visual-board-type-floor",
@@ -593,11 +1200,25 @@
       "why": "旧版 validate_session 对 02-visual 一律按 14 像素、对 03-prototype 按 12 像素，视觉板与原型字号对不上；2026-10-29 审计统一为 12，不写 12–13",
       "uses": 3,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "视觉板与原型用同一套界面字号规则：正文、表格、控件不小于 14px，时间、角标、单位、计数等辅助文字可用 12–13px，但选择器或类名要标明（time、tag、meta、badge、unit、count 等）；智能体的步骤耗时、等待时长、阶段计时属于数据档，用 14 号等宽数字",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "visual-preferences-printed-on-function-cards",
+      "kind": "lesson",
+      "text": "视觉类用户偏好若留在本技能经验库，会被印在每张功能规则卡上，让 agent 以为本技能决定视觉：迁到 Luz-Design 的经验库，本技能的卡用 moved_preferences 跳过，旧会话引用的 key 仍有效",
+      "why": "本次迁移 18 条偏好，System 卡不再打印",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "visual-values-creep-into-function-rules",
+      "kind": "lesson",
+      "text": "功能规范里的视觉值会随时间堆回去：给规则页加视觉词检查（段落带视觉词又无指引即报错），功能文档里出现视觉值给警告",
+      "why": "本次瘦身删掉约 190 个带视觉值又无指引的段落，靠校验器守住",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "规范页技术记号",
@@ -620,15 +1241,11 @@
     {
       "key": "agent-research-sources",
       "kind": "fact",
-      "text": "智能体调研来源在 Luz-Crawl 任务 017（SSE、排队、重试、熔断、幂等、进度）、018（底座技术栈：工具、上下文、记忆、知识库、护栏、追踪、各家函数调用）与 023（ReAct、MCP 最新版工具与授权、轮次上限、Claude 定义工具、LangGraph 递归上限、OWASP 过度代理）；新调研先复用这三个任务",
-      "why": "2026-10-29 补充智能体运行方案时新采任务 023，逐篇核对原文",
+      "text": "智能体调研已覆盖的来源：SSE、排队、重试、熔断、幂等、进度（WHATWG、MDN、Anthropic、Azure、Stripe、Nginx、NN/g、LangGraph 流式）；底座技术栈（工具、上下文、记忆、知识库、护栏、追踪、各家函数调用）；ReAct、MCP 最新版工具与授权、轮次上限、Claude 定义工具、LangGraph 递归上限、OWASP 过度代理；新调研先用 experience.py search 查已采来源，再补缺口",
+      "why": "2026-10-29 补充智能体运行方案时新采，逐篇核对原文",
       "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "智能体调研来源：Luz-Crawl 任务 017（WHATWG 服务器推送事件、MDN SSE 与 Retry-After、Anthropic 流式/错误/速率限制、Azure 队列削峰/重试/熔断、Stripe 幂等、Nginx 代理、NN/g 响应时间与进度指示、LangGraph 流式）与 018（Anthropic 智能体、工具、上下文工程、上下文检索、多智能体，Pydantic 与 Pydantic AI，OpenAI Agents SDK 护栏与追踪，LangGraph 记忆、持久化、中断，Mem0，pgvector，Qdrant 混合检索，OWASP 大模型十大风险，通义千问与 DeepSeek 函数调用）；新调研先复用这两个任务",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
     },
     {
       "key": "agent-run-state-blocks",
@@ -646,11 +1263,7 @@
       "why": "NN/g 响应时间三界限与进度指示；Ant Design X 思维链没有耗时属性需自己补；用户 2026-10-29 追问智能体对话耗时，并要求进度不吸顶、停止只放输入区",
       "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "智能体耗时分段显示：运行头部常驻总已用时、当前阶段与预计剩余（取同类阶段历史中位数，无历史不显示）；每阶段、每步显示耗时，运行中每秒更新，结束定格；排队与等待审批单独计时，不计入执行用时；1 秒内不显示进度，超过 1 秒给进行标记，超过 10 秒显示已用时、当前步骤与停止；等宽数字，写法 12 秒、1 分 05 秒、1 小时 02 分；界面本地计时，按事件时间恢复不从 0 重算",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
     },
     {
       "key": "approval-mode-authorization",
@@ -662,10 +1275,28 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "audit-rendered-walk-with-component-library",
+      "kind": "fact",
+      "text": "audit_rendered.py 的 --walk 脚本定义 walk(page, scan)，每走到一个状态返回 (标签, scan())，真实组件库的对话框、底部面板和各场景都要逐个走到才会被审计；单选与多选（role=radio、role=checkbox）不在点击区域检查范围里，要自己用样式和脚本量到 44 以上。",
+      "why": "手机原型 48 个状态逐步审计通过",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "chat-booking-interaction-loop",
+      "kind": "fact",
+      "text": "对话式预约的交互闭环：首步告知与同意；预约用四屏表单并在时段被占时回到选时间屏；取消类先二次确认；提交类超时先查询结果再允许重试；症状类固定话术并转人工；每个环节有转前台的出口。",
+      "why": "2026-11 对话式预约方案设计",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
       "key": "commerce-config-research-sources",
       "kind": "fact",
-      "text": "交易与营销界面的调研在 Luz-Crawl 任务 026（组件库、体验研究与价格法规、作品视觉），另有用户提供的咖啡、茶饮点单小程序录屏；远程配置与热更新的调研在任务 028（微信小程序更新机制与 UpdateManager、Firebase 远程配置、Apollo、Nacos、功能开关、苹果审核指南 2.5.2）；新调研先复用这两个任务",
-      "why": "2026-10-29 审计：调研任务编号从规则卡移到经验库，规则卡只写先查经验库",
+      "text": "交易与营销界面的调研来源：组件库、体验研究与价格法规、作品视觉（依据表在 commerce-design.html）；远程配置与热更新：微信小程序更新机制与 UpdateManager、Firebase 远程配置、Apollo、Nacos、功能开关、苹果审核指南 2.5.2；新调研先用 experience.py search 查已采来源，再补缺口",
+      "why": "2026-10-29 审计：调研来源记在经验库，规则卡只写先查经验库",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
@@ -674,7 +1305,7 @@
       "key": "commercial-card-patterns",
       "kind": "fact",
       "text": "商用小程序卡片的丰富感来自六种做法：整幅照片加黑色透明度遮罩压白字、主色块加照片分栏、内容卡用真实首屏截图做封面、立体元素探出卡片边缘、浅彩宫格配大号数字、头部色块上叠卡；渐变底、模糊光晕与半透明玻璃是另一路 AI 风格，按视觉规范不能用",
-      "why": "Luz-Crawl 任务 024 的 Dribbble 小程序、卡片、AI 助手三页约 150 张缩略图拼图核对",
+      "why": "Dribbble 小程序、卡片、AI 助手三页约 150 张缩略图拼图核对",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
@@ -682,11 +1313,74 @@
     {
       "key": "component-library-reference",
       "kind": "fact",
-      "text": "组件库参考清单在 references/ui-standards.html“参考组件库”；2026-10-28 已采集 Ant Design 字体与数据格式、Arco、TDesign 字体与表格、Semi、Element Plus、Carbon、Polaris、Atlassian 表格及 NN/g 数据表格、驾驶舱、筛选共 16 页（LuzCrawl 批次 batch-f38ef88f）",
-      "why": "Luz-Crawl 调研 009",
+      "text": "组件库登记在 Luz-Design 视觉设计规范“组件与组件库”（ui-standards.html“参考组件库”只写怎么查）；2026-10-28 已采集 Ant Design 字体与数据格式、Arco、TDesign 字体与表格、Semi、Element Plus、Carbon、Polaris、Atlassian 表格及 NN/g 数据表格、驾驶舱、筛选共 16 页",
+      "why": "Luz-Crawl 采集 2026-10-28，逐页核对",
       "uses": 1,
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-28"
+    },
+    {
+      "key": "decision-agent-program-baseline",
+      "kind": "fact",
+      "text": "交易决策类智能体：指标与信号由程序按已收盘 K 线计算并给出基线方向，模型只做综合与解释；与基线方向相反必须有明确事件理由，否则降级为观望；输出用结构化格式并经校验器检查价位与盈亏比；每条建议保存行情与规则、模型版本快照，用于复盘和置信度校准。",
+      "why": "交易决策类智能体方案设计",
+      "uses": 1,
+      "first_seen": "2026-11-03",
+      "last_confirmed": "2026-11-03"
+    },
+    {
+      "key": "element-plus-overlay-in-prototype-frame",
+      "kind": "fact",
+      "text": "原型里对话框用 append-to 挂进原型框内并把 .el-overlay 改成 position:absolute，场景面板在框外保持可点；el-drawer 的样式会触发 check_document 的内容抽屉误报，窄屏菜单面板改用 el-dialog 做左侧升起的面板；图表悬浮提示用单个 el-tooltip 的 virtual-ref 加 virtual-triggering，离开页面时要隐藏",
+      "why": "后台原型 Element Plus 接入的有效做法",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "entrance-grid-derivation",
+      "kind": "fact",
+      "text": "金刚区的列数、行数、分页由入口数、最长文案字数、屏宽推导（每格最小宽 = 取大值（56，字数 × 12 + 8）），参考案例的 5 列 2 行只是候选信号；超过两行横向分页并配指示点。",
+      "why": "TDesign 小程序宫格示例文案：5 列不超过 4 字、4 列 5 字、3 列 6 字；Vant、NutUI、TDesign 默认 4 列，antd-mini 默认 5 列并支持滑动分页；微信官方没有金刚区规范。",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "entry-ownership-by-function-type",
+      "kind": "fact",
+      "text": "每个功能按类型（上下文、搜索、核心任务、状态、账户、订单、营销、内容、工具）有默认入口位置：门店与配送方式在顶部上下文栏，会员收藏优惠券归我的，订单首页只出进行中状态卡，金刚区只放并列高频核心业务；架构阶段同时交 entrances.json 给视觉技能，用 entrances_check.py 检查",
+      "why": "用户 2026-11-04 要求金刚区不放账户类与标签栏重复项，入口精简",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "five-skill-boundary-contracts",
+      "kind": "fact",
+      "text": "把 Crawl 证据、System 稳定 ID、Design 视觉令牌、Dev 实现契约、Writing 文案键、Ops 测试证据和 Project 的数据文件串成独立交接契约，能清晰划分七个技能的边界",
+      "why": "七个技能：Writing、Crawl、Design、Dev、Ops、Project、System；用户 2026-11-02 确认的链条",
+      "uses": 2,
+      "first_seen": "2026-10-31",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "function-vs-visual-split",
+      "kind": "fact",
+      "text": "界面的功能归本技能、视觉归 Luz-Design：规则页与文档不写颜色、字号、圆角、阴影、图标图形、配图、栅格间距、动画时长；校验器对规则页查视觉词、对功能文档报视觉值警告",
+      "why": "用户 2026-11-04 要求功能归 System、视觉归 Design，边界文档在 Luz-Design references/ui-ownership.md",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "gbt35273-current-edition",
+      "kind": "fact",
+      "text": "GB/T 35273 现行版是 2020 版（2020-10-01 实施），修订稿尚未发布，没有 2025 版；账号注销的要求来自国标 8.5，不是个人信息保护法的条文",
+      "why": "国家标准信息公共服务平台与法条原文 2026-11-02 核对",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
     },
     {
       "key": "imagegen-actual-size",
@@ -704,17 +1398,13 @@
       "why": "两次风格样例生成的打印结果",
       "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "Imagegen 透明底 4×4 元素拼板：请求 2880 实际返回 1254×1254，每格约 313 像素，界面 120 像素内够用；按网格切图后只保留面积不小于主体 1% 的连通部分，去掉背景碎点，再裁边存 WebP（每个约 15 KB）嵌入页面",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
     },
     {
       "key": "manifest-strict-fields",
       "kind": "fact",
       "text": "strict-production 要求 MANIFEST 状态 approved、各阶段 sha256、verification 全 pass、deliverables 的 id 以 ARCH/SYS/VIS/PROTO 等前缀开头且每个模式至少一项",
-      "why": "008 发布时 strict 校验",
+      "why": "发布时 strict 校验",
       "uses": 1,
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-28"
@@ -723,7 +1413,7 @@
       "key": "member-list-default-and-columns",
       "kind": "fact",
       "text": "会员列表默认有效、按最近到店倒序（未到店排最后），即将到期取 15 天内；选定单一状态、单一门店或单一会员卡类型时隐藏对应列，由状态标签或筛选标签写一次；表头筛选与窄屏工具条是同一动作时用不同 data-arg 区分入口",
-      "why": "001 会员管理列表页浏览器验收 58 项通过（1280–1920 无溢出、1440×900 首屏 12 行、390 宽可操作）",
+      "why": "会员管理列表页浏览器验收 58 项通过（1280–1920 无溢出、1440×900 首屏 12 行、390 宽可操作）",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
@@ -738,6 +1428,42 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "pipl-product-design-articles",
+      "kind": "fact",
+      "text": "个人信息保护法产品设计常用条款：第 15 撤回、第 16 拒绝不得停服务、第 17 告知、第 23 第三方单独同意、第 24 自动化决策可关闭、第 26 公共场所设备提示、第 28 至 31 敏感信息与 14 周岁、第 44 至 50 权利受理、第 55 影响评估",
+      "why": "网信办转载全文 2026-11-02 核对",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "platform-console-research-sources",
+      "kind": "fact",
+      "text": "平台配置台调研来源：Dify 文档索引 docs.dify.ai/_llms/en/cloud.txt（节点页 /en/cloud/use-dify/nodes/<名称>.md）；扣子 docs.coze.cn/guides_<名称>（www.coze.cn 只返回标题）；LangGraph 在 docs.langchain.com；Temporal、Airflow、Alertmanager、PagerDuty、Stripe 阶梯定价可直接取；Microsoft Learn 模式页整页返回很长；RAGFlow 旧链接 /docs/dev/ 404，用 /docs/dataset_configuration",
+      "why": "2026-11-02 逐篇核对原文，依据表只写读过的结论",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "product-ui-min-font-12",
+      "kind": "fact",
+      "text": "规范里产品界面（后台、小程序、智能体）最小字号是 12（辅助档给时间、单位、角标），网站与阅读型网页最小 14；渲染审计 audit_rendered.py 现有 --min-font，产品界面传 12，默认仍 14。",
+      "why": "Luz-Design 视觉规范“网页类产出任何文字不小于 12 像素：产品界面、智能体最小 12，网站与阅读型网页最小 14”；审计脚本此前一律按 14 报错，与规范不一致，页面作者会被迫把合规的 12px 辅助文字改大。",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "prototype-chart-drill-consistency",
+      "kind": "fact",
+      "text": "驾驶舱图表的钻取要区分统计口径：按客户统计的图（沟通深度、行业、各销售客户数）进客户表，按记录统计的图（业务类型、趋势、各销售记录数）进记录表，明细条数才等于图上数字；用脚本把每个图表项点一遍，核对明细页“共 N 条”等于图上数字。",
+      "why": "后台原型四组范围共点开 123 个图表项，明细条数全部等于图上数字。",
+      "uses": 1,
+      "first_seen": "2026-11-03",
+      "last_confirmed": "2026-11-03"
+    },
+    {
       "key": "prototype-feedback-from-action-meta",
       "kind": "fact",
       "text": "原型的确认与反馈直接取架构 action_meta：通用引擎按 confirm 文案弹居中确认、按 feedback 给进行中与轻反馈、有 target 就跳页，只给录音、智能体运行、分享、迭代等少数动作写专用行为",
@@ -747,23 +1473,64 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "prototype-spec-system-fields",
+      "kind": "fact",
+      "text": "给原型模板的 System 数据只填 pages[].logic（from、back、done、primary、rules、states、backend、data、actions 四字段）、flows、statuses、tabbar 或 nav、roles、scenes、rules 分组；页面 links 要按动作去向补全否则生成器报孤岛页；tabbar.icon、statuses.tone、blocks、演示数据是 Design 的事，拿不准的字段列进决定记录。",
+      "why": "Luz-Design 原型规格 schema 与 build_prototype.py --check",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "research-source-method-webfetch",
+      "kind": "fact",
+      "text": "审计与规范核对的来源用 WebSearch 与 WebFetch 读取，记入 sources.json 时 method 写 WebFetch、不留快照，只作知识来源，不能 reuse 进会话调研",
+      "why": "experience.py reuse 只接受有快照的 LuzCrawl 来源",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
       "key": "script-bracket-paren-link",
       "kind": "fact",
       "text": "会话与技能校验的本地链接检查在 HTML 里只认 href 与 src 属性，脚本、样式和注释不扫；Markdown 里代码段与代码块不扫，原型脚本可以照常写右方括号紧跟左圆括号",
       "why": "旧版把原型内联脚本里的 ]( 当成 Markdown 链接报断链，已修",
       "uses": 2,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29",
-      "previous": {
-        "text": "原型脚本里不要写右方括号紧跟左圆括号的调用（例如按键名取函数后直接传参），先赋给变量再调用；会话校验会把它当成 Markdown 链接报断链",
-        "replaced_at": "2026-10-29"
-      }
+      "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "shadcn-ui-is-not-a-component-library",
+      "kind": "fact",
+      "text": "shadcn/ui 官方写明它不是组件库而是搭自己组件库的方式：组件源码拷进项目，升级与一致性由项目自己承担；它没有表格、级联、树选择、上传、步骤、时间线、描述列表这类高阶业务组件，要自己用原子件拼，与“优先用库里的高阶复合组件、不自造控件”的规则要另行登记处理",
+      "why": "2026-11-04 评估用户给的 Next.js 加 shadcn/ui 后台技术栈，读了官方介绍",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "spec-source-access",
+      "kind": "fact",
+      "text": "读规范原文的可行路径：Apple HIG 读官方站同源 JSON（tutorials/data/design/human-interface-guidelines/页名.json）；m3.material.io 是 SPA 读不到，改读 material-web 与 material-components-android 的令牌和文档；web.dev 与 Chrome 文档若连不上，用 MDN 替代并标注仅搜索摘要。",
+      "why": "2026-11-02 交互规则调研：HIG 页面 JS 渲染、M3 站点与 web.dev 不可达。",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "ui-recipes-moved-to-design",
+      "kind": "fact",
+      "text": "界面实现参考（ui-recipes.html）、commerce-kit 骨架与示例已迁到 Luz-Design（规则卡 interface-recipes）；本技能的 commerce-design.html 只写分类联动、预估到手价展开构成、倒计时依据、强公告与遮罩、加购飞入何时触发这些功能规则，画法一律读 Luz-Design",
+      "why": "用户 2026-11-04 要求视觉实现归 Design、功能归 System（Luz-Design references/ui-ownership.md）",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
     },
     {
       "key": "ui-recording-frame-sheets",
       "kind": "fact",
       "text": "分析用户的手机录屏：用 imageio_ffmpeg 自带的 ffmpeg 按每 2 秒一帧、带时间戳拼成 4×2 缩略图逐张看完整流程，关键页再按时间点抽原尺寸帧量字号（录屏宽 592 约等于 393 点）；录屏里出现的聊天列表等个人信息不记录",
-      "why": "2026-10-29 用户提供咖啡与茶饮点单小程序录屏，用此方法提取了交易界面规则与紧凑字阶",
+      "why": "2026-10-29 用户提供的点单小程序录屏，用此方法提取了交易界面规则与紧凑字阶",
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
@@ -776,6 +1543,42 @@
       "uses": 1,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "uview-plus-scope-and-package-size",
+      "kind": "fact",
+      "text": "uview-plus 是 uni-app 生态专用的界面框架，官方写明除微信小程序外其他小程序平台兼容可能有问题；组件清单没有图表组件（侧栏的图表是外链的另一个产品）；有经验文章专讲它让小程序主包过大，要按需引入并分包；深浅两套主题能否成立没有读到，要样板页验证",
+      "why": "2026-11-04 评估用户给的 uni-app 加 uView Plus 小程序技术栈，读了官方介绍与一篇经验文章",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "wcag22-aa-product-criteria",
+      "kind": "fact",
+      "text": "WCAG 2.2 对产品设计影响最大的新增 AA 条款：2.4.11 焦点不被遮挡、2.5.7 拖动要有单击替代（仅方向键不够）、2.5.8 目标尺寸 24、3.3.8 登录不靠记忆或拼图；3.3.7 冗余输入和 3.2.6 一致的帮助是 A 级",
+      "why": "W3C Understanding 页面 2026-11-02 核对",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "wechat-official-font-sizes",
+      "kind": "fact",
+      "text": "微信官方常用字号 22、17、15、14、12；微信字体大小标准档 iOS 17、Android 16，iOS 375 屏七档 16、17、18、19.5、21、22、23.8，Android 倍率 1、1、1、1.12、1.125、1.4、1.55、1.65；关怀模式 1.4 倍，字体、图形、按钮等比放大，间距与导航栏固定；wx.getAppBaseInfo 读 fontSizeSetting 与 fontSizeScaleFactor；苹果 iOS 默认 17、最小 11",
+      "why": "2026-11-04 检索微信设计指南、适老化指南、wx.getAppBaseInfo 与苹果排版页；各字号的使用场景表是图片，没取到",
+      "uses": 1,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "wechat-package-limits",
+      "kind": "fact",
+      "text": "微信小程序主包与每个分包各不超过 2M，所有分包合计不超过 30M（服务商代开发 20M）；标签栏 2 至 5 个、官方建议不超过 4 个；图标型轻提示约 1.5 秒、不适用于错误",
+      "why": "官方框架文档与设计指南 2026-11-02 核对；页面栈 10 层只在镜像与社区引述中见到",
+      "uses": 1,
+      "first_seen": "2026-11-02",
+      "last_confirmed": "2026-11-02"
     }
   ]
 }

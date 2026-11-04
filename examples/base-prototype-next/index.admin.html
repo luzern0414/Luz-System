@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<script>/* the scheme is set before the first paint: no light frame before the dark scheme (Luz-Design 视觉设计规范 稳定显示) */(function(){try{var q=new URLSearchParams(location.search).get('scheme');if(q==='dark'||((q===null||q==='system')&&matchMedia('(prefers-color-scheme: dark)').matches)){var r=document.documentElement;r.classList.add('dark');r.style.colorScheme='dark'}}catch(e){}})()</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>示例门店管理后台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23E6F4FF'/%3E%3Cg fill='none' stroke='%23003EB3' stroke-width='2.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 13l2-5h14l2 5'/%3E%3Cpath d='M8 13v11h16V13'/%3E%3Cpath d='M13 24v-6h6v6'/%3E%3C/g%3E%3C/svg%3E">
+</head>
+<body>
+<div id="app"></div>
+<script type="module" src="/src/admin/main.js"></script>
+</body>
+</html>

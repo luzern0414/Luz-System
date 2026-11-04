@@ -466,7 +466,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--system-name", help="Required in system mode; provide the exact system name supplied by the user")
     parser.add_argument("--modules", help="Comma-separated exact module names supplied by the user")
     parser.add_argument("--root", help="Output root override, primarily for tests")
-    parser.add_argument("--card", action="append", help="Extra rule card for this task (repeatable): system-design, function-list, admin-list, admin-dashboard, admin-form, miniprogram, agent-ui, agent-runtime-ui, website, prototype, hardware, interaction; each mode adds its own card (system and prototype also add interaction)")
+    parser.add_argument("--card", action="append", help="Extra rule card for this task (repeatable): system-design, client-docs, function-list, admin-list, admin-dashboard, admin-form, miniprogram, agent-ui, agent-runtime-ui, platform-console, queue-capacity, scheduler-ui, alert-loop, rule-engine-ui, multi-agent, kb-console, workflow-canvas, website, prototype, hardware, interaction, agent-composer, interaction-patterns, nav-levels; each mode adds its own card (system and prototype also add interaction)")
     parser.add_argument("--approval-mode", choices=APPROVAL_MODES, default="per_stage",
                         help="per_stage (default): a person approves each stage; authorization: a platform demo session where a "
                              "person signs one authorization before generation (APPROVALS.json authorizations)")

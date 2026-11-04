@@ -5,7 +5,9 @@
 
 先运行 hw_plan_lib.validate；有错误时停止（--force 仅用于调试，交付前必须零错误）。
 版式遵循 Luz-Design references/file-design.html 的网页文件规则：
-唯一 h1、各节以 h2 开头、字号只用 32/24/20/16/14、字重 400/600、单字体族、浅色、一个主色。
+唯一 h1、各节以 h2 开头、单字体族、浅色、一个主色、字重 400/600（22 像素以上的标题 700）。
+文字层级（h1–h6、正文、表格、辅助字的字号、行高、间距）读取 references/md-type.css 的文本直接拼进页面：
+桌面（768 像素及以上）正文 18，手机 16；不在这里另写标题与正文的字号。
 """
 from __future__ import annotations
 
@@ -22,6 +24,12 @@ from new_session import pick_icon, tab_icon_href  # noqa: E402
 E = lambda s: html.escape(str(s if s is not None else ""), quote=True)  # noqa: E731
 
 ACCENT = {"brand": "#0958D9", "hover": "#003EB3", "tint": "#E6F4FF", "line": "#91CAFF"}
+MD_TYPE = Path(__file__).resolve().parents[1] / "references" / "md-type.css"
+
+
+def md_type_css() -> str:
+    """Markdown 层级样式（Luz-Design 母本的副本，sync_md_type.py 同步）。整段文本作为 format 的参数传入，不经过花括号加倍。"""
+    return MD_TYPE.read_text(encoding="utf-8")
 
 
 def money(v) -> str:
@@ -570,7 +578,7 @@ def render(plan: dict) -> str:
     # Tab icon: the system's pictogram in its theme colour; a hardware plan with no subject keyword gets the chip.
     pictogram = pick_icon(plan["title"])
     tab_icon = tab_icon_href(plan["title"], icon="chip" if pictogram == "grid" else pictogram)
-    return PAGE.format(title=E(plan["title"]), tab_icon=E(tab_icon), body="".join(out), **ACCENT)
+    return PAGE.format(title=E(plan["title"]), tab_icon=E(tab_icon), body="".join(out), md_type=md_type_css(), **ACCENT)
 
 
 PAGE = """<!doctype html>
@@ -583,25 +591,25 @@ PAGE = """<!doctype html>
 <style>
 :root{{color-scheme:light;--ink:#1F1F1F;--muted:#595959;--line:#E8E8E8;--line2:#D9D9D9;--soft:#FAFAFA;--brand:{brand};--tint:{tint};--bl:{line}}}
 *{{box-sizing:border-box}}
-body{{margin:0;background:#FFFFFF;color:var(--ink);font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif;font-size:16px;line-height:1.75}}
+body{{margin:0;background:#FFFFFF;color:var(--ink);font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif}}
+{md_type}
 main{{max-width:1120px;margin:0 auto;padding:48px 24px 72px}}
-h1{{font-size:32px;line-height:1.25;font-weight:600;margin:0 0 36px}}
-h2{{font-size:24px;line-height:1.3;font-weight:600;margin:0 0 16px;padding-left:12px;border-left:4px solid var(--brand)}}
-h3{{font-size:20px;line-height:1.4;font-weight:600;margin:28px 0 12px;display:flex;align-items:center;gap:8px}}
-h4{{font-size:16px;line-height:1.5;font-weight:600;margin:0}}
+h2{{margin:0 0 16px;padding:0 0 0 12px;border-bottom:0;border-left:4px solid var(--brand)}}
+h3{{margin:28px 0 12px;display:flex;align-items:center;gap:8px}}
+h4{{margin:0}}
 section{{margin:0 0 56px}}
-p{{margin:12px 0;max-width:880px}}
 a{{color:var(--brand);text-decoration:none}}a:hover{{color:{hover};text-decoration:underline}}
-b,strong{{font-weight:600}}
 .ic{{fill:none;stroke:var(--brand);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}}
-.conclusion{{background:var(--tint);border-left:4px solid var(--brand);padding:12px 16px;margin:0 0 20px;max-width:880px}}
+.conclusion{{background:var(--tint);border-left:4px solid var(--brand);padding:12px 16px;margin:0 0 20px;max-width:var(--md-measure)}}
 .metrics{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:0 0 20px}}
 .metrics div{{border:1px solid var(--line);border-radius:8px;padding:16px;text-align:center}}
 .metrics strong{{display:block;font-size:32px;line-height:1.25}}
-.metrics span{{font-size:14px;color:var(--muted)}}
+.metrics span{{font-size:var(--md-aux);color:var(--muted)}}
+.chain,.steps,.fsteps,.story{{max-width:none}}
 .chain,.steps{{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:12px}}
-.chain li,.steps li{{display:flex;align-items:flex-start;gap:8px;font-size:14px;line-height:1.5;padding:8px 12px;border:1px solid var(--line2);border-radius:8px;background:#FFFFFF}}
-.chain li b,.steps li b{{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:50%;background:var(--tint);color:var(--brand);font-size:14px;flex:none}}
+.chain li,.steps li,.fsteps li,.story li{{margin:0}}
+.chain li,.steps li{{display:flex;align-items:flex-start;gap:8px;font-size:var(--md-table);line-height:1.5;padding:8px 12px;border:1px solid var(--line2);border-radius:8px;background:#FFFFFF}}
+.chain li b,.steps li b{{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:50%;background:var(--tint);color:var(--brand);font-size:var(--md-aux);flex:none}}
 .steps li{{max-width:260px}}
 .steps li div{{display:flex;flex-direction:column}}
 .steps .dev{{color:var(--muted)}}
@@ -610,14 +618,14 @@ b,strong{{font-weight:600}}
 .flow:last-child{{border-bottom:0}}
 .flow h4{{padding-top:2px}}
 .fsteps{{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 0}}
-.fsteps li{{display:flex;flex-direction:column;gap:4px;padding-right:28px;position:relative;font-size:14px;line-height:1.5}}
+.fsteps li{{display:flex;flex-direction:column;gap:4px;padding-right:28px;position:relative;font-size:var(--md-table);line-height:1.5}}
 .fsteps li:not(:last-child)::after{{content:"";position:absolute;right:8px;top:11px;width:12px;height:0;border-top:2px solid var(--bl)}}
 .act{{display:flex;align-items:center;gap:6px}}
-.act b{{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--tint);color:var(--brand);font-size:14px;font-weight:400}}
+.act b{{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--tint);color:var(--brand);font-size:var(--md-aux);font-weight:400}}
 .who{{display:flex;flex-wrap:wrap;gap:4px;padding-left:26px}}
-.dv{{font-size:14px;line-height:1.4;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 6px}}
+.dv{{font-size:var(--md-aux);line-height:1.4;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 6px}}
 .mod h3{{border-bottom:1px solid var(--line);padding-bottom:8px}}
-.msum{{margin-left:auto;font-size:14px;font-weight:400;color:var(--muted)}}
+.msum{{margin-left:auto;font-size:var(--md-aux);font-weight:400;color:var(--muted)}}
 .cards{{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}}
 .card{{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#FFFFFF}}
 .ph{{display:block;object-fit:contain;background-color:#FFFFFF}}
@@ -625,58 +633,59 @@ b,strong{{font-weight:600}}
 .pic{{width:100%;height:180px;border-bottom:1px solid var(--line);flex:none;padding:8px}}
 .stage{{margin:0 0 24px}}
 .stage h3{{margin:20px 0 10px}}
-.role{{font-size:14px;font-weight:600;color:var(--brand);background-color:var(--tint);border:1px solid var(--bl);border-radius:4px;padding:0 8px;line-height:1.6}}
+.role{{font-size:var(--md-aux);font-weight:600;color:var(--brand);background-color:var(--tint);border:1px solid var(--bl);border-radius:4px;padding:0 8px;line-height:1.6}}
 .story{{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:8px}}
 .sc{{display:grid;grid-template-columns:44px minmax(0,1.3fr) minmax(0,1.7fr) 112px;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}}
 .sc:last-child{{border-bottom:0}}
-.no{{font-size:14px;color:var(--brand);font-weight:600}}
+.no{{font-size:var(--md-aux);color:var(--brand);font-weight:600}}
 .what .act{{font-weight:600;line-height:1.5}}
-.what .res{{font-size:14px;color:var(--muted);line-height:1.5}}
-.exc{{font-size:14px;line-height:1.5;margin-top:4px;color:var(--muted)}}
+.what .res{{font-size:var(--md-table);color:var(--muted);line-height:1.5}}
+.exc{{font-size:var(--md-table);line-height:1.5;margin-top:4px;color:var(--muted)}}
 .exc b{{font-weight:600;color:#AD4E00;margin-right:6px}}
 .thumbs{{display:flex;flex-wrap:wrap;gap:8px}}
-.th{{display:flex;flex-direction:column;align-items:center;gap:2px;width:60px;font-size:14px;line-height:1.3;text-align:center;color:var(--muted)}}
+.th{{display:flex;flex-direction:column;align-items:center;gap:2px;width:60px;font-size:var(--md-aux);line-height:1.3;text-align:center;color:var(--muted)}}
 .th.cloud{{width:auto;flex-direction:row;padding:4px 10px;border:1px dashed var(--line2);border-radius:6px}}
 .tp{{width:48px;height:48px;border:1px solid var(--line);border-radius:6px;padding:2px}}
-.fn{{justify-self:end;font-size:14px;line-height:1.5;padding:2px 10px;border-radius:4px;background-color:var(--tint);color:#003EB3;text-align:center}}
+.fn{{justify-self:end;font-size:var(--md-aux);line-height:1.5;padding:2px 10px;border-radius:4px;background-color:var(--tint);color:#003EB3;text-align:center}}
 .dvc{{display:inline-flex;align-items:center;gap:10px;white-space:nowrap}}
 .tm{{width:36px;height:36px;border:1px solid var(--line);border-radius:4px;flex:none;padding:2px}}
-.dot{{display:inline-block;margin:2px;padding:0 6px;border-radius:4px;background-color:var(--tint);color:#003EB3;font-size:14px;line-height:1.5}}
+.dot{{display:inline-block;margin:2px;padding:0 6px;border-radius:4px;background-color:var(--tint);color:#003EB3;font-size:var(--md-aux);line-height:1.5}}
 .body{{min-width:0;flex:1;display:flex;flex-direction:column;gap:6px;padding:12px 14px 14px}}
 .top{{display:flex;align-items:flex-start;gap:8px;justify-content:space-between}}
-.model{{font-size:14px;color:var(--muted);line-height:1.5}}
-.duty{{font-size:14px;line-height:1.5}}
+.model{{font-size:var(--md-aux);color:var(--muted);line-height:1.5}}
+.duty{{font-size:var(--md-table);line-height:1.5}}
 .price{{display:flex;align-items:baseline;gap:8px}}
-.price strong{{font-size:20px;color:var(--ink)}}
-.price span{{font-size:14px;color:var(--muted)}}
+.price strong{{font-size:var(--md-h3);color:var(--ink)}}
+.price span{{font-size:var(--md-aux);color:var(--muted)}}
 .chips{{display:flex;flex-wrap:wrap;gap:6px}}
-.chip,.port{{font-size:14px;line-height:1.5;padding:0 8px;border-radius:4px}}
+.chip,.port{{font-size:var(--md-aux);line-height:1.5;padding:0 8px;border-radius:4px}}
 .chip{{background:var(--tint);color:#003EB3}}
 .port{{border:1px solid var(--line2);color:var(--muted)}}
 .port.pw{{border-style:dashed}}
-.lv{{font-size:14px;line-height:1.5;padding:0 8px;border-radius:4px;white-space:nowrap;border:1px solid var(--line2);color:var(--muted)}}
+.lv{{font-size:var(--md-aux);line-height:1.5;padding:0 8px;border-radius:4px;white-space:nowrap;border:1px solid var(--line2);color:var(--muted)}}
 .lv-必选{{border-color:var(--brand);color:var(--brand)}}
 .links{{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}}
-.btn{{font-size:14px;line-height:1.5;padding:2px 10px;border:1px solid var(--bl);border-radius:4px;color:var(--brand);white-space:nowrap}}
+.btn{{font-size:var(--md-aux);line-height:1.5;padding:2px 10px;border:1px solid var(--bl);border-radius:4px;color:var(--brand);white-space:nowrap}}
 .qr{{width:96px;height:96px}}
 .sites{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
 .site{{border:1px solid var(--line);border-radius:8px;padding:16px}}
-.site ul{{margin:8px 0 0;padding-left:18px;font-size:14px;line-height:1.6;color:var(--muted)}}
+.site ul{{margin:8px 0 0;padding-left:18px;font-size:var(--md-table);line-height:1.6;color:var(--muted)}}
 .bars{{position:relative;display:flex;flex-direction:column;gap:10px;max-width:880px}}
-.bar{{display:grid;grid-template-columns:96px 1fr 96px;align-items:center;gap:12px;font-size:14px;outline:none}}
+.bar{{display:grid;grid-template-columns:96px 1fr 96px;align-items:center;gap:12px;font-size:var(--md-table)}}
 .bl{{text-align:right;color:var(--muted)}}
 .track{{height:20px;background:var(--soft);border-radius:4px;overflow:hidden}}
 .bar-fill{{display:block;height:100%;background:var(--brand);border-radius:0 4px 4px 0}}
 .bar:hover .bar-fill,.bar:focus .bar-fill{{background:{hover}}}
+.bar:focus-visible{{outline:2px solid var(--ink);outline-offset:2px}}
 .bv{{text-align:left}}
-.tip{{position:absolute;pointer-events:none;background:#FFFFFF;border:1px solid var(--line2);border-radius:6px;padding:6px 10px;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}}
-.note-line{{font-size:14px;color:var(--muted)}}
+.tip{{position:absolute;pointer-events:none;background:#FFFFFF;border:1px solid var(--line2);border-radius:6px;padding:6px 10px;font-size:var(--md-aux);box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}}
+.note-line{{margin:12px 0 0;font-size:var(--md-aux);color:var(--muted)}}
 details{{border:1px solid var(--line);border-radius:8px;margin:0 0 12px;background:#FFFFFF}}
 summary{{cursor:pointer;padding:12px 16px;font-weight:600}}
 details[open] summary{{border-bottom:1px solid var(--line)}}
 details .scroll{{padding:0 0 4px}}
 .scroll{{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 8px}}
-table{{border-collapse:collapse;width:100%;font-size:14px;line-height:1.5}}
+table{{border-collapse:collapse;width:100%}}
 th{{background:var(--soft);font-weight:600;text-align:center;vertical-align:middle;padding:10px 12px;border-bottom:1px solid var(--line2);white-space:nowrap}}
 td{{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}}
 td.c{{text-align:center}}td.l{{text-align:left}}
@@ -698,14 +707,14 @@ a[href^="tel:"]{{white-space:nowrap}}
 .dg-arrow{{fill:#8C8C8C}}
 .dg-badge circle{{fill:#FFFFFF;stroke:{brand};stroke-width:1.2}}
 .dg-badge text{{font-size:14px;fill:{brand};text-anchor:middle}}
-.legend{{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:14px;color:var(--muted);margin:8px 0 16px}}
+.legend{{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:var(--md-aux);color:var(--muted);margin:8px 0 16px}}
 .legend span{{display:inline-flex;align-items:center;gap:8px}}
 .legend i{{display:inline-block;width:28px;height:0;border-top:2px solid #8C8C8C}}
 .legend .lg-data{{border-top-color:{brand}}}.legend .lg-power{{border-top-style:dashed}}
 .legend .lg-opt{{width:22px;height:14px;border:1px dashed #8C8C8C}}
 .legend .lg-site{{width:22px;height:14px;border:1px dotted #8C8C8C;background:#FAFAFA}}
 .lg-badge{{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1px solid {brand};border-radius:50%;color:{brand};font-weight:400}}
-@media (max-width:768px){{main{{padding:32px 16px 56px}}.metrics{{grid-template-columns:repeat(2,minmax(0,1fr))}}.metrics strong{{font-size:24px}}.sites{{grid-template-columns:1fr}}.cards{{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}.pic{{height:120px}}.body{{padding:10px}}.bar{{grid-template-columns:72px 1fr 80px}}.flow{{grid-template-columns:1fr;gap:8px}}.sc{{grid-template-columns:36px 1fr;gap:8px 10px}}.thumbs,.fn{{grid-column:2}}.fn{{justify-self:start}}}}
+@media (max-width:767px){{main{{padding:32px 16px 56px}}.metrics{{grid-template-columns:repeat(2,minmax(0,1fr))}}.metrics strong{{font-size:var(--md-h2)}}.sites{{grid-template-columns:1fr}}.cards{{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}.pic{{height:120px}}.body{{padding:10px}}.bar{{grid-template-columns:72px 1fr 80px}}.flow{{grid-template-columns:1fr;gap:8px}}.sc{{grid-template-columns:36px 1fr;gap:8px 10px}}.thumbs,.fn{{grid-column:2}}.fn{{justify-self:start}}}}
 @media print{{.scroll{{overflow:visible}}details{{break-inside:avoid}}.card{{break-inside:avoid}}}}
 </style>
 </head>

@@ -1,0 +1,32 @@
+{
+  "name": "luz-base-prototype",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Industry-neutral base prototypes (web admin and mini-program) built from real component library components.",
+  "scripts": {
+    "build": "node build.mjs all",
+    "build:admin": "node build.mjs admin",
+    "build:mini": "node build.mjs mini",
+    "dev:admin": "vite --config vite.config.mjs",
+    "dev:mini": "vite --config vite.config.mjs"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "@vant/touch-emulator": "^1.5.0",
+    "echarts": "^6.1.0",
+    "element-plus": "^2.14.7",
+    "vant": "^4.10.2",
+    "vue": "^3.5.44",
+    "vue-echarts": "^8.3.2",
+    "vue-router": "^5.4.0"
+  },
+  "devDependencies": {
+    "@vant/auto-import-resolver": "^1.3.0",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "unplugin-auto-import": "^21.1.0",
+    "unplugin-vue-components": "^32.1.0",
+    "vite": "^8.3.5",
+    "vite-plugin-singlefile": "^2.3.4"
+  }
+}

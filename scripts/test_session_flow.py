@@ -86,6 +86,9 @@ def approve_artifact(session: Path, name: str, relative: str, acceptance: str | 
     write_json(path, data)
 
 def write_research(session: Path, *, omit_tasks: bool = False) -> None:
+    sys.path.insert(0, str(ROOT.parent / "Luz-Crawl" / "scripts"))
+    from test_crawl_preflight import complete_fixture
+    complete_fixture(session, "luz-system")
     snaps = session / "raw" / "01-system" / "crawl-snapshots"
     snaps.mkdir(parents=True, exist_ok=True)
     categories = ["页面结构", "页面结构", "页面结构", "交互流程", "交互流程", "交互流程", "组件状态", "组件状态"]

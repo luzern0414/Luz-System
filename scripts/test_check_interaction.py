@@ -1,5 +1,6 @@
 """Tests for check_interaction.py (interaction logic: entries, exits, duplicates, closed loops, states and feedback,
-and the seven agent run states a prototype demonstrates).
+the seven agent run states a prototype demonstrates, and the front-end behaviour of a prototype: input box state
+machine, motion, wide tables, two-state controls).
 
 Run:  py -X utf8 -m unittest test_check_interaction -v   (from scripts/)
 """
@@ -17,8 +18,14 @@ sys.path.insert(0, str(HERE))
 from check_interaction import (  # noqa: E402
     AGENT_RUN_STATES,
     architecture_interaction_findings,
+    function_visual_findings,
     prototype_agent_state_findings,
+    prototype_behavior_findings,
+    prototype_composer_findings,
     prototype_interaction_findings,
+    prototype_motion_findings,
+    prototype_table_findings,
+    prototype_toggle_findings,
 )
 from validate_session import parse_html  # noqa: E402
 
@@ -113,6 +120,15 @@ class ContractTests(unittest.TestCase):
         return run(page("P-001", "订单", "/orders", **attrs), page("P-002", "订单详情", "/orders/:id", **detail),
                    *BASE[2:], comp("C-001", "P-001", "订单列表", act("A-001", "P-001", "C-001", "打开订单详情",
                                                                     target_page_id="P-002", navigation_id="N-002")))
+
+    def test_visual_values_in_a_function_document_are_a_warning(self) -> None:
+        root = parse('<section><h2>订单页</h2><p>卡片圆角 12，主按钮用 #2563EB 实色。</p><p>商品卡要有封面图。</p></section>')
+        found = function_visual_findings(root, "architecture")
+        self.assertEqual(len(found), 1)
+        self.assertIn("圆角", found[0])
+        self.assertIn("色值", found[0])
+        self.assertIn("ui-ownership.md", found[0])
+        self.assertEqual(function_visual_findings(parse('<section><h2>订单页</h2><p>商品卡要有封面图，标签栏 4 项。</p></section>'), "architecture"), [])
 
     def test_complete_contract_passes(self) -> None:
         errors, warnings = self.full()
@@ -509,3 +525,145 @@ class RuleAndCheckAgreementTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ComposerTests(unittest.TestCase):
+    """agent-design.html 输入区状态机: one primary button in one place that switches with the state."""
+
+    def box(self, state: str = "draft", button: str | None = None, extra: str = "", script: str = "") -> str:
+        button = button or '<button type="button" data-composer-primary data-composer-action="send" aria-label="发送">发送</button>'
+        return (f'<form data-composer data-composer-state="{state}"><textarea aria-label="输入消息"></textarea>{button}{extra}'
+                f'<span role="status" aria-live="polite"></span></form>{script}')
+
+    def findings(self, body: str) -> list[str]:
+        return prototype_composer_findings(parse(body))
+
+    def test_silent_without_a_composer(self) -> None:
+        self.assertEqual(self.findings('<div><button>发送</button><button>停止</button></div>'), [])
+
+    def test_one_primary_button_per_state_passes(self) -> None:
+        demo = "".join(self.box(s, b) for s, b in (
+            ("idle", '<button type="button" data-composer-primary data-composer-action="voice" aria-label="语音输入">语音</button>'),
+            ("draft", None),
+            ("running", '<button type="button" data-composer-primary data-composer-action="stop" aria-label="停止生成">停止</button>'),
+            ("running-draft", '<button type="button" data-composer-primary data-composer-action="queue" aria-label="发送，加入队列">发送</button>')))
+        self.assertEqual(self.findings(demo), [])
+
+    def test_send_and_stop_side_by_side_are_flagged(self) -> None:
+        two = ('<button type="button" data-composer-primary data-composer-action="send" aria-label="发送">发送</button>'
+               '<button type="button" aria-label="停止">停止</button>')
+        warnings = self.findings(self.box("running", two))
+        self.assertTrue(any("as separate buttons at the same time" in w for w in warnings))
+
+    def test_missing_or_double_primary_is_flagged(self) -> None:
+        none = self.findings(self.box("draft", '<button type="button">发送</button>'))
+        self.assertTrue(any("has 0 primary buttons" in w for w in none))
+        twice = self.findings(self.box("draft", '<button data-composer-primary data-composer-action="send">发送</button>'
+                                                '<button data-composer-primary data-composer-action="voice">语音</button>'))
+        self.assertTrue(any("has 2 primary buttons" in w for w in twice))
+
+    def test_state_action_and_label_must_agree(self) -> None:
+        stop_in_draft = '<button data-composer-primary data-composer-action="stop" aria-label="停止生成">停止</button>'
+        self.assertTrue(any("state draft cannot carry the stop action" in w for w in self.findings(self.box("draft", stop_in_draft))))
+        wrong = '<button data-composer-primary data-composer-action="send" aria-label="停止生成">停止</button>'
+        self.assertTrue(any("label and action must agree" in w for w in self.findings(self.box("draft", wrong))))
+        self.assertTrue(any("is not one of" in w for w in self.findings(self.box("sending"))))
+
+    def test_uploading_disables_send(self) -> None:
+        enabled = self.box("uploading")
+        self.assertTrue(any("uploading must disable send" in w for w in self.findings(enabled)))
+        disabled = self.box("uploading", '<button data-composer-primary data-composer-action="send" aria-disabled="true" aria-label="发送">发送</button>')
+        self.assertFalse(any("uploading" in w for w in self.findings(disabled)))
+
+    def test_status_region_and_input_name_are_required(self) -> None:
+        bare = ('<form data-composer data-composer-state="draft"><textarea></textarea>'
+                '<button data-composer-primary data-composer-action="send" aria-label="发送">发送</button></form>')
+        warnings = self.findings(bare)
+        self.assertTrue(any("no status region" in w for w in warnings))
+        self.assertTrue(any("input has no accessible name" in w for w in warnings))
+
+    def test_enter_handler_must_respect_ime_composition(self) -> None:
+        bad = self.box("draft", script='<script>box.addEventListener("keydown", e => { if (e.key === "Enter") send(); });'
+                                      'box.dataset.composerState = "draft";</script>')
+        self.assertTrue(any("without checking IME composition" in w for w in self.findings(bad)))
+        good = self.box("draft", script='<script>box.addEventListener("keydown", e => { if (e.key === "Enter" && !e.isComposing) send(); });'
+                                        'box.dataset.composerState = "draft";</script>')
+        self.assertFalse(any("IME" in w for w in self.findings(good)))
+
+    def test_one_static_state_is_flagged_and_a_switching_script_is_not(self) -> None:
+        self.assertTrue(any("shows one state only" in w for w in self.findings(self.box("draft"))))
+        switching = self.box("draft", script='<script>x.dataset.composerState="running"</script>')
+        self.assertFalse(any("shows one state only" in w for w in self.findings(switching)))
+
+    def test_slow_button_transition_is_flagged(self) -> None:
+        slow = '<style>.composer-send{transition:background-color .3s}</style>' + self.box("draft") + '<script>x.dataset.composerState="running"</script>'
+        self.assertTrue(any("longer than 150 ms" in w for w in self.findings(slow)))
+        fast = slow.replace(".3s", "120ms")
+        self.assertFalse(any("longer than 150 ms" in w for w in self.findings(fast)))
+
+
+class MotionTests(unittest.TestCase):
+    def findings(self, css: str) -> list[str]:
+        return prototype_motion_findings(parse(f"<style>{css}</style><div class='card'>x</div>"))
+
+    def test_motion_needs_a_reduced_motion_branch(self) -> None:
+        css = ".card{transition:transform 160ms ease,opacity 160ms ease}"
+        self.assertTrue(any("prefers-reduced-motion" in w for w in self.findings(css)))
+        self.assertEqual(self.findings(css + "@media (prefers-reduced-motion:reduce){.card{transition:none}}"), [])
+
+    def test_no_motion_no_warning(self) -> None:
+        self.assertEqual(self.findings(".card{padding:16px;transition:none}"), [])
+
+    def test_transition_all_and_layout_properties_are_flagged(self) -> None:
+        reduce = "@media (prefers-reduced-motion:reduce){.card{transition:none}}"
+        self.assertTrue(any("transition: all" in w for w in self.findings(".card{transition:all .2s}" + reduce)))
+        warnings = self.findings(".card{transition:width .2s,margin-left .2s,opacity .2s}" + reduce)
+        self.assertTrue(any("animates width, margin-left" in w for w in warnings))
+        ok = ".card{transition:transform .2s,opacity .2s,box-shadow .2s,background-color .2s,height .2s}"
+        self.assertEqual(self.findings(ok + reduce), [])
+
+    def test_long_interface_animation_is_flagged_but_endless_loops_are_not(self) -> None:
+        reduce = "@media (prefers-reduced-motion:reduce){.card{animation:none}}"
+        self.assertTrue(any("longer than 1.2 s" in w for w in self.findings(".card{animation:enter 1.6s ease}" + reduce)))
+        self.assertEqual(self.findings(".card{animation:shimmer 2s linear infinite}" + reduce), [])
+
+
+class WideTableTests(unittest.TestCase):
+    def table(self, columns: int, attrs: str = "", head: str = "") -> str:
+        cells = "".join(f"<th>列{i}</th>" for i in range(columns))
+        return f'<div><table {attrs}>{head}<thead><tr>{cells}</tr></thead><tbody><tr>{"<td>1</td>" * columns}</tr></tbody></table></div>'
+
+    def test_narrow_tables_are_silent(self) -> None:
+        self.assertEqual(prototype_table_findings(parse(self.table(5))), [])
+
+    def test_wide_table_needs_a_column_strategy(self) -> None:
+        self.assertTrue(any("no column-width strategy" in w for w in prototype_table_findings(parse(self.table(6)))))
+        for declared in (self.table(6, 'data-col-strategy="序号 56；名称 弹性；操作 固定右"'),
+                         self.table(6, head='<colgroup><col width="56"><col><col><col><col><col width="120"></colgroup>'),
+                         self.table(6, 'style="table-layout:fixed"'),
+                         "<style>td{min-width:96px}</style>" + self.table(6)):
+            self.assertEqual(prototype_table_findings(parse(declared)), [], declared[:60])
+
+    def test_very_wide_table_needs_a_scroll_container(self) -> None:
+        wide = self.table(8, 'data-col-strategy="x"')
+        self.assertTrue(any("no horizontal scroll container" in w for w in prototype_table_findings(parse(wide))))
+        scrolled = wide.replace("<div>", '<div class="table-wrap">', 1)
+        self.assertEqual(prototype_table_findings(parse(scrolled)), [])
+
+
+class ToggleControlTests(unittest.TestCase):
+    def test_switch_needs_aria_checked(self) -> None:
+        self.assertTrue(any("no aria-checked" in w for w in prototype_toggle_findings(parse('<button role="switch">自动续费</button>'))))
+        self.assertEqual(prototype_toggle_findings(parse('<button role="switch" aria-checked="true">自动续费</button>')), [])
+
+    def test_a_pressed_button_keeps_one_name(self) -> None:
+        self.assertEqual(prototype_toggle_findings(parse('<button aria-pressed="false" aria-label="收藏">收藏</button>')), [])
+        renamed = prototype_toggle_findings(parse('<button aria-pressed="true" aria-label="取消收藏">取消收藏</button>'))
+        self.assertTrue(any("renames itself" in w for w in renamed))
+        self.assertTrue(any("no accessible name" in w for w in prototype_toggle_findings(parse('<button aria-pressed="true"></button>'))))
+
+
+class BehaviorTemplateTests(unittest.TestCase):
+    def test_prototype_templates_pass_the_behaviour_checks(self) -> None:
+        for agent in (False, True):
+            self.assertEqual(prototype_behavior_findings(parse_file(prototype_from_template(agent))), [], f"agent part: {agent}")

@@ -22,13 +22,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-3b83b53a-58ca-40e6-9b59-db9993a14af1",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-018",
-        "path": "01-system/crawl-snapshots/REF-018.json",
-        "sha256": "832379fa54edea0bef8302e1996d2fc0208922734d1f4045bbd21bdfaae726a5"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-002",
@@ -51,13 +45,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-6f0b906d-95d0-4552-a7e0-5116c0de77b1",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-002",
-        "path": "01-system/crawl-snapshots/REF-002.json",
-        "sha256": "6cbfc258eea8addf0a56b26310b45ce2ca7c1c5c25609f7018972e395dc4fe2a"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-003",
@@ -80,13 +68,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-95663bf9-0edf-448e-ab48-fafae3142e40",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-003",
-        "path": "01-system/crawl-snapshots/REF-003.json",
-        "sha256": "e34ed4c88900bd8ae507386e0d85ba9461a82789b39506a3d7b91c5c380f3c3e"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-004",
@@ -109,13 +91,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-8e1bcd5d-0477-4301-a3a7-cd5f67f763fc",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-008",
-        "path": "01-system/crawl-snapshots/luzcrawl-8e1bcd5d-0477-4301-a3a7-cd5f67f763fc.json",
-        "sha256": "853e1c159abedcc40bc9466ead852b6bc91cf48a6115d4a361842604e7c64720"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-005",
@@ -140,13 +116,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-63d75535-9235-4dd7-b591-490e68d13b52",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-005",
-        "path": "01-system/crawl-snapshots/REF-005.json",
-        "sha256": "f0b602019b2b55b0d037b8323a82979b415692ec09f5e68737c7a1189b578b49"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-006",
@@ -169,13 +139,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-4b1510e6-5f59-4b54-be12-3013306b0047",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-006",
-        "path": "01-system/crawl-snapshots/REF-006.json",
-        "sha256": "e6e09fbb173362f7f7f28057856aaf5a01957ecf948065463e5f861502984134"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-007",
@@ -198,13 +162,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-d2e264bd-e213-41e9-b957-5e28035f25c1",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-007",
-        "path": "01-system/crawl-snapshots/REF-007.json",
-        "sha256": "30552c3c0d2f135487dc1d257040a94f7f34474fb578acc1c37b7e83d09cc27c"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-008",
@@ -227,13 +185,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-c03daaea-ab62-4f40-b012-9958832b9de3",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-008",
-        "path": "01-system/crawl-snapshots/REF-008.json",
-        "sha256": "36269194eb5be61ad7210785aff9137b65ae5c05c4281365020e6eab1d03f7d7"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-009",
@@ -256,13 +208,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-2f712d82-1851-42c1-8a92-d0af803e874d",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-009",
-        "path": "01-system/crawl-snapshots/REF-009.json",
-        "sha256": "379014aa1e2611b0bf16176dccdb7d377ee23c2fd0ab4631bba65087db24f5f3"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-010",
@@ -285,13 +231,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-5f06bd35-086d-423c-96cf-058745ecbbd1",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-010",
-        "path": "01-system/crawl-snapshots/REF-010.json",
-        "sha256": "2cb5f7da8c39665c08c5d26acca20af00d5df29bf89e27b2368f738fba79a81b"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-011",
@@ -314,13 +254,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-ca76a52b-a7d3-42bb-99c4-7c3470e64875",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-011",
-        "path": "01-system/crawl-snapshots/REF-011.json",
-        "sha256": "2c2c33f1f8aa4bc4990ae84c17bdeb49637305ed27ba0fa830fc2ccba4580b2f"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-012",
@@ -343,13 +277,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-e2011c6f-34e4-4f38-b3cc-db62a47ba039",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-012",
-        "path": "01-system/crawl-snapshots/REF-012.json",
-        "sha256": "e8ea7067af5aa28c014808f498ff1855bfabbecff9cc40a99fe77a75b9429bc0"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-018",
@@ -374,13 +302,7 @@
       "http_status": "202",
       "luzcrawl_task": "luzcrawl-bd0ff479-adc6-4bd8-9cf8-03d89a9062e2",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-013",
-        "path": "01-system/crawl-snapshots/REF-013.json",
-        "sha256": "7f0e9b0a02890fcae0456d606881bd74602135be045d7e57ec3bc9a8431c0cc4"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-019",
@@ -403,13 +325,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-f2424579-dea6-4b47-b4a0-6239cbb4955e",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-014",
-        "path": "01-system/crawl-snapshots/REF-014.json",
-        "sha256": "abb8a4741b034dcd6e8a97f627a028077f31c0a882638965c6122ace0d08f614"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-023",
@@ -432,13 +348,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-90805c2f-6b27-40a6-82da-85a9500eb817",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-019",
-        "path": "01-system/crawl-snapshots/REF-019.json",
-        "sha256": "e0719490051f96794ccb6a104e7db845becde2d28257cf53842d826bee58426f"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-024",
@@ -461,13 +371,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-437ca2d9-598d-45e3-8bc9-86ab0b8e0f58",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-020",
-        "path": "01-system/crawl-snapshots/REF-020.json",
-        "sha256": "6dff8233a88de6baa4f8e9ac40ed01985da1ba07b7265de01d0310d791dd1532"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-025",
@@ -490,13 +394,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-ed593691-a2d1-41e6-aa05-39f92e843009",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-021",
-        "path": "01-system/crawl-snapshots/REF-021.json",
-        "sha256": "ddec8999ba1ddd978a7cb749541b095cc83b3f3a4302663032c5325c6110691b"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-026",
@@ -519,13 +417,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-460b7427-c1a9-410b-a929-8936029c421e",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-022",
-        "path": "01-system/crawl-snapshots/REF-022.json",
-        "sha256": "fe08a0e212ce4272322e797108fc786f633b75bbba95041841db0cb4aefd191a"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-027",
@@ -548,13 +440,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-029783c3-14f2-42d3-b12c-8770d0e2eb22",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-023",
-        "path": "01-system/crawl-snapshots/REF-023.json",
-        "sha256": "049a1135492288322254e85896723c7243bb2ebf6748c71e5f815feaffa436ef"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-028",
@@ -577,13 +463,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-e1ab1653-cf04-4a0d-ae59-7f3908fe1730",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-024",
-        "path": "01-system/crawl-snapshots/REF-024.json",
-        "sha256": "4745b6f0dfa572ea40020d532fcbe2f8d3a1fce63377df891689b34054c0b31b"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-029",
@@ -606,13 +486,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-a797d474-dcf2-4af1-bce8-4829c14db73c",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-025",
-        "path": "01-system/crawl-snapshots/REF-025.json",
-        "sha256": "2a4d1122c2cc0493ad006f6c55f6ede347f449c5cb571148af2cb7324881b544"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-030",
@@ -635,13 +509,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-a8e11557-05d7-465a-a71e-38bfa0e79de9",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-026",
-        "path": "01-system/crawl-snapshots/REF-026.json",
-        "sha256": "9101e3ba10cbfe2df7599f928067e8354c9cba8cb7ecaff21cacad5aae813147"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-033",
@@ -664,13 +532,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-28718032-cb32-487e-8f77-1b509cd50848",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-030",
-        "path": "01-system/crawl-snapshots/REF-030.json",
-        "sha256": "39186597297dd2aeae572bf0095fef01f6f0b498ac272c89f24a94562c3179dc"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-034",
@@ -693,13 +555,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-a5adb941-8e1e-4bbd-a689-0664450cbd77",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-031",
-        "path": "01-system/crawl-snapshots/REF-031.json",
-        "sha256": "205688d629974f0dcd6886746dda92b65cee8f1b8d61ec08c089a9a1b14a2de7"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-035",
@@ -722,13 +578,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-9b3982e5-0806-408c-aa55-7f4f39c65610",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-032",
-        "path": "01-system/crawl-snapshots/REF-032.json",
-        "sha256": "e1c3fd6700ee5a7075d131f3c1aadd7308b8c8b414dad15730c7fc12768935ee"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-036",
@@ -751,13 +601,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-c442aa99-b5e2-4847-8d03-d0b05a94c6d3",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-033",
-        "path": "01-system/crawl-snapshots/REF-033.json",
-        "sha256": "4d2d40bc360f90fb4fede448cbc9b127de35e1aab02f3618f3841dc1b23d0c90"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-037",
@@ -780,13 +624,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-7d8188f4-988f-4822-bda7-0913d180227a",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-034",
-        "path": "01-system/crawl-snapshots/REF-034.json",
-        "sha256": "b69c506ecde39a2f5ef9852eb91cbae757fdc15f7d96f7fe9d2f6bc8fa27dad2"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-038",
@@ -811,13 +649,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-12665a92-1203-4403-a69f-bc2ef3981564",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-035",
-        "path": "01-system/crawl-snapshots/REF-035.json",
-        "sha256": "d21c62f579b44ce51f9d0e5cbe2898b47d3e509816a0d42f2ab88687a6752f87"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-040",
@@ -840,13 +672,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-d4f947d9-c6aa-4bf0-a3f7-935b73c6f0ee",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-037",
-        "path": "01-system/crawl-snapshots/REF-037.json",
-        "sha256": "da940a4daba31b65ecaf43a2cb568811d5d1030ea6bb09c828343eb63f41bd45"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-041",
@@ -869,13 +695,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-cfa31eca-60ba-455f-98dd-45006c5dfdc0",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-038",
-        "path": "01-system/crawl-snapshots/REF-038.json",
-        "sha256": "e6bbcdde1015fd0d844d6834deb8e70496fcdb09e72c39a5a7e16ff965fca298"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-042",
@@ -898,13 +718,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-9ef4aaaf-662f-4895-b1f2-26ea54018b3e",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-039",
-        "path": "01-system/crawl-snapshots/REF-039.json",
-        "sha256": "fae98f6d0964be3ac10e2daae391f9f0abd0a9e95b576bebec50e40e5bdc3908"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-043",
@@ -927,13 +741,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-39e109fb-6ea9-4642-bc3f-32360b0f4953",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-040",
-        "path": "01-system/crawl-snapshots/REF-040.json",
-        "sha256": "23a958975807a518f0538dda23ed8d8b3048602824f467b0fd1d29cfc904788a"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-044",
@@ -956,13 +764,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-1f6624a6-5800-4bf4-bf8b-5a4b5581e28d",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-041",
-        "path": "01-system/crawl-snapshots/REF-041.json",
-        "sha256": "809605c8cbd716bedf445a814cfa5008d0b0769f3b61f0e1616febeb865615c8"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-045",
@@ -985,13 +787,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-f5ebe36d-d542-4cd0-b30d-aab2d81a0131",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-042",
-        "path": "01-system/crawl-snapshots/REF-042.json",
-        "sha256": "d8c460bfb533f3fa8ee391b68bf171bf98d762543f3c4144f354ccc7749cb938"
-      }
+      "method": "LuzCrawl"
     },
     {
       "url": "https://www.nngroup.com/articles/top-ten-guidelines-for-homepage-usability",
@@ -1012,9 +808,6 @@
       "captured_at": "2026-10-28",
       "luzcrawl_status": "部分",
       "method": "LuzCrawl",
-      "snapshot": {
-        "path": "D:/Codes/skill输出/Luz-Crawl/raw/001_Luz-Design 健身房小程序与后台设计规范调研/raw/399_Top 10 Guidelines for Homepage Usability - NN G"
-      },
       "id": "SRC-071"
     },
     {
@@ -1036,9 +829,6 @@
       "captured_at": "2026-10-28",
       "luzcrawl_status": "部分",
       "method": "LuzCrawl",
-      "snapshot": {
-        "path": "D:/Codes/skill输出/Luz-Crawl/raw/001_Luz-Design 健身房小程序与后台设计规范调研/raw/400_Breakpoints – Material Design 3"
-      },
       "id": "SRC-072"
     },
     {
@@ -1060,9 +850,6 @@
       "captured_at": "2026-10-28",
       "luzcrawl_status": "部分",
       "method": "LuzCrawl",
-      "snapshot": {
-        "path": "D:/Codes/skill输出/Luz-Crawl/raw/001_Luz-Design 健身房小程序与后台设计规范调研/raw/402_F-Shaped Pattern of Reading Misunderstood, But Still Relevant -"
-      },
       "id": "SRC-073"
     },
     {
@@ -1084,9 +871,6 @@
       "captured_at": "2026-10-28",
       "luzcrawl_status": "部分",
       "method": "LuzCrawl",
-      "snapshot": {
-        "path": "D:/Codes/skill输出/Luz-Crawl/raw/001_Luz-Design 健身房小程序与后台设计规范调研/raw/404_Web Page Footers 101 Design Patterns and When to Use Each - NN G"
-      },
       "id": "SRC-074"
     },
     {
@@ -1108,9 +892,6 @@
       "captured_at": "2026-10-28",
       "luzcrawl_status": "部分",
       "method": "LuzCrawl",
-      "snapshot": {
-        "path": "D:/Codes/skill输出/Luz-Crawl/raw/001_Luz-Design 健身房小程序与后台设计规范调研/raw/408_SEO 新手指南：基础知识 Google 搜索中心 Documentation Google for Developers"
-      },
       "id": "SRC-075"
     },
     {
@@ -1132,9 +913,6 @@
       "captured_at": "2026-10-28",
       "luzcrawl_status": "部分",
       "method": "LuzCrawl",
-      "snapshot": {
-        "path": "D:/Codes/skill输出/Luz-Crawl/raw/001_Luz-Design 健身房小程序与后台设计规范调研/raw/409_Menu-Design Checklist 17 UX Guidelines - NN G"
-      },
       "id": "SRC-076"
     },
     {
@@ -1156,9 +934,6 @@
       "captured_at": "2026-10-28",
       "luzcrawl_status": "部分",
       "method": "LuzCrawl",
-      "snapshot": {
-        "path": "D:/Codes/skill输出/Luz-Crawl/raw/001_Luz-Design 健身房小程序与后台设计规范调研/raw/410_Atomic Design Methodology Atomic Design by Brad Frost"
-      },
       "id": "SRC-077"
     },
     {
@@ -1180,9 +955,6 @@
       "captured_at": "2026-10-28",
       "luzcrawl_status": "成功",
       "method": "LuzCrawl",
-      "snapshot": {
-        "path": "D:/Codes/skill输出/Luz-Crawl/raw/001_Luz-Design 健身房小程序与后台设计规范调研/raw/414_Guidelines for Human-AI Interaction - Microsoft Research"
-      },
       "id": "SRC-078"
     },
     {
@@ -1204,9 +976,6 @@
       "captured_at": "2026-10-28",
       "luzcrawl_status": "成功",
       "method": "LuzCrawl",
-      "snapshot": {
-        "path": "D:/Codes/skill输出/Luz-Crawl/raw/001_Luz-Design 健身房小程序与后台设计规范调研/raw/417_Generative AI Apple Developer Documentation"
-      },
       "id": "SRC-079"
     },
     {
@@ -1230,13 +999,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-270734d2-7627-4bfc-a576-eee3f57bf86b",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-059",
-        "path": "01-system/crawl-snapshots/REF-059.json",
-        "sha256": "eca422aaa7c27792d71e87457b87849703aff67472c1e1b29dc0471ae13bd7b2"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-064",
@@ -1259,13 +1022,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-735db960-4f6f-4958-abb0-a6e2c5726101",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-061",
-        "path": "01-system/crawl-snapshots/REF-061.json",
-        "sha256": "758326276c721e2bb97776409b6798706e42622667ace55705c1cd5a216c81f5"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-069",
@@ -1288,13 +1045,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-18ea6f46-6539-47f2-a30e-1970fad0c495",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-066",
-        "path": "01-system/crawl-snapshots/REF-066.json",
-        "sha256": "3c19bc4ed7a168b19dc89cf9f58fd0e12f4722ae3085b1ca054eca0168c51d91"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-070",
@@ -1317,13 +1068,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-891208f6-2312-4976-b678-3cb8b241f347",
       "luzcrawl_status": "成功",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "001-健身房小程序和后台系统",
-        "ref": "REF-067",
-        "path": "01-system/crawl-snapshots/REF-067.json",
-        "sha256": "a565e6d2ba7c52d40a7b006d728276face4e48a36d99bbcfa8b6954fa2a3059e"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-080",
@@ -1346,13 +1091,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-8cb33186-18f7-4df0-94e1-d210d8869de4",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-001",
-        "path": "01-system/crawl-snapshots/luzcrawl-8cb33186-18f7-4df0-94e1-d210d8869de4.json",
-        "sha256": "ec94711d58ade71847d72b79ac918a80cd48f88ddec258eadc60dd2867567b01"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-081",
@@ -1375,13 +1114,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-0cf490d0-21ad-4c7a-86a8-8ba5ba845c4c",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-002",
-        "path": "01-system/crawl-snapshots/luzcrawl-0cf490d0-21ad-4c7a-86a8-8ba5ba845c4c.json",
-        "sha256": "003ebd0b358347deac794eed2d1b9e77b44e52becc298698c1250ef0484e80f4"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-082",
@@ -1404,13 +1137,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-104eda55-d47f-4d7a-b14c-2aed75438fee",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-003",
-        "path": "01-system/crawl-snapshots/luzcrawl-104eda55-d47f-4d7a-b14c-2aed75438fee.json",
-        "sha256": "dbf79121f4131b6fddccb1c008789772442dad83b238793365126821b09a714c"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-083",
@@ -1433,13 +1160,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-8b1a8918-d49b-4878-ab88-8dcf362d5a73",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-004",
-        "path": "01-system/crawl-snapshots/luzcrawl-8b1a8918-d49b-4878-ab88-8dcf362d5a73.json",
-        "sha256": "d04c7818d4c65bc88e1fce785c434581301ba61c64a583839df5290db4334cc7"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-084",
@@ -1462,13 +1183,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-f74fdf7c-f617-48e1-a79c-6af01f803595",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-005",
-        "path": "01-system/crawl-snapshots/luzcrawl-f74fdf7c-f617-48e1-a79c-6af01f803595.json",
-        "sha256": "d87c6bf831618e12724a9172189cfa2f3c05202d9a792965c91890825b206484"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-085",
@@ -1491,13 +1206,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-2a4e0a94-54ba-4ee2-8d52-a5448929d79b",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-006",
-        "path": "01-system/crawl-snapshots/luzcrawl-2a4e0a94-54ba-4ee2-8d52-a5448929d79b.json",
-        "sha256": "902e02e5dd88abce685f6a1132365e22ed99987c353c6e8a87bc79e77aa6c76f"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-086",
@@ -1520,13 +1229,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-03331d39-3caf-497e-8d99-787fa316a00a",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-007",
-        "path": "01-system/crawl-snapshots/luzcrawl-03331d39-3caf-497e-8d99-787fa316a00a.json",
-        "sha256": "a8e984cb02ab70c7eeee43dd35c4f9017dbdc83d233dea3391ea4f981fb47571"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-087",
@@ -1549,13 +1252,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-92c12f14-4bc1-4ea0-8e7f-b08505f66867",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-009",
-        "path": "01-system/crawl-snapshots/luzcrawl-92c12f14-4bc1-4ea0-8e7f-b08505f66867.json",
-        "sha256": "fb29632530ae09f11a20ac60fa2e94be90188889298e552883a7c344e4ddd2c9"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-088",
@@ -1578,13 +1275,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-05a4cc39-ff7f-430a-bf1a-9b3f9ca42315",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-010",
-        "path": "01-system/crawl-snapshots/luzcrawl-05a4cc39-ff7f-430a-bf1a-9b3f9ca42315.json",
-        "sha256": "2ad80c2b4997204bae985c86dfde42372c7c58528916fadcdd773924a82dc16c"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-089",
@@ -1607,13 +1298,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-4e2f8e2b-7bc4-44b1-a06e-702fbf10bf55",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-011",
-        "path": "01-system/crawl-snapshots/luzcrawl-4e2f8e2b-7bc4-44b1-a06e-702fbf10bf55.json",
-        "sha256": "743b86bc124a1e83fd0de9520b5b0e834599a42b658e68a0c65bc7bf49f82ca3"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-090",
@@ -1636,13 +1321,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-ec2a7b78-6eff-45ec-a8ef-683a80eba998",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-012",
-        "path": "01-system/crawl-snapshots/luzcrawl-ec2a7b78-6eff-45ec-a8ef-683a80eba998.json",
-        "sha256": "b1fa70b88fb554fdcfc9f31c2004ad41e5b3a4bf16e5fa7b89a5d6e704d11f73"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-091",
@@ -1665,13 +1344,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-25d9c59f-2cf1-4c01-9284-a327989bb832",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-013",
-        "path": "01-system/crawl-snapshots/luzcrawl-25d9c59f-2cf1-4c01-9284-a327989bb832.json",
-        "sha256": "69c83c198034076a2d5afb87806adb2520ae4ebb8430bbe011e3642f210d9b93"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-092",
@@ -1694,13 +1367,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-d28f1d84-5938-45a3-bed6-a419d706b3c7",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-014",
-        "path": "01-system/crawl-snapshots/luzcrawl-d28f1d84-5938-45a3-bed6-a419d706b3c7.json",
-        "sha256": "dbb38fd12517893126d5647e5249864e56a818763997ab1d956887fdea8dee8a"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-093",
@@ -1723,13 +1390,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-59dc1ffc-d793-450e-bad4-be1b58924480",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-015",
-        "path": "01-system/crawl-snapshots/luzcrawl-59dc1ffc-d793-450e-bad4-be1b58924480.json",
-        "sha256": "6d5b6890e43d5ae3c7d6cf1cae761ea469146bcd9a3335f405e54fe69866f7b6"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-094",
@@ -1752,13 +1413,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-fa63eb3c-f6eb-4306-b36c-450b09ba5da4",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-016",
-        "path": "01-system/crawl-snapshots/luzcrawl-fa63eb3c-f6eb-4306-b36c-450b09ba5da4.json",
-        "sha256": "6464329adba3fdd1ecaf16f9c25f923d0f3caf79f307e80574a8e0520bb08db7"
-      }
+      "method": "LuzCrawl"
     },
     {
       "id": "SRC-095",
@@ -1781,13 +1436,7 @@
       "http_status": "200",
       "luzcrawl_task": "luzcrawl-f2fc5de5-3250-4f7d-8b23-82dc81431191",
       "luzcrawl_status": "部分",
-      "method": "LuzCrawl",
-      "snapshot": {
-        "session": "005-商机雷达获客系统前端重设计",
-        "ref": "REF-017",
-        "path": "01-system/crawl-snapshots/luzcrawl-f2fc5de5-3250-4f7d-8b23-82dc81431191.json",
-        "sha256": "262869dbf9ce3da84e7a460d228c4a6a8aab66655cad78fa5f83851cf290f7ab"
-      }
+      "method": "LuzCrawl"
     },
     {
       "url": "https://ant.design/docs/spec/font-cn",
@@ -2028,6 +1677,1084 @@
       "luzcrawl_status": "成功",
       "method": "LuzCrawl",
       "id": "SRC-107"
+    },
+    {
+      "url": "https://webstore.iec.ch/en/publication/64315",
+      "title": "IEC 商店 ISO/IEC/IEEE 29148:2018",
+      "domain": "webstore.iec.ch",
+      "category": "前端规则",
+      "evidence": "2018-11-28 发布的第 2 版，范围是产生需求的工程活动所需的过程；标准全文收费，条款文字未取得",
+      "borrowable": "需求工程的现行版本与适用范围",
+      "not_copyable": "标准全文",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-108"
+    },
+    {
+      "url": "https://openstd.samr.gov.cn/bzgk/gb/std_list?p.p90=circulation_date&p.p91=desc&p.p2=9385",
+      "title": "国家标准全文公开系统 GB/T 9385",
+      "domain": "openstd.samr.gov.cn",
+      "category": "前端规则",
+      "evidence": "列表行：GB/T 9385-2008 计算机软件需求规格说明规范，状态现行",
+      "borrowable": "需求规格说明国标的编号、年份、现行状态",
+      "not_copyable": "标准全文",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-109"
+    },
+    {
+      "url": "https://openstd.samr.gov.cn/bzgk/gb/std_list?p.p90=circulation_date&p.p91=desc&p.p1=0&p.p2=需求工程",
+      "title": "国家标准全文公开系统 需求工程",
+      "domain": "openstd.samr.gov.cn",
+      "category": "前端规则",
+      "evidence": "列表行：GB/T 45802-2025 系统与软件工程 生存周期过程 需求工程，现行，采标；2025-12-01 起实施",
+      "borrowable": "需求工程国标现行编号",
+      "not_copyable": "标准全文",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-110"
+    },
+    {
+      "url": "https://c4model.com/diagrams/notation",
+      "title": "C4 模型 图的记法",
+      "domain": "c4model.com",
+      "category": "前端规则",
+      "evidence": "每张图有标题（类型加范围）和图例；元素写类型、技术和简短说明；每条线是单向关系并写明具体用途，容器间的线写协议；颜色要考虑黑白打印与色盲",
+      "borrowable": "架构图的标题、图例、元素说明、带标注的单向线",
+      "not_copyable": "C4 的具体形状与配色（该模型不规定）",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-111"
+    },
+    {
+      "url": "https://c4model.com/diagrams",
+      "title": "C4 模型 图的层次",
+      "domain": "c4model.com",
+      "category": "前端规则",
+      "evidence": "上下文图与容器图对多数团队已经足够；组件图只在有价值时画；代码图不建议长期维护",
+      "borrowable": "一张图一个抽象层次，先全貌后局部",
+      "not_copyable": "四层图的全部要求",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-112"
+    },
+    {
+      "url": "https://c4model.com/diagrams/deployment",
+      "title": "C4 模型 部署图",
+      "domain": "c4model.com",
+      "category": "前端规则",
+      "evidence": "一张部署图只画一个环境；部署节点加基础设施节点；图标要进图例",
+      "borrowable": "部署图一个环境一张",
+      "not_copyable": "具体图标",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-113"
+    },
+    {
+      "url": "https://www.omg.org/spec/BPMN/2.0.2/PDF",
+      "title": "OMG BPMN 2.0.2 规范",
+      "domain": "www.omg.org",
+      "category": "前端规则",
+      "evidence": "泳池与泳道的定义；顺序流不跨池，消息流连接两个池并画虚线；开始事件可选，有结束事件就须有开始事件；任务是原子活动，排他网关像一个问题、只走一条路径",
+      "borrowable": "泳道图元素语义；跨系统交接用虚线",
+      "not_copyable": "动词加对象等命名写法（规范里没有，只是习惯）",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-114"
+    },
+    {
+      "url": "https://docs.camunda.io/docs/components/best-practices/modeling/naming-bpmn-elements/",
+      "title": "Camunda 业务流程元素命名",
+      "domain": "docs.camunda.io",
+      "category": "前端规则",
+      "evidence": "任务用动词加对象；事件用对象加表示状态的动词；排他网关写成问句，出线标条件",
+      "borrowable": "流程图元素命名习惯（惯例，不是规范）",
+      "not_copyable": "BPMN 规范本身",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-115"
+    },
+    {
+      "url": "https://www.omg.org/spec/UML/2.5.1/PDF",
+      "title": "OMG UML 2.5.1 规范",
+      "domain": "www.omg.org",
+      "category": "前端规则",
+      "evidence": "节点是可部署制品的计算资源；制品是软件开发或运行所用的信息项；通信路径是两个部署目标之间交换信号与消息的关联",
+      "borrowable": "部署图的节点、制品、通信路径",
+      "not_copyable": "UML 全部图种",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-116"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/well-architected/architect-role/design-diagrams",
+      "title": "Azure Well-Architected 架构图做法",
+      "domain": "learn.microsoft.com",
+      "category": "前端规则",
+      "evidence": "没有箭头的线含义不清，要画箭头；每个图标、分组、关系都要标注；线型或边框有含义要给图例；一个层次一张图；不只靠颜色区分；上下文图要有明确边界",
+      "borrowable": "架构图的箭头、标注、图例、边界",
+      "not_copyable": "Azure 图标与产品术语",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-117"
+    },
+    {
+      "url": "https://www.agilebusiness.org/?p=1907",
+      "title": "敏捷商业联盟 MoSCoW 优先级",
+      "domain": "www.agilebusiness.org",
+      "category": "前端规则",
+      "evidence": "Must 是项目保证交付的最小可用子集，Should 重要但非必须，Could 想要而次要，Won't 本次不做；Must 的工作量通常不超过六成",
+      "borrowable": "基础功能与可选功能的划分依据",
+      "not_copyable": "具体比例当作硬规则",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-118"
+    },
+    {
+      "url": "https://developers.weixin.qq.com/miniprogram/dev/framework/subpackages.html",
+      "title": "微信小程序 分包加载",
+      "domain": "developers.weixin.qq.com",
+      "category": "前端规则",
+      "evidence": "整个小程序所有分包大小不超过 30M（服务商代开发的不超过 20M）；单个分包或主包不能超过 2M",
+      "borrowable": "代码包大小限制",
+      "not_copyable": "其他口径的数字",
+      "surfaces": [
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-119"
+    },
+    {
+      "url": "https://developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/PrivacyAuthorize.html",
+      "title": "微信小程序 用户隐私保护指引与授权",
+      "domain": "developers.weixin.qq.com",
+      "category": "前端规则",
+      "evidence": "处理个人信息须补充隐私保护指引；未声明的接口与组件直接禁用；触发隐私接口时平台弹官方弹窗，开发者也可自行设计并用同意按钮承接",
+      "borrowable": "隐私保护指引的页面与流程设计",
+      "not_copyable": "接口调用的实现细节",
+      "surfaces": [
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-120"
+    },
+    {
+      "url": "https://developers.weixin.qq.com/miniprogram/product/",
+      "title": "微信小程序平台运营规范",
+      "domain": "developers.weixin.qq.com",
+      "category": "交互流程",
+      "evidence": "2.15.1 用户未触发相关功能时不得提前弹窗申请权限、拒绝授权不得停止全部服务、不得要求先输入手机号；2.13.5 弹窗可关闭；2.5.21 与 2.5.1 禁止强制订阅与强制分享；2.14 支付提示、原路退款、不自动跳营销页（页面常改，以当前版本为准）",
+      "borrowable": "授权、订阅、分享、支付的界面底线",
+      "not_copyable": "条文逐字复制",
+      "surfaces": [
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-121"
+    },
+    {
+      "url": "https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html",
+      "title": "微信小程序 手机号快速验证",
+      "domain": "developers.weixin.qq.com",
+      "category": "前端规则",
+      "evidence": "必须由用户点按钮并同意；仅向已认证的非个人主体开放；可能按次收费；不保证实时验证；不合理索要手机号会被处理",
+      "borrowable": "手机号授权的页面设计",
+      "not_copyable": "费用与额度的具体数字（常变）",
+      "surfaces": [
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-122"
+    },
+    {
+      "url": "https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/userProfile.html",
+      "title": "微信小程序 头像昵称填写",
+      "domain": "developers.weixin.qq.com",
+      "category": "前端规则",
+      "evidence": "用头像选择按钮与昵称输入框让用户自己填；昵称输入有异步安全检测，不通过输入被清空",
+      "borrowable": "头像昵称的填写流程与被清空的处理",
+      "not_copyable": "接口细节",
+      "surfaces": [
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-123"
+    },
+    {
+      "url": "https://developers.weixin.qq.com/miniprogram/dev/framework/ability/darkmode.html",
+      "title": "微信小程序 深色模式",
+      "domain": "developers.weixin.qq.com",
+      "category": "前端规则",
+      "evidence": "配置里声明适配后才生效，基础库 2.11.0 起",
+      "borrowable": "深色模式的取舍",
+      "not_copyable": "适配实现细节",
+      "surfaces": [
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-124"
+    },
+    {
+      "url": "https://www.cac.gov.cn/2021-08/20/c_1631050028355286.htm",
+      "title": "中华人民共和国个人信息保护法（网信办转载）",
+      "domain": "www.cac.gov.cn",
+      "category": "前端规则",
+      "evidence": "第 13 至 17 条处理依据、同意、撤回、不得因拒绝而不提供服务、告知；第 23、24、26 条第三方提供、自动化决策、公共场所设备；第 28 至 31 条敏感信息与未成年人；第 44 至 47、50 条权利与受理；第 55 条影响评估；2021-11-01 施行",
+      "borrowable": "个人信息的产品设计依据",
+      "not_copyable": "条文逐字复制",
+      "surfaces": [
+        "小程序",
+        "后台",
+        "网站"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-125"
+    },
+    {
+      "url": "https://www.cac.gov.cn/2025-03/21/c_1744174262156096.htm",
+      "title": "人脸识别技术应用安全管理办法（国家互联网信息办公室、公安部令第 19 号）",
+      "domain": "www.cac.gov.cn",
+      "category": "前端规则",
+      "evidence": "2025-06-01 施行：第 6 条单独同意，第 8 条存于设备内不得通过互联网对外传输（另有规定或单独同意除外），第 10 条不得作唯一验证方式，第 13 条公共场所要有提示标识且私密空间内部不得安装，第 15 条 10 万人备案",
+      "borrowable": "人脸门禁的同意、替代方式、提示与备案",
+      "not_copyable": "条文逐字复制",
+      "surfaces": [
+        "硬件",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-126"
+    },
+    {
+      "url": "https://std.samr.gov.cn/gb/search/gbDetailed?id=A0280129495AEBB4E05397BE0A0AB6FE",
+      "title": "国家标准信息公共服务平台 GB/T 35273",
+      "domain": "std.samr.gov.cn",
+      "category": "前端规则",
+      "evidence": "GB/T 35273-2020 现行，2020-10-01 实施；复审结论为修订，修订计划处于征求意见",
+      "borrowable": "国标版本与状态（2025 版尚未发布）",
+      "not_copyable": "标准全文",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-127"
+    },
+    {
+      "url": "https://www.cupk.edu.cn/xxglb/cl/2020-08-9/db2.0/01-GBT35273%E2%80%942020.pdf",
+      "title": "GB/T 35273-2020 全文（高校托管副本）",
+      "domain": "www.cupk.edu.cn",
+      "category": "前端规则",
+      "evidence": "5.2 最小必要；5.3 肯定性动作开启功能、不捆绑、不反复询问；5.4 敏感信息明示同意与生物识别单独告知；6.3 原则上不存原始生物识别图像；7.5 个性化展示可区分并可关闭；8.4 撤回；8.5 注销方法简便",
+      "borrowable": "产品设计层面的授权、撤回、注销、个性化规则",
+      "not_copyable": "条文逐字复制（非官方副本，引用前对照正式文本）",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-128"
+    },
+    {
+      "url": "https://www.cac.gov.cn/2019-12/27/c_1578986455686625.htm",
+      "title": "App 违法违规收集使用个人信息行为认定方法",
+      "domain": "www.cac.gov.cn",
+      "category": "前端规则",
+      "evidence": "频繁征求同意干扰使用、默认选择同意隐私政策、一次性要求打开多个权限、拒绝提供业务功能、删除更正设置不合理条件属违规情形",
+      "borrowable": "授权界面的反面清单",
+      "not_copyable": "适用范围（对小程序是否适用未核实）",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-129"
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html",
+      "title": "WCAG 2.2 焦点不被遮挡（最低）",
+      "domain": "www.w3.org",
+      "category": "前端规则",
+      "evidence": "2.4.11，AA：获得焦点的组件不会被作者创建的内容完全遮住",
+      "borrowable": "吸顶栏与冻结列的焦点处理",
+      "not_copyable": "术语解释",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-130"
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html",
+      "title": "WCAG 2.2 拖动动作",
+      "domain": "www.w3.org",
+      "category": "前端规则",
+      "evidence": "2.5.7，AA：依赖拖动的功能要能用单指针不拖动完成；仅键盘支持不满足，两者独立评估",
+      "borrowable": "拖动排序、滑块、列宽的替代操作",
+      "not_copyable": "示例逐字",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-131"
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html",
+      "title": "WCAG 2.2 目标尺寸（最低）",
+      "domain": "www.w3.org",
+      "category": "前端规则",
+      "evidence": "2.5.8，AA：至少 24×24 CSS 像素，除间距、等效、行内、用户代理、必要等例外",
+      "borrowable": "点击目标下限",
+      "not_copyable": "例外细节",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-132"
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/consistent-help.html",
+      "title": "WCAG 2.2 一致的帮助",
+      "domain": "www.w3.org",
+      "category": "前端规则",
+      "evidence": "3.2.6，A：帮助入口在各页相对位置一致",
+      "borrowable": "客服与联系方式入口位置",
+      "not_copyable": "术语解释",
+      "surfaces": [
+        "后台",
+        "小程序",
+        "网站"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-133"
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/redundant-entry.html",
+      "title": "WCAG 2.2 冗余输入",
+      "domain": "www.w3.org",
+      "category": "前端规则",
+      "evidence": "3.3.7，A：同一流程中已填写的信息自动带入或可选择，安全等例外",
+      "borrowable": "多步表单",
+      "not_copyable": "例外细节",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-134"
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/accessible-authentication-minimum.html",
+      "title": "WCAG 2.2 无障碍认证（最低）",
+      "domain": "www.w3.org",
+      "category": "前端规则",
+      "evidence": "3.3.8，AA：认证步骤不要求认知功能测试，除非有替代、机制（粘贴、密码管理器）、对象识别、个人内容例外",
+      "borrowable": "登录页",
+      "not_copyable": "例外细节",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-135"
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html",
+      "title": "WCAG 2.2 文字间距",
+      "domain": "www.w3.org",
+      "category": "前端规则",
+      "evidence": "1.4.12，AA：行高 1.5 倍、段距 2 倍、字距 0.12 倍、词距 0.16 倍时内容与功能不丢失",
+      "borrowable": "固定行高与裁切",
+      "not_copyable": "术语解释",
+      "surfaces": [
+        "后台",
+        "网站"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-136"
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+      "title": "WCAG 2.2 非文本对比度",
+      "domain": "www.w3.org",
+      "category": "前端规则",
+      "evidence": "1.4.11，AA：界面组件与图形对相邻颜色至少 3:1",
+      "borrowable": "焦点环与控件边界对比度",
+      "not_copyable": "术语解释",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-137"
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+      "title": "WCAG 2.2 对比度（最低）",
+      "domain": "www.w3.org",
+      "category": "前端规则",
+      "evidence": "1.4.3，AA：文字 4.5:1，大字 3:1，阈值不四舍五入",
+      "borrowable": "文字对比度",
+      "not_copyable": "术语解释",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-138"
+    },
+    {
+      "url": "https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/",
+      "title": "W3C ARIA 实践指南 键盘接口",
+      "domain": "www.w3.org",
+      "category": "组件状态",
+      "evidence": "需要保持可发现的禁用控件用 aria-disabled，使读屏用户仍能发现",
+      "borrowable": "禁用控件保持可聚焦并说明原因",
+      "not_copyable": "示例代码",
+      "surfaces": [
+        "后台",
+        "小程序"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-139"
+    },
+    {
+      "url": "https://ant.design/components/skeleton",
+      "title": "Ant Design 骨架屏",
+      "domain": "ant.design",
+      "category": "组件状态",
+      "evidence": "骨架屏只在首次加载数据时使用",
+      "borrowable": "后台切换范围时保留旧内容",
+      "not_copyable": "组件样式",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-140"
+    },
+    {
+      "url": "https://ant.design/components/modal",
+      "title": "Ant Design 对话框",
+      "domain": "ant.design",
+      "category": "组件状态",
+      "evidence": "静态确认框默认不可点遮罩关闭，支持 Esc 关闭，默认聚焦确认按钮",
+      "borrowable": "表单与确认浮层点遮罩不关闭",
+      "not_copyable": "组件样式",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-141"
+    },
+    {
+      "url": "https://ant.design/components/pagination",
+      "title": "Ant Design 分页",
+      "domain": "ant.design",
+      "category": "组件状态",
+      "evidence": "默认每页 10 条，可选 10、20、50、100，总数超过 50 时显示每页条数切换",
+      "borrowable": "分页默认值对照（本技能定 20 是项目约定）",
+      "not_copyable": "组件样式",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-142"
+    },
+    {
+      "url": "https://element-plus.org/en-US/component/pagination.html",
+      "title": "Element Plus 分页",
+      "domain": "element-plus.org",
+      "category": "组件状态",
+      "evidence": "默认每页 10 条，可选每页条数 10、20、30、40、50、100",
+      "borrowable": "分页默认值对照",
+      "not_copyable": "组件样式",
+      "surfaces": [
+        "后台"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-143"
+    },
+    {
+      "url": "https://docs.dify.ai/en/api-reference/workflow-runs/stream-workflow-events.md",
+      "title": "Dify 工作流事件流",
+      "domain": "docs.dify.ai",
+      "category": "交互流程",
+      "evidence": "暂停时默认关闭流（continue_on_pause 可保持打开），每约 10 秒一个心跳，可回放节点状态",
+      "borrowable": "等待审批期间事件流的两种处理",
+      "not_copyable": "接口字段",
+      "surfaces": [
+        "智能体"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-144"
+    },
+    {
+      "url": "https://docs.n8n.io/advanced-ai/human-in-the-loop-tools/",
+      "title": "n8n 人在回路工具",
+      "domain": "docs.n8n.io",
+      "category": "交互流程",
+      "evidence": "审批人看到工具名与参数，拒绝则动作取消且通知模型",
+      "borrowable": "审批卡与拒绝结果",
+      "not_copyable": "节点配置",
+      "surfaces": [
+        "智能体"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-145"
+    },
+    {
+      "url": "https://docs.n8n.io/workflows/executions/all-executions/",
+      "title": "n8n 执行列表",
+      "domain": "docs.n8n.io",
+      "category": "交互流程",
+      "evidence": "执行状态筛选：失败、运行中、成功、等待；从失败节点重试，需检查重复执行",
+      "borrowable": "失败重试前确认已写入的内容",
+      "not_copyable": "界面样式",
+      "surfaces": [
+        "智能体"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-146"
+    },
+    {
+      "url": "https://docs.ag-ui.com/concepts/events",
+      "title": "AG-UI 事件",
+      "domain": "docs.ag-ui.com",
+      "category": "交互流程",
+      "evidence": "运行开始与结束、步骤、工具调用事件；中断是一次运行的结束结果，恢复开启新的运行",
+      "borrowable": "等待审批在事件流里的建模",
+      "not_copyable": "事件字段名",
+      "surfaces": [
+        "智能体"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-147"
+    },
+    {
+      "url": "https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-tool-usage",
+      "title": "Vercel AI SDK 工具调用界面",
+      "domain": "ai-sdk.dev",
+      "category": "组件状态",
+      "evidence": "工具状态：输入流式、输入就绪、等待批准、已响应、输出就绪、输出错误、已拒绝；等待批准时显示批准与拒绝按钮和理由",
+      "borrowable": "工具卡与审批状态的呈现",
+      "not_copyable": "接口命名（随版本变化）",
+      "surfaces": [
+        "智能体"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-148"
+    },
+    {
+      "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/Next-Generation-PoE-IEEE-802.3bt-White-Paper-DS00002992A.pdf",
+      "title": "Microchip 802.3bt 白皮书",
+      "domain": "ww1.microchip.com",
+      "category": "前端规则",
+      "evidence": "类型 1 至 4 的供电端与设备端功率：15.4/12.95 W、30/25.5 W、60/51 W、90/71.3 W，100 米信道",
+      "borrowable": "PoE 功率等级",
+      "not_copyable": "营销数字",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-149"
+    },
+    {
+      "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9400/software/release/17-5/configuration_guide/int_hw/b_175_int_and_hw_9400_cg/configuring_poe.html",
+      "title": "Cisco Catalyst 9400 PoE 配置",
+      "domain": "www.cisco.com",
+      "category": "前端规则",
+      "evidence": "初始分配取设备要求的最大功率，授予会超出系统预算时拒绝供电",
+      "borrowable": "PoE 预算按等级最大功率预留",
+      "not_copyable": "命令行",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-150"
+    },
+    {
+      "url": "https://documentation.extremenetworks.com/Fabric%20Engine%20v9.1%20User%20Guide/GUID-EDD35ADD-A653-4580-9600-F811AC94B7DE.shtml",
+      "title": "Extreme Fabric Engine PoE 阈值",
+      "domain": "documentation.extremenetworks.com",
+      "category": "前端规则",
+      "evidence": "PoE 功耗超过阈值时记录日志，默认阈值 80%",
+      "borrowable": "80% 余量是行业默认告警值而非 IEEE 要求",
+      "not_copyable": "命令行",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-151"
+    },
+    {
+      "url": "https://www.onvif.org/blog/2021/08/04/do-you-know-your-onvif-profiles/",
+      "title": "ONVIF 档案介绍",
+      "domain": "www.onvif.org",
+      "category": "前端规则",
+      "evidence": "S 取流与控制，T 更先进的流媒体（H.265），G 存储检索回放，M 分析元数据与事件，C 基础门禁控制，A 门禁配置",
+      "borrowable": "采购写明需要的 Profile",
+      "not_copyable": "档案细则",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-152"
+    },
+    {
+      "url": "https://www.chinesestandard.net/PDF.aspx/GBT28181-2022",
+      "title": "GB/T 28181-2022 索引",
+      "domain": "www.chinesestandard.net",
+      "category": "前端规则",
+      "evidence": "2022-12-30 发布，2023-07-01 实施，替代 GB/T 28181-2016，现行",
+      "borrowable": "国标视频联网版本",
+      "not_copyable": "标准全文",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-153"
+    },
+    {
+      "url": "https://www.chinesestandard.net/PDF.aspx/GB55029-2022",
+      "title": "GB 55029-2022 安全防范工程通用规范 索引",
+      "domain": "www.chinesestandard.net",
+      "category": "前端规则",
+      "evidence": "2022-03-10 发布，2022-10-01 实施，强制性规范",
+      "borrowable": "安全防范强制性规范的编号与实施日期",
+      "not_copyable": "标准全文",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-154"
+    },
+    {
+      "url": "https://www.gb-gbt.com/PDF/Chinese.aspx/GB55029-2022",
+      "title": "GB 55029-2022 条文（转载）",
+      "domain": "www.gb-gbt.com",
+      "category": "前端规则",
+      "evidence": "3.5.3 疏散通道出入口控制点不经凭证识读即可通行；断电开启的出入口控制点备用电源保证执行装置正常工作不少于 48 小时；3.5.2 视频图像保存不少于 30 天",
+      "borrowable": "门锁与存储天数的规范依据（转载，选型前对照正式文本）",
+      "not_copyable": "条文逐字复制（非官方副本）",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-155"
+    },
+    {
+      "url": "https://www.chinesestandard.net/PDF.aspx/GB50116-2013",
+      "title": "GB 50116-2013 火灾自动报警系统设计规范 索引",
+      "domain": "www.chinesestandard.net",
+      "category": "前端规则",
+      "evidence": "2013-09-06 发布，2014-05-01 实施，现行；4.10.3 消防联动控制器应能打开疏散通道上由门禁系统控制的门",
+      "borrowable": "火警联动开门依据",
+      "not_copyable": "标准全文",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-156"
+    },
+    {
+      "url": "https://www.securitysa.com/7524a",
+      "title": "Axis 视频存储估算方法",
+      "domain": "www.securitysa.com",
+      "category": "前端规则",
+      "evidence": "码率 ÷ 8 × 3600 秒得每小时存储量，乘每天小时数和保存天数",
+      "borrowable": "视频存储计算公式",
+      "not_copyable": "厂商营销",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-157"
+    },
+    {
+      "url": "https://www.ti.com/lit/pdf/slla272",
+      "title": "TI RS-485 设计指南",
+      "domain": "www.ti.com",
+      "category": "前端规则",
+      "evidence": "最多 32 个单位负载；两端各一个约 120 欧终端电阻；约 1200 米对应低速和 22 AWG 双绞线",
+      "borrowable": "RS-485 距离、节点与终端电阻",
+      "not_copyable": "电路设计细节",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-158"
+    },
+    {
+      "url": "https://cars.uchicago.edu/software/epics/Modbus_over_serial_line_V1_02.pdf",
+      "title": "Modbus 串行线规范 V1.02（镜像）",
+      "domain": "cars.uchicago.edu",
+      "category": "前端规则",
+      "evidence": "无中继时 32 个设备；9600 波特且 AWG26 或更粗最长 1000 米；终端电阻可取 150 欧；支线不超过 20 米",
+      "borrowable": "Modbus RTU 布线",
+      "not_copyable": "规范全文",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-159"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Wiegand_interface",
+      "title": "维基百科 Wiegand 接口",
+      "domain": "en.wikipedia.org",
+      "category": "前端规则",
+      "evidence": "多数读头厂商给出的最大线缆长度约 150 米（500 英尺）",
+      "borrowable": "韦根距离的参考上限（二手来源）",
+      "not_copyable": "全文",
+      "surfaces": [
+        "硬件"
+      ],
+      "industries": [
+        "通用"
+      ],
+      "captured_at": "2026-11-02",
+      "http_status": "200",
+      "method": "WebFetch",
+      "luzcrawl_status": "知识来源（未留快照）",
+      "id": "SRC-160"
     }
   ]
 }

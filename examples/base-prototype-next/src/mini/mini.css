@@ -1,0 +1,45 @@
+/* Mini-program page-level layout: the phone frame, the page area and the transitions. Controls are Vant's own; this file only places them. */
+html, body, #app { min-height: 100%; }
+/* The frame and the demo panel are laid out at the phone's own size and scaled to the window by App.vue (--phone-scale, 1 to 1.5): lengths inside a zoomed box scale with it, so the height is divided back. */
+.stage { --phone-scale: 1; min-height: 100dvh; display: flex; align-items: center; justify-content: center; gap: 32px; padding: 24px; }
+.phone { position: relative; flex: none; zoom: var(--phone-scale); width: 390px; height: min(932px, calc((100dvh - 48px) / var(--phone-scale))); background: var(--luz-canvas); border: 1px solid var(--luz-line);
+  border-radius: 44px; overflow: hidden; box-shadow: var(--luz-level-4); transform: translateZ(0); }       /* the transform makes fixed children (popups, bars) stay in the frame */
+.phone-inner { display: flex; flex-direction: column; height: 100%; }
+.status-bar { flex: none; display: flex; align-items: flex-end; justify-content: space-between; height: 44px; padding: 0 28px 4px; background: var(--van-background-2); font-weight: 600; }
+.battery { width: 24px; height: 12px; border: 1.5px solid var(--luz-ink); border-radius: 4px; position: relative; }
+.battery::after { content: ""; position: absolute; inset: 1.5px; right: 6px; background: var(--luz-ink); border-radius: 1px; }
+.capsule { display: inline-flex; align-items: center; justify-content: space-evenly; width: 87px; height: 32px; margin-right: 8px; border: 1px solid var(--luz-line); border-radius: 16px; pointer-events: none; }
+.capsule i { width: 6px; height: 6px; border-radius: 50%; background: var(--luz-ink-2); }
+.screen { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; position: relative; background: var(--luz-canvas); -webkit-overflow-scrolling: touch; }
+.overlay-root { position: absolute; inset: 0; pointer-events: none; z-index: 3000; }
+.overlay-root > * { pointer-events: auto; }
+.side { flex: 0 1 440px; min-width: 0; zoom: var(--phone-scale); height: min(932px, calc((100dvh - 48px) / var(--phone-scale))); overflow: auto; background: var(--luz-surface); border: 1px solid var(--luz-line); border-radius: var(--luz-radius-card); }
+
+/* page area: pages fill the screen and bring their own padding; a page is a stack of groups */
+.mp-page { min-height: 100%; padding: 12px 12px 24px; display: grid; gap: 12px; align-content: start; }
+.mp-card { background: var(--van-background-2); border-radius: var(--luz-radius-card); padding: 12px; box-shadow: var(--luz-level-1); }
+.price { color: var(--luz-price); font-weight: 600; font-variant-numeric: tabular-nums; }
+.price small { font-size: var(--t12); }
+.price-old { color: var(--luz-ink-3); text-decoration: line-through; font-size: var(--t12); margin-left: 4px; }
+
+/* transitions: only transform and opacity, 200 ms in and 150 ms out */
+.push-enter-active, .pop-enter-active { transition: transform 200ms cubic-bezier(0, 0, 0, 1), opacity 200ms cubic-bezier(0, 0, 0, 1); }
+.push-leave-active, .pop-leave-active { transition: opacity 120ms cubic-bezier(.3, 0, 1, 1); }
+.push-enter-from { opacity: 0; transform: translateX(24px); }
+.pop-enter-from { opacity: 0; transform: translateX(-24px); }
+.push-leave-to, .pop-leave-to { opacity: 0; }
+
+/* on a phone-sized window the frame is the window: no bezel, no status bar, the 40 px target size of the library */
+@media (max-width: 910px) {
+  .stage { display: block; padding: 0; }
+  .phone { zoom: 1; width: min(100vw, 480px); height: 100dvh; margin: 0 auto; border: 0; border-radius: 0; box-shadow: none; }   /* a tablet gets a phone-width column, not a stretched phone */
+  .status-bar { display: none; }
+  .phone { --van-button-small-height: 40px; --van-button-mini-height: 40px; --van-stepper-input-height: 40px; }   /* touch targets are 40 px on a phone */
+}
+
+@media (min-width: 481px) and (max-width: 910px) { .phone { border-inline: 1px solid var(--luz-line); } }
+
+/* Vant variables (not overrides of component internals): the notice bar takes the theme, inset groups line up with the page padding */
+.phone-inner > .van-tabbar { flex: none; }   /* a long page must not squeeze the tab bar below its 50 px (touch target) */
+.phone { --van-notice-bar-background: var(--luz-action-tint); --van-notice-bar-text-color: var(--luz-action-text); --van-cell-group-inset-padding: 0; --van-cell-group-inset-radius: var(--luz-radius-card); }
+.mp-page { --van-cell-group-inset-padding: 0; }

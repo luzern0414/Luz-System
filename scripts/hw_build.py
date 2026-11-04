@@ -2,6 +2,7 @@
 
 校验 raw/04-hardware/plan.json → 生成 raw/04-hardware/hardware-plan.html → 用 Luz-Design 文档检查脚本验收；
 交付时用 publish.py <会话> hardware 发布为会话唯一的最终 HTML。
+给客户的是 Excel：方案通过校验后用 hw_export.py <会话> 生成 raw/04-hardware/client/硬件选型清单.xlsx（HTML 只给评审与开发）。
 
 用法：
   py -X utf8 scripts/hw_build.py "<会话目录>"
@@ -24,6 +25,9 @@ LUZ_DESIGN = Path(r"D:\Codes\Luz-Design")
 
 
 def main() -> int:
+    if len(sys.argv) == 2 and sys.argv[1] in ("-h", "--help"):
+        print(__doc__)
+        return 0
     if len(sys.argv) != 2:
         print(__doc__)
         return 2
@@ -73,6 +77,8 @@ def main() -> int:
     })
     (raw / "build-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"{'通过' if ok else '未通过'}：{out}")
+    if ok:
+        print("下一步：人批准后发布网页；客户的 Excel 用 py -X utf8 scripts/hw_export.py \"<会话目录>\" 生成")
     return 0 if ok else 1
 
 

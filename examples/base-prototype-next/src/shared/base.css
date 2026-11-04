@@ -1,0 +1,34 @@
+/* Page-level styles shared by both prototypes. Controls are never styled here: they are the component library's own, re-coloured by the theme variables. */
+:root { --luz-font: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif; }
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--luz-canvas); color: var(--luz-ink); font: 400 14px/22px var(--luz-font); -webkit-text-size-adjust: 100%; }
+button, input, select, textarea { font-family: inherit; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--luz-ink-2); }
+.small { font-size: 12px; line-height: 18px; }
+.right { text-align: right; }
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.grow { flex: 1 1 auto; min-width: 0; }
+.stack { display: grid; gap: 16px; }
+.nowrap { white-space: nowrap; }
+.clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Motion: the system setting and the demo panel's switch both take effect (the panel sets .reduce-motion on <html>). */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+
+/* Page transition: only opacity and transform, 150 ms in, 100 ms out (Luz-Design 动效). */
+.page-enter-active { transition: opacity 150ms cubic-bezier(0, 0, 0, 1), transform 150ms cubic-bezier(0, 0, 0, 1); }
+.page-leave-active { transition: opacity 100ms cubic-bezier(.3, 0, 1, 1); }
+.page-enter-from { opacity: 0; transform: translateY(6px); }
+.page-leave-to { opacity: 0; }
+
+/* Focus: a text box shows it only by its border turning dark (the library's own border variable, set in the theme); no outline, no glow, no blue frame.
+   A click leaves no ring on any control; a key press gets a neutral 2 px ring (keyboard use stays visible). */
+* { -webkit-tap-highlight-color: transparent; }
+:focus:not(:focus-visible) { outline: none; }
+:focus-visible { outline: 2px solid var(--luz-ink-2); outline-offset: 2px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, [contenteditable]:focus-visible { outline: none; }

@@ -2,7 +2,7 @@
 """Rule card: the rules, preferences, lessons, tools and checks for one kind of Luz System task, printed before any work starts.
 
 Templates (references/templates.txt), the prototype skeleton and the hardware builder are skeletons; the rule card is
-what decides scope, architecture, navigation, default views, filters, pagination, table alignment, density, panels,
+what decides scope, architecture, navigation, default views, filters, pagination, table behaviour, panels,
 prototype acceptance and hardware lists. Every call of this skill starts here:
 
   py -X utf8 scripts/context.py list                       task kinds and what each covers
@@ -11,8 +11,9 @@ prototype acceptance and hardware lists. Every call of this skill starts here:
   py -X utf8 scripts/context.py check                      verify every card resolves to existing rule sections
 
 Cards are defined in references/cards.json; rule text is extracted from the rule pages at run time, so it never drifts.
-Visual sections come from Luz-Design (references/visual-design.html) through a card section's "root"; when that
-skill is not on this machine the card prints its GitHub address instead.
+A card section may name another skill's page through "root" (when that skill is not on this machine the card prints its
+GitHub address instead). Luz-System's own cards cut no visual rules: the look of an interface is Luz-Design's, and each
+interface card's tools line points to Luz-Design's cards.
 """
 from __future__ import annotations
 
@@ -336,12 +337,16 @@ def make_card(kind: str, topic: list[str], full: bool = False) -> tuple[str, str
             body = body[:limit].rsplit("\n", 1)[0] + f"\n…（已截断，全文见 {page.name} › {' › '.join(spec['path'])}；加 --full 显示全部）"
         rule_parts.append(f"### {label}\n\n{body}")
     rules = "\n\n".join(rule_parts)
+    rules += "\n\n前置检索：D:/Codes/Luz-Crawl/references/preflight.md"
     digest = hashlib.sha256(rules.encode("utf-8")).hexdigest()[:12]
     notes = load_json(NOTES_FILE, {"notes": []}).get("notes", [])
     words = [*card.get("keywords", []), *topic]
     # Preferences are the user's standing instructions: all of them apply unless a card narrows them by keywords.
     narrow = card.get("preference_keywords")
-    prefs = [n for n in notes if n.get("kind") == "preference" and (not narrow or note_matches(n, narrow + topic))]
+    # Preferences about how things look moved to Luz-Design (references/ui-ownership.md); the keys stay valid for older sessions
+    # but this skill's cards no longer print them.
+    moved = set(cards.get("moved_preferences", []))
+    prefs = [n for n in notes if n.get("kind") == "preference" and n.get("key") not in moved and (not narrow or note_matches(n, narrow + topic))]
     others = [n for n in notes if n.get("kind") in ("lesson", "fact") and note_matches(n, words)][:12]
     out = [
         f"# 规则卡：{card['title']}（{skill} · 规则 {digest}）",
@@ -364,10 +369,12 @@ def make_card(kind: str, topic: list[str], full: bool = False) -> tuple[str, str
         "## 4 用什么做",
         "",
         *[f"- {t}" for t in card.get("tools", [])],
+        "- 前置检索：crawl_preflight.py run --caller " + skill + " --session <会话> --topic <任务>；阅读正文后 conclude --file <补充信息.json>。已有任务加 --task，项目加 --stage。查询不得含密钥或真实用户数据。",
         "",
         "## 5 交付前必须通过",
         "",
         *[f"- {c}" for c in card.get("checks", [])],
+        "- crawl_preflight.py check --caller " + skill + " --session <会话或项目根> [--stage <项目阶段>] 必须通过；项目中的专属更严格检查仍然有效。",
         "",
         "## 6 收尾（必做，发布与交付会检查）",
         "",

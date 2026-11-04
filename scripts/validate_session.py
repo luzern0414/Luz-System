@@ -694,7 +694,80 @@ def validate_html_top_contract(root: Node, label: str, errors: list[str]) -> Non
             errors.append(f"{label} must keep source, capture date, and evidence status outside delivery HTML")
 
 
-def validate_light_html(path: Path, errors: list[str], min_px: float = 14.0) -> Node | None:
+# Two themes (Luz-Design visual-design.html 深色与浅色两套主题): a product interface (admin, mini-program, agent, website, prototype) carries a dark theme beside
+# the light one, so the dark colours of its dark theme blocks are not judged as dark surfaces of the light theme. A dark theme block is a rule inside
+# @media (prefers-color-scheme: dark), or one whose selector names the dark theme: [data-theme="dark"], [data-scheme=dark], html.dark, .dark.
+DARK_SELECTOR_RE = re.compile(r"""\[data-(?:theme|scheme|bs-theme|color-mode)\s*=\s*["']?dark["']?\s*\]|\.dark(?![\w-])""", re.I)
+DARK_MEDIA_RE = re.compile(r"@media[^{]*prefers-color-scheme\s*:\s*dark", re.I)
+
+
+def split_theme_blocks(style: str) -> tuple[str, str]:
+    """Split style-sheet text into (everything outside the dark theme blocks, the dark theme blocks)."""
+    text = re.sub(r"/\*.*?\*/", "", style, flags=re.S)
+
+    def walk(chunk: str) -> tuple[list[str], list[str]]:
+        light: list[str] = []
+        dark: list[str] = []
+        pos = 0
+        while pos < len(chunk):
+            brace = chunk.find("{", pos)
+            if brace < 0:
+                light.append(chunk[pos:])
+                break
+            prelude = chunk[pos:brace]
+            if ";" in prelude:                      # a statement at-rule such as @layer a, b; or @import before the next rule
+                cut = prelude.rfind(";") + 1
+                light.append(prelude[:cut])
+                prelude = prelude[cut:]
+            depth, end = 1, brace + 1
+            while end < len(chunk) and depth:
+                depth += (chunk[end] == "{") - (chunk[end] == "}")
+                end += 1
+            body = chunk[brace + 1:end - 1]
+            selector = prelude.strip()
+            rule = f"{selector}{{{body}}}"
+            if selector.startswith("@"):
+                if DARK_MEDIA_RE.match(selector):
+                    dark.append(rule)
+                elif re.match(r"@(?:media|supports|layer|container|scope)\b", selector, re.I):
+                    inner_light, inner_dark = walk(body)
+                    if "".join(inner_light).strip():
+                        light.append(f"{selector}{{{''.join(inner_light)}}}")
+                    if "".join(inner_dark).strip():
+                        dark.append(f"{selector}{{{''.join(inner_dark)}}}")
+                else:
+                    light.append(rule)
+            elif DARK_SELECTOR_RE.search(selector):
+                dark.append(rule)
+            else:
+                light.append(rule)
+            pos = end
+        return light, dark
+
+    light_parts, dark_parts = walk(text)
+    return "".join(light_parts), "".join(dark_parts)
+
+
+def has_appearance_switch(root: Node) -> bool:
+    """The 外观 control of a prototype: a radiogroup labelled 外观 holding three radio buttons (跟随系统 / 浅色 / 深色)."""
+    for group in iter_nodes(root):
+        if group.get("role").strip() == "radiogroup" and group.get("aria-label").strip() == "外观":
+            return sum(1 for node in iter_nodes(group) if node.get("role").strip() == "radio") >= 3
+    return False
+
+
+def is_appearance_radio(node: Node) -> bool:
+    """A radio button inside the 外观 radiogroup belongs to the prototype shell (its configuration panel), not to an approved product action."""
+    return node.get("role").strip() == "radio" and any(
+        a.get("role").strip() == "radiogroup" and a.get("aria-label").strip() == "外观" for a in ancestors(node))
+
+
+def validate_light_html(path: Path, errors: list[str], min_px: float = 14.0, *, product_ui: bool | None = None,
+                        warnings: list[str] | None = None) -> Node | None:
+    """Light-page contract. A product interface (``product_ui``; by default the pages checked at the 12px interface floor) may also carry a dark theme:
+    dark colours inside its dark theme blocks are not dark surfaces. Reading pages stay light only. ``warnings`` asks for the missing-dark-theme finding."""
+    if product_ui is None:
+        product_ui = min_px < 14.0
     root = parse_html(path, errors)
     if root is None:
         return None
@@ -703,10 +776,17 @@ def validate_light_html(path: Path, errors: list[str], min_px: float = 14.0) -> 
     if body is None:
         errors.append(f"{path.name} is missing body")
         return root
-    style = css_text(root)
+    full_style = css_text(root)
+    dark_style = ""
+    style = full_style
+    if product_ui:
+        style, dark_style = split_theme_blocks(full_style)
+        if warnings is not None and not dark_style.strip():
+            warnings.append(f"{path.name}: product interface has no dark theme block (@media (prefers-color-scheme: dark) or [data-theme=\"dark\"]); "
+                            "it ships a light and a dark theme (Luz-Design visual-design.html 深色与浅色两套主题)")
     if re.search(r"color-scheme\s*:\s*dark", style, re.I):
-        errors.append(f"{path.name} must use a light color scheme")
-    for finding in size_violations(style, min_px):
+        errors.append(f"{path.name} must use a light color scheme" + (" outside its dark theme blocks" if product_ui else ""))
+    for finding in size_violations(full_style, min_px):
         errors.append(f"{path.name}: {finding}")
     variables = css_variables(style)
     for match in re.finditer(r"background(?:-color)?\s*:\s*([^;}{]+)", style, re.I):
@@ -1856,9 +1936,12 @@ def validate_prototype(
     if not path.is_file():
         return
     # Prototypes render real interfaces; nothing below 12px (Luz-Design visual-design.html 字体与字号).
-    root = validate_light_html(path, errors, min_px=12.0)
+    root = validate_light_html(path, errors, min_px=12.0, warnings=warnings)
     if root is None:
         return
+    if warnings is not None and not has_appearance_switch(root):
+        warnings.append('interactive-prototype has no 外观 switch: a role="radiogroup" with aria-label="外观" holding three role="radio" buttons '
+                        "(跟随系统 / 浅色 / 深色) in the global group of the configuration panel (system-design.html 原型配置面板)")
     main = first(root, "main")
     if main is None or main.get("data-artifact") != "interactive-prototype":
         errors.append('interactive-prototype must declare data-artifact="interactive-prototype"')
@@ -1867,6 +1950,8 @@ def validate_prototype(
     buttons = [node for node in iter_nodes(root) if node.tag == "button"]
     if not buttons:
         errors.append("interactive-prototype needs at least one button")
+    # The 外观 radios are the prototype shell's own control (they switch the theme, not a product action): no action ID is asked of them.
+    buttons = [node for node in buttons if not is_appearance_radio(node)]
     for index, node in enumerate(buttons, 1):
         control = node.get("data-control").strip()
         if control:
@@ -1917,13 +2002,16 @@ def validate_prototype(
     errors.extend(ui_errors)
     # One visible entry per action (ui-standards.html 一个动作一个按钮) and, for an agent, the seven run states
     # (agent-design.html 运行状态); an agent session is one that works from the agent rule cards.
-    from check_interaction import prototype_agent_state_findings, prototype_interaction_findings
+    from check_interaction import prototype_agent_state_findings, prototype_behavior_findings, prototype_interaction_findings
     interaction_errors, interaction_warnings = prototype_interaction_findings(root)
     errors.extend(interaction_errors)
     if warnings is not None:
         warnings.extend(ui_warnings)
         warnings.extend(prototype_list_brand_findings(root))
         warnings.extend(interaction_warnings)
+        # Front-end behaviour (input box, motion, wide tables, two-state controls): ui-standards.html 切换类控件 and
+        # 列表变更与动画, agent-design.html 输入区状态机, admin-design.html 表格列宽、冻结与滚动.
+        warnings.extend(prototype_behavior_findings(root))
         agent_cards = any((session / "00-rules" / f"{kind}.md").is_file() for kind in AGENT_CARD_KINDS)
         warnings.extend(prototype_agent_state_findings(root, expected=agent_cards))
 
@@ -1941,6 +2029,9 @@ def validate(
     if not session.is_dir():
         return [f"session folder does not exist: {session}"]
     folder = session
+    if strict or final_html(folder).is_file():
+        from crawl_gate import crawl_errors
+        errors.extend(crawl_errors(folder, caller="luz-system"))
     session = work_dir(folder)
     for item in folder.iterdir():
         if item.name not in {RAW_DIR, final_html(folder).name}:
@@ -2253,6 +2344,10 @@ def validate(
 
     for path in session.rglob("*.html"):
         if any(part in {".git", "__pycache__", ".pytest_cache"} for part in path.parts):
+            continue
+        # raw/00-crawl holds the shared Luz-Crawl preflight evidence; its page format belongs to Luz-Crawl and is checked by
+        # crawl_gate (crawl_preflight.py check), not by this skill's page contract.
+        if "00-crawl" in path.relative_to(session).parts:
             continue
         # Visual boards and prototypes render interfaces (12px auxiliary text allowed); every other page, including a
         # standalone poster's 02-visual, keeps the 14px floor.

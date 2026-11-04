@@ -4,8 +4,10 @@
 Rules: references/ui-standards.html 二、功能架构 “功能闭环” (with “一个动作一个按钮”), 三、信息架构与导航 “页面交互契约”,
 五、组件 “操作反馈”; system-design.html “架构的交互字段”; agent-design.html 二、功能架构 “运行状态” for the seven agent
 run states a prototype demonstrates. Blocking faults are errors; anything inferred from wording is a warning.
-validate_session.py calls architecture_interaction_findings, prototype_interaction_findings and
-prototype_agent_state_findings; the command line below runs the same checks read-only:
+validate_session.py calls architecture_interaction_findings, prototype_interaction_findings,
+prototype_agent_state_findings and prototype_behavior_findings (input box state machine, motion, wide tables, two-state
+controls: agent-design.html 输入区状态机, ui-standards.html 切换类控件 and 列表变更与动画, admin-design.html 表格列宽、冻结与滚动);
+the command line below runs the same checks read-only:
 
   py -X utf8 scripts/check_interaction.py <会话目录 | 架构.html> [--design 系统设计.html]
 
@@ -694,13 +696,41 @@ def _design_naming(model: Model, design_root, warnings: list[str]) -> None:
                 warnings.append(f"system design labels {aid} “{said}” but the architecture calls it “{actual}”")
 
 
+VISUAL_TERM_RE = re.compile(r"圆角|阴影|渐变|描边|线宽|缓动|字号|字重|行高|栅格|色板|配色|品牌色|毛玻璃")
+VISUAL_COLOUR_RE = re.compile(r"#[0-9A-Fa-f]{6}(?![0-9A-Fa-f])|(?<![A-Za-z])rgba?\(")
+
+
+def function_visual_findings(root, label: str) -> list[str]:
+    """Warn when a function document (architecture, system design) states visual values: colour, type, radius, shadow,
+    stroke, grid and motion belong to Luz-Design (Luz-Design references/ui-ownership.md); the function side writes what
+    is needed ("商品卡要有封面图"), not how it looks."""
+    hits: list[tuple[list[str], str]] = []
+    for node in _iter(root):
+        if node.tag in {"script", "style", "code", "pre"}:
+            continue
+        own = _clean("".join(c for c in node.children if isinstance(c, str)))
+        found = sorted(set(VISUAL_TERM_RE.findall(own)))
+        if VISUAL_COLOUR_RE.search(own):
+            found.append("色值")
+        if found:
+            hits.append((found, own[:40]))
+    if not hits:
+        return []
+    terms = "、".join(dict.fromkeys(term for found, _ in hits for term in found))
+    samples = "；".join(f"“{text}”" for _, text in hits[:3])
+    return [f"{label} states visual values ({terms}) in {len(hits)} place(s), which Luz-Design decides "
+            f"(Luz-Design references/ui-ownership.md): write what is needed, not how it looks: {samples}"]
+
+
 def architecture_interaction_findings(root, design_root=None) -> tuple[list[str], list[str]]:
     """Return (errors, warnings) for the interaction logic of a parsed architecture (and optional system design)."""
     errors: list[str] = []
-    warnings: list[str] = []
+    warnings: list[str] = function_visual_findings(root, "architecture")
+    if design_root is not None:
+        warnings.extend(function_visual_findings(design_root, "system design"))
     model = build_model(root)
     if not model.pages:
-        return errors, warnings
+        return errors, list(dict.fromkeys(warnings))
     opt_in = _is_opt_in(model)
     for page in model.pages.values():
         _page_contract(model, page, opt_in, errors)
@@ -837,6 +867,210 @@ def prototype_agent_state_findings(root, expected: bool = False) -> list[str]:
     return warnings
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Front-end behaviour checks on a prototype (warnings only: they are inferred from markup, scripts and CSS).
+# Rules: agent-design.html 五、组件 “输入区状态机”; ui-standards.html 五、组件 “切换类控件”“列表变更与动画”“卡片交互动画”;
+# admin-design.html 五、组件 “表格列宽、冻结与滚动”; visual-design.html “动效细则”“表格列宽与行高”.
+# ---------------------------------------------------------------------------------------------------------------------
+COMPOSER_CLASS_RE = re.compile(r"(?:^|[-_\s])composer(?:$|[-_\s])", re.I)
+# data-composer-state -> the actions the single primary button may carry in that state (data-composer-action).
+COMPOSER_STATES = {
+    "idle": {"voice", "send"},           # nothing typed, nothing running: the voice entry, or a disabled send
+    "draft": {"send"},                    # text or an attachment is ready
+    "running": {"stop"},                  # a run is going and the box is empty
+    "running-draft": {"queue", "send"},   # a run is going and something new is typed: send joins the queue
+    "uploading": {"send"},                # a file is uploading: send stays disabled until it ends
+    "composing": {"send", "voice", "stop", "queue"},  # IME composition: the button keeps the state it had
+}
+COMPOSER_ACTION_LABEL = {"send": "发送", "queue": "发送", "stop": "停止", "voice": "语音"}
+MAIN_LABEL_RE = re.compile(r"^(?:发送|停止)(?:生成|回复|运行|任务)?$")
+KEY_HANDLER_RE = re.compile(r"keydown|keypress|onkeydown|onkeypress", re.I)
+IME_GUARD_RE = re.compile(r"isComposing|compositionstart|compositionend|\b229\b|composing", re.I)
+COMPOSER_CSS_RE = re.compile(r"composer|send|stop|primary", re.I)
+TIME_RE = re.compile(r"(\d*\.?\d+)\s*(ms|s)\b")
+LAYOUT_PROPS = ("width", "min-width", "max-width", "left", "right", "top", "bottom", "margin", "margin-left", "margin-right",
+                "margin-top", "margin-bottom", "padding", "padding-left", "padding-right", "padding-top", "padding-bottom")
+SCROLL_CLASS_RE = re.compile(r"scroll|table-wrap|overflow|x-auto", re.I)
+WIDE_TABLE_COLUMNS = 6
+
+
+def _hidden(node) -> bool:
+    return any(a.tag in {"template", "script"} or "hidden" in a.attrs or a.get("aria-hidden") == "true"
+               or re.search(r"display\s*:\s*none", a.get("style"), re.I) is not None for a in [node, *_ancestors(node)])
+
+
+def _name_of(node) -> str:
+    return _clean(node.get("aria-label")) or _clean(_text(node))
+
+
+def _buttons(scope) -> list:
+    return [n for n in _iter(scope) if (n.tag == "button" or n.get("role") == "button") and not _hidden(n)]
+
+
+def _seconds(value: str) -> list[float]:
+    return [float(n) / (1000 if unit == "ms" else 1) for n, unit in TIME_RE.findall(value)]
+
+
+def _is_text_field(node) -> bool:
+    return node.tag in {"textarea", "input"} or node.get("contenteditable") in {"", "true"}
+
+
+def prototype_composer_findings(root) -> list[str]:
+    """Warnings for an input box that sends messages (agent-design.html 输入区状态机): the send, stop and voice entries share
+    ONE primary button in one place (data-composer-primary) that changes with the box state (data-composer-state: idle,
+    draft, running, running-draft, uploading, composing) instead of two buttons side by side; its label and action agree
+    (data-composer-action: send, queue, stop, voice); a status region (aria-live or role=status) announces the change;
+    Enter handlers ignore IME composition; the button swap takes no longer than 150 ms; the prototype shows more than one
+    state. Silent unless a block is marked data-composer (or has a composer class) and holds a text input."""
+    from validate_session import _css_rules, css_text, text_content_direct
+    composers = [n for n in _iter(root) if ("data-composer" in n.attrs or COMPOSER_CLASS_RE.search(n.get("class")))
+                 and not _hidden(n) and any(_is_text_field(c) for c in _iter(n))]
+    if not composers:
+        return []
+    warnings: list[str] = []
+    states: set[str] = set()
+    live_anywhere = any(n.get("aria-live").strip() or n.get("role") == "status" for n in _iter(root))
+    for composer in composers:
+        state = composer.get("data-composer-state").strip()
+        if state:
+            states.add(state)
+        if state and state not in COMPOSER_STATES:
+            warnings.append(f"interactive-prototype composer state “{state}” is not one of {', '.join(COMPOSER_STATES)}")
+        primaries = [b for b in _buttons(composer) if "data-composer-primary" in b.attrs]
+        if len(primaries) != 1:
+            warnings.append(f"interactive-prototype composer has {len(primaries)} primary buttons (data-composer-primary); "
+                            "send, stop and voice share exactly one button in one place")
+        main_labels = [b for b in _buttons(composer) if MAIN_LABEL_RE.match(_clean(_text(b)) or b.get("aria-label").strip())]
+        if len(main_labels) > 1:
+            warnings.append("interactive-prototype composer shows " + "、".join(_name_of(b) for b in main_labels)
+                            + " as separate buttons at the same time; merge them into one same-position button that switches by state")
+        for primary in primaries[:1]:
+            action = primary.get("data-composer-action").strip()
+            name = _name_of(primary)
+            if not name:
+                warnings.append("interactive-prototype composer primary button has no accessible name (aria-label or text)")
+            if action not in COMPOSER_ACTION_LABEL:
+                warnings.append("interactive-prototype composer primary button has no data-composer-action (send, queue, stop or voice)")
+            elif name and COMPOSER_ACTION_LABEL[action] not in name:
+                warnings.append(f"interactive-prototype composer primary button carries {action} but is labelled “{name}”: label and action must agree")
+            if state in COMPOSER_STATES and action in COMPOSER_ACTION_LABEL and action not in COMPOSER_STATES[state]:
+                warnings.append(f"interactive-prototype composer state {state} cannot carry the {action} action "
+                                f"(allowed: {', '.join(sorted(COMPOSER_STATES[state]))})")
+            if state == "uploading" and primary.get("aria-disabled") != "true" and "disabled" not in primary.attrs:
+                warnings.append("interactive-prototype composer state uploading must disable send (aria-disabled or disabled)")
+        field = next((c for c in _iter(composer) if _is_text_field(c)), None)
+        if field is not None and not (field.get("aria-label").strip() or field.get("aria-labelledby").strip()
+                                      or field.get("placeholder").strip()):
+            warnings.append("interactive-prototype composer input has no accessible name (aria-label or placeholder)")
+        if not live_anywhere:
+            warnings.append("interactive-prototype composer has no status region (aria-live or role=status) that announces the send/stop change")
+            live_anywhere = True
+    scripts = "\n".join(text_content_direct(n) for n in _iter(root) if n.tag == "script")
+    if KEY_HANDLER_RE.search(scripts) and re.search(r"Enter|\b13\b", scripts) and not IME_GUARD_RE.search(scripts):
+        warnings.append("interactive-prototype composer handles Enter without checking IME composition "
+                        "(isComposing / compositionstart / compositionend): the Enter that confirms a candidate must not send")
+    if len(states) < 2 and not re.search(r"composerState|data-composer-state", scripts):
+        warnings.append("interactive-prototype composer shows one state only; demonstrate the switch (idle, draft, running, "
+                        "running-draft) with a script that sets data-composer-state or one marked block per state")
+    for selector, declarations, _ in _css_rules(css_text(root)):
+        if COMPOSER_CSS_RE.search(selector):
+            for m in re.finditer(r"transition(?:-duration)?\s*:\s*([^;}{]+)", declarations, re.I):
+                if any(s > 0.15 for s in _seconds(m.group(1))):
+                    warnings.append(f"interactive-prototype composer rule “{selector.strip()[:40]}” has a transition longer than 150 ms")
+                    break
+    return list(dict.fromkeys(warnings))
+
+
+def prototype_motion_findings(root) -> list[str]:
+    """Warnings for motion in a prototype (visual-design.html 动效细则; ui-standards.html 列表变更与动画): any transition or
+    animation needs a prefers-reduced-motion branch; no `transition: all`; entering, hovering and pressing move with
+    transform and opacity, not with width, margin, padding or position (height and grid rows may animate a collapse);
+    an interface animation stays within 1.2 s (endless spinners and skeleton shimmer excepted)."""
+    from validate_session import _css_rules, css_text
+    style = css_text(root)
+    if not style.strip():
+        return []
+    warnings: list[str] = []
+    motion = (re.search(r"(?<![-\w])(?:transition|animation)(?:-[a-z]+)?\s*:\s*(?!none\b|0s?\b)[^;}{]*\S", style, re.I)
+              or "@keyframes" in style)
+    if motion and "prefers-reduced-motion" not in style:
+        warnings.append("interactive-prototype uses transition or animation without a prefers-reduced-motion branch "
+                        "(@media (prefers-reduced-motion: reduce) turns moves into fades or plain switches)")
+    for selector, declarations, _ in _css_rules(style):
+        for m in re.finditer(r"(?<![-\w])transition(?:-property)?\s*:\s*([^;}{]+)", declarations, re.I):
+            value = re.sub(r"\([^)]*\)", "", m.group(1).lower())
+            names = set(re.findall(r"(?<![-\w.])([a-z][a-z-]*)(?![\w-])", value))
+            if "all" in names:
+                warnings.append(f"interactive-prototype “{selector.strip()[:40]}” uses transition: all; list the properties (transform, opacity, colours)")
+            bad = [p for p in LAYOUT_PROPS if p in names]
+            if bad:
+                warnings.append(f"interactive-prototype “{selector.strip()[:40]}” animates {', '.join(bad)} (triggers layout); "
+                                "move with transform and opacity")
+        for m in re.finditer(r"(?<![-\w])animation(?:-duration)?\s*:\s*([^;}{]+)", declarations, re.I):
+            value = m.group(1)
+            if "infinite" in value.lower():
+                continue
+            if any(s > 1.2 for s in _seconds(value)[:1]):
+                warnings.append(f"interactive-prototype “{selector.strip()[:40]}” runs an animation longer than 1.2 s")
+    return list(dict.fromkeys(warnings))
+
+
+def prototype_table_findings(root) -> list[str]:
+    """Warnings for wide tables (admin-design.html 表格列宽、冻结与滚动; visual-design.html 表格列宽与行高): a table with six or
+    more columns declares how its columns take width (colgroup widths, data-col-strategy, or CSS table-layout / column
+    widths), and a table with eight or more columns sits in a horizontal scroll container."""
+    from validate_session import css_text
+    style = css_text(root)
+    css_strategy = re.search(r"table-layout\s*:", style, re.I) is not None or re.search(
+        r"(?:^|[\s,}])(?:th|td|col)(?:[\s.#:\[,{][^{}]*)?\{[^{}]*(?:min-width|max-width|width)\s*:", style, re.I) is not None
+    warnings: list[str] = []
+    for table in _iter(root):
+        if table.tag != "table" or _hidden(table):
+            continue
+        rows = [r for r in _iter(table) if r.tag == "tr"]
+        columns = max((len(_cells(r)) for r in rows), default=0)
+        if columns < WIDE_TABLE_COLUMNS:
+            continue
+        label = _clean(_text(rows[0]))[:20] if rows else "table"
+        chain = [table, *_ancestors(table)]
+        declared = (any(n.get("data-col-strategy").strip() for n in chain)
+                    or any(c.tag == "col" and (c.get("width").strip() or "width" in c.get("style") or c.get("data-col").strip())
+                           for c in _iter(table))
+                    or "table-layout" in table.get("style") or css_strategy)
+        if not declared:
+            warnings.append(f"interactive-prototype table “{label}” has {columns} columns but no column-width strategy "
+                            "(colgroup widths, data-col-strategy, table-layout or column widths)")
+        if columns >= WIDE_TABLE_COLUMNS + 2:
+            scrolls = any(SCROLL_CLASS_RE.search(n.get("class")) or re.search(r"overflow(?:-x)?\s*:\s*(?:auto|scroll)", n.get("style"), re.I)
+                          or n.get("data-scroll").strip() for n in chain[1:])
+            if not scrolls:
+                warnings.append(f"interactive-prototype table “{label}” has {columns} columns and no horizontal scroll container")
+    return list(dict.fromkeys(warnings))
+
+
+def prototype_toggle_findings(root) -> list[str]:
+    """Warnings for two-state controls (ui-standards.html 切换类控件): a role=switch carries aria-checked; a button that
+    shows its state with aria-pressed keeps one name (a pair such as 收藏 / 取消收藏 on the same control is a rename)."""
+    warnings: list[str] = []
+    for node in _iter(root):
+        if _hidden(node):
+            continue
+        if node.get("role") == "switch" and node.get("aria-checked") not in {"true", "false"}:
+            warnings.append(f"interactive-prototype switch “{_name_of(node)[:20]}” has no aria-checked")
+        if "aria-pressed" in node.attrs and not _name_of(node):
+            warnings.append("interactive-prototype toggle button with aria-pressed has no accessible name")
+        if node.get("aria-pressed") in {"true", "false"} and re.search(r"取消|已", node.get("aria-label")):
+            warnings.append(f"interactive-prototype toggle “{node.get('aria-label')[:20]}” renames itself and also sets aria-pressed; "
+                            "keep one label with aria-pressed, or name the next action and drop aria-pressed")
+    return list(dict.fromkeys(warnings))
+
+
+def prototype_behavior_findings(root) -> list[str]:
+    """All front-end behaviour warnings of a prototype (composer, motion, wide tables, two-state controls)."""
+    return [*prototype_composer_findings(root), *prototype_motion_findings(root),
+            *prototype_table_findings(root), *prototype_toggle_findings(root)]
+
+
 def main(argv: list[str] | None = None) -> int:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from validate_session import ARCHITECTURE_PATH, PROTOTYPE_PATH, SYSTEM_DESIGN_PATH, parse_html
@@ -868,6 +1102,7 @@ def main(argv: list[str] | None = None) -> int:
             warnings += p_warnings
             agent_cards = any((raw / "00-rules" / f"{kind}.md").is_file() for kind in ("agent-ui", "agent-runtime-ui"))
             warnings += prototype_agent_state_findings(proto_root, expected=agent_cards)
+            warnings += prototype_behavior_findings(proto_root)
     for warning in warnings:
         print("WARN", warning)
     for error in errors:

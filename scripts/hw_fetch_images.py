@@ -76,7 +76,9 @@ def _rank(urls: list[str]) -> list[str]:
 
 def image_urls(folder: Path) -> list[str]:
     urls = []
-    for snap in sorted((folder / "raw" / "snapshots").glob("*.html")):
+    # Snapshots sit in <archive>\snapshots; archives made before task_folder_v2 keep them in <archive>\raw\snapshots.
+    snapshots = folder / "snapshots" if (folder / "snapshots").is_dir() else folder / "raw" / "snapshots"
+    for snap in sorted(snapshots.glob("*.html")):
         h = snap.read_text(encoding="utf-8", errors="ignore")
         found = re.findall(MURL, h, re.I)
         if not found:
@@ -188,7 +190,7 @@ def cmd_clean(_a) -> int:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help") or sys.argv[1] not in ("search", "pick", "clean"):
         print(__doc__)
-        sys.exit(2)
+        sys.exit(0 if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help") else 2)
     sys.exit({"search": cmd_search, "pick": cmd_pick, "clean": cmd_clean}[sys.argv[1]](sys.argv[2:]))

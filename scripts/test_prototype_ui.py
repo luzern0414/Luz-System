@@ -216,12 +216,12 @@ class TabIconTests(unittest.TestCase):
 class IconSetTests(unittest.TestCase):
     def test_keywords_pick_the_pictogram_and_theme_colour(self) -> None:
         from new_session import FALLBACK_COLORS, pick_icon, theme_colors
-        cases = {"健身房后台": "dumbbell", "政府采购招标": "megaphone", "商机雷达获客系统": "radar", "门禁硬件选型": "chip",
-                 "珠宝财务智能化": "ledger", "零售门店管理": "store", "Demo一键生成": "grid"}
+        cases = {"健身房后台": "dumbbell", "政府采购招标": "megaphone", "获客工具": "radar", "门禁硬件选型": "chip",
+                 "企业财务智能化": "ledger", "零售门店管理": "store", "演示一键生成": "grid"}
         for name, icon in cases.items():
             with self.subTest(name=name):
                 self.assertEqual(pick_icon(name), icon)
-        self.assertEqual(theme_colors("Demo一键生成", themes_json=Path("missing.json")), FALLBACK_COLORS)
+        self.assertEqual(theme_colors("演示一键生成", themes_json=Path("missing.json")), FALLBACK_COLORS)
         self.assertEqual(theme_colors("某系统", themes_json=Path("missing.json")), FALLBACK_COLORS)
 
     def test_every_icon_is_flat_line_with_at_most_three_shapes_and_no_text(self) -> None:

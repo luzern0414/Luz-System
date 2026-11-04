@@ -7,6 +7,9 @@
 输出两类记录：
   candidates  电商/搜索候选（1688 等），拆出 标题 / 价格 / 销量 / 供应商 / 链接，仅算候选
   sources     已打开并读到正文的页面（content.json status=captured|partial 且有正文）
+
+任务目录是 <输出根>\\NNN_主题，search-*.json 与各页面存档 NNNN_标题\\ 都在其下 raw\\ 里，content.json 直接在存档目录；
+旧任务的 search-*.json 在任务目录下、content.json 在存档的 raw\\ 里，同样能读。
 """
 from __future__ import annotations
 
@@ -64,10 +67,26 @@ def load_json(path: str):
         return None
 
 
+def search_files(task: Path) -> list[str]:
+    """Search records: <task>\\raw (task_folder_v2) first, then directly in <task> (older tasks)."""
+    return sorted(glob.glob(str(task / "raw" / "search-*.json"))) + sorted(glob.glob(str(task / "search-*.json")))
+
+
+def page_contents(task: Path) -> list[tuple[Path, Path]]:
+    """(archive, content.json) of every page archive <task>\\raw\\NNNN_标题: in the archive itself, else in the older <archive>\\raw."""
+    found = []
+    for archive in sorted(p for p in (task / "raw").glob("*") if p.is_dir()):
+        for candidate in (archive / "content.json", archive / "raw" / "content.json"):
+            if candidate.is_file():
+                found.append((archive, candidate))
+                break
+    return found
+
+
 def collect(task: Path) -> dict:
     candidates, sources, failures = [], [], []
     seen = set()
-    for f in sorted(glob.glob(str(task / "search-*.json"))):
+    for f in search_files(task):
         d = load_json(f)
         if not isinstance(d, dict):
             continue
@@ -82,8 +101,8 @@ def collect(task: Path) -> dict:
                 seen.add(c["url"])
                 c["platform"] = platform or "1688"
                 candidates.append(c)
-    for f in sorted(glob.glob(str(task / "raw" / "*" / "raw" / "content.json"))):
-        d = load_json(f)
+    for archive, f in page_contents(task):
+        d = load_json(str(f))
         if not isinstance(d, dict):
             continue
         text = d.get("text") or ""
@@ -93,7 +112,7 @@ def collect(task: Path) -> dict:
             "platform": d.get("platform") or "",
             "status": d.get("status") or "",
             "chars": len(text),
-            "folder": str(Path(f).parent.parent),
+            "folder": str(archive),
         }
         if rec["status"] in ("captured", "partial") and len(text) > 300:
             sources.append(rec)
@@ -127,9 +146,9 @@ def main() -> int:
     task = Path(a.task)
     d = collect(task)
     if a.text:
-        for f in sorted(glob.glob(str(task / "raw" / "*" / "raw" / "content.json"))):
-            c = load_json(f) or {}
-            if a.text in (c.get("title") or "") or a.text in f:
+        for _, f in page_contents(task):
+            c = load_json(str(f)) or {}
+            if a.text in (c.get("title") or "") or a.text in str(f):
                 print("=" * 8, c.get("title"), c.get("resolved_url") or c.get("requested_url"))
                 print((c.get("text") or "")[: a.max])
         return 0

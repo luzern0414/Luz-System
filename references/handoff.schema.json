@@ -572,6 +572,728 @@
         }
       }
     },
+    "platform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "queue-capacity",
+              "scheduler",
+              "alert-loop",
+              "rule-engine",
+              "config-driven-calculation",
+              "knowledge-base",
+              "workflow-canvas",
+              "multi-agent"
+            ]
+          }
+        },
+        "configBoundary": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "store",
+              "editableBy"
+            ],
+            "properties": {
+              "key": {
+                "type": "string",
+                "minLength": 1
+              },
+              "store": {
+                "enum": [
+                  "config-file",
+                  "console"
+                ]
+              },
+              "editableBy": {
+                "type": "string",
+                "minLength": 1
+              },
+              "effect": {
+                "type": "string",
+                "minLength": 1
+              },
+              "inFlightImpact": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "queuePolicies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "status",
+              "definitionPath"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "draft",
+                  "in_review",
+                  "published",
+                  "archived"
+                ]
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "definitionPath": {
+                "type": "string",
+                "minLength": 1,
+                "description": "relative path to the object definition file under 99-delivery"
+              },
+              "contentHash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "screenIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "apiIntentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "eventNames": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "scope": {
+                "enum": [
+                  "global",
+                  "tenant",
+                  "user",
+                  "conversation"
+                ]
+              },
+              "lanes": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "urgent",
+                    "normal",
+                    "batch"
+                  ]
+                }
+              },
+              "fairness": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "schedules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "status",
+              "definitionPath",
+              "cron",
+              "timezone",
+              "runAs"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "draft",
+                  "in_review",
+                  "published",
+                  "archived"
+                ]
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "definitionPath": {
+                "type": "string",
+                "minLength": 1,
+                "description": "relative path to the object definition file under 99-delivery"
+              },
+              "contentHash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "screenIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "apiIntentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "eventNames": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "cron": {
+                "type": "string",
+                "minLength": 1
+              },
+              "timezone": {
+                "type": "string",
+                "minLength": 1
+              },
+              "runAs": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tenantScope": {
+                "type": "string",
+                "minLength": 1
+              },
+              "targetId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "misfire": {
+                "enum": [
+                  "skip",
+                  "fire_once",
+                  "catch_up"
+                ]
+              },
+              "overlap": {
+                "enum": [
+                  "skip",
+                  "queue",
+                  "parallel"
+                ]
+              }
+            }
+          }
+        },
+        "alertPolicies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "status",
+              "definitionPath",
+              "blocking"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "draft",
+                  "in_review",
+                  "published",
+                  "archived"
+                ]
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "definitionPath": {
+                "type": "string",
+                "minLength": 1,
+                "description": "relative path to the object definition file under 99-delivery"
+              },
+              "contentHash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "screenIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "apiIntentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "eventNames": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "warning",
+                  "error",
+                  "critical"
+                ]
+              },
+              "blocking": {
+                "type": "boolean"
+              },
+              "ackWithinS": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "expireAfterS": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "decisionOptions": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "confirm",
+                    "reject",
+                    "modify",
+                    "transfer"
+                  ]
+                }
+              },
+              "resumeSchemaPath": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "ruleSets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "status",
+              "definitionPath",
+              "ruleSetKey"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "draft",
+                  "in_review",
+                  "published",
+                  "archived"
+                ]
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "definitionPath": {
+                "type": "string",
+                "minLength": 1,
+                "description": "relative path to the object definition file under 99-delivery"
+              },
+              "contentHash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "screenIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "apiIntentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "eventNames": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "ruleSetKey": {
+                "type": "string",
+                "minLength": 1
+              },
+              "domain": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hitPolicy": {
+                "enum": [
+                  "unique",
+                  "first",
+                  "collect",
+                  "all"
+                ]
+              },
+              "effectiveFrom": {
+                "type": "string",
+                "minLength": 1
+              },
+              "goldenCaseCount": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "workflows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "status",
+              "definitionPath"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "draft",
+                  "in_review",
+                  "published",
+                  "archived"
+                ]
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "definitionPath": {
+                "type": "string",
+                "minLength": 1,
+                "description": "relative path to the object definition file under 99-delivery"
+              },
+              "contentHash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "screenIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "apiIntentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "eventNames": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "riskTools": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "approvalNodeIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "maxSteps": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        "knowledgeBases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "status",
+              "definitionPath"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "draft",
+                  "in_review",
+                  "published",
+                  "archived"
+                ]
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "definitionPath": {
+                "type": "string",
+                "minLength": 1,
+                "description": "relative path to the object definition file under 99-delivery"
+              },
+              "contentHash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "screenIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "apiIntentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "eventNames": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "indexVersion": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "aclLevels": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "library",
+                    "document",
+                    "field"
+                  ]
+                }
+              },
+              "evalSetId": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "agentTeams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "status",
+              "definitionPath",
+              "pattern"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "draft",
+                  "in_review",
+                  "published",
+                  "archived"
+                ]
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "definitionPath": {
+                "type": "string",
+                "minLength": 1,
+                "description": "relative path to the object definition file under 99-delivery"
+              },
+              "contentHash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "screenIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "apiIntentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "eventNames": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "pattern": {
+                "enum": [
+                  "orchestrator_workers",
+                  "router",
+                  "handoff",
+                  "fan_out",
+                  "reviewer_generator"
+                ]
+              },
+              "memberIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "maxHandoffs": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "carries"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "carries": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "consumerScreenIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": "Optional, added after 1.0 without changing any existing field: the agent platform console objects of platform-console-design.html."
+    },
     "acceptance": {
       "type": "array",
       "minItems": 1,

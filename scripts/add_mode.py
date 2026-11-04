@@ -135,7 +135,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("mode", choices=["visual", "prototype", "document"], help="visual or prototype; document is refused (Luz-Design)")
     parser.add_argument("--standalone-poster", action="store_true", help="refused: posters belong to Luz-Design")
     parser.add_argument("--root", help="Session root override, primarily for tests")
-    parser.add_argument("--card", action="append", help="Rule card for the surfaces in scope (repeatable): admin-list, admin-dashboard, admin-form, miniprogram, agent-ui, agent-runtime-ui, website, function-list, interaction; visual defaults to admin-list and miniprogram")
+    parser.add_argument("--card", action="append", help="Rule card for the surfaces in scope (repeatable): admin-list, admin-dashboard, admin-form, miniprogram, agent-ui, agent-runtime-ui, website, function-list, client-docs, interaction, agent-composer, interaction-patterns, nav-levels; visual defaults to admin-list and miniprogram")
     args = parser.parse_args(argv)
     root = Path(args.root).resolve() if args.root else OUTPUT_ROOT
     try:

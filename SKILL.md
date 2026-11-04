@@ -1,34 +1,63 @@
 ---
 name: luz-system
-description: Use when designing a complete product system, software and hardware together — requirements and module scope, LuzCrawl research, system architecture and solution, the function list, product UI for web admin consoles, mini-programs, agent UIs (SSE streaming, run states, timing, failure handling) and websites with closed-loop interaction checks, interactive prototypes, and on-site hardware selection (business flow to devices, interfaces and protocols, connection diagram, models, prices and suppliers, site requirements) — with hash-bound human approvals, browser verification and experience libraries. Visual foundations, posters and document layout come from Luz-Design; backend implementation goes to Luz-Dev. Start every call with scripts/context.py <kind> — its rule card carries the user's preferences, lessons, the rule text, tools and checks; templates, the prototype skeleton and the hardware builder are skeletons only.
+description: Use when designing a complete product system, software and hardware together — requirements and module scope, LuzCrawl research, system architecture, the function list, the functional design of product interfaces (pages, entrances, tab bars, components, button actions, flows, states) for admin consoles, mini-programs, agent UIs, platform consoles and websites with closed-loop interaction checks, the behaviour and data of interactive prototypes, and on-site hardware selection (devices, interfaces, protocols, models, prices, site requirements), with hash-bound human approvals and experience libraries. Everything visual (look, composition, cards, buttons' appearance, icons, images, motion, themes, prototype appearance), posters and document layout belong to Luz-Design; backend to Luz-Dev. Start every call with scripts/context.py <kind> — its rule card carries the user's preferences, lessons, rule text, tools and checks; templates and builders are skeletons only.
 ---
 
 # Luz System
 
-Luz System turns a scoped request into an auditable system design: what the system does, how users move through it, what every screen looks like and how it behaves, and which devices on site carry each step. One session can hold the software design, the hardware design, or both.
+Luz System turns a scoped request into an auditable system design: what the system does, how users move through it, what every screen contains and does (pages, entrances, tab bars, components, button actions, states), and which devices on site carry each step. How it looks is Luz-Design's. One session can hold the software design, the hardware design, or both.
 
 ## 调用协议（每次调用都按顺序做，不可跳过）
 
+**先判定模式与检索。** 若提供显式 project context / `LUZ_PROJECT_ROOT`，先按 [project-mode.md](../Luz-Project/references/project-mode.md) 读取 `project.py context <project> <stage> --skill luz-system`；项目阶段使用项目 HTML/JSON 与审批，不套 standalone 的旧会话路径。没有项目上下文就沿用本技能编号会话，不创建完整项目目录。
+
+**项目模式下的原型。** design 阶段的可交互原型（每个系统、设备端一个单文件，各占设计文档一页签、只放原型，路径写进“前端规范”；`03-手机原型.html`、`04-后台原型.html`）的行为、数据与场景遵守本技能的 `prototype`、`interaction-patterns`、`nav-levels` 规则卡（外观、组件库与动效由 Luz-Design 规定，项目模式下原型随前端界面设计阶段由 Luz-Design 交付）：场景配置面板按端的一级导航分类、场景逐一列出、全局含网络、外观（跟随系统 / 浅色 / 深色）、减少动态、角色、重置演示数据；手机宽度可完整操作，浅色与深色两种外观下每页都能打开（`audit_rendered.py --scheme dark`）；`project.py document` 读构建出的文件，缺减少动态效果分支、对话框角色或配置面板就不放行。**原型的控件一律来自所选组件库的真实组件**（Luz-Design 规则卡 `interface-components`，库登记在 `Luz-Design/references/component-libraries.json`）：每个前端先选一个库，写进前端架构；不手写 HTML/CSS 自造控件，不由模型直接写整页代码；`prototype` 块写 `library`，构建后用 `audit_rendered.py --library <编号>` 逐页核对。**文本框的聚焦样式、焦点轮廓与点按高亮不在本技能规定**，按 Luz-Design 的规则卡 `interface-visual`、`interface-components` 执行，`audit_rendered.py` 报“聚焦框”算不通过（键盘可达与焦点不被遮挡见 `ui-standards.html` 五、组件 › 无障碍底线）。页面清单、令牌与六种布局可参考 `examples/base-prototype-next/`（用 Element Plus 与 Vant 的真实组件构建：后台 17 页、小程序 25 页）；它只是参考，按本次内容推导页面，不整套复制。
+
+**项目模式下的架构文档。** architecture 阶段交给开发看的文档是 `docs/02-产品开发/01-系统架构.html`，章节、必须有的图和表、事实来源与检查见 [dev-documents.md](../Luz-Project/references/dev-documents.md)（上下文图、部署图、时序图、模块表、技术栈、架构决策、质量属性、已知限制）；`project.py document` 校验它，所在阶段没有完成 Luz-Crawl 前置检索就写不出来。
+
+每次业务调用都按 [前置检索协议](../Luz-Crawl/references/preflight.md) 在方案/正式实现之前执行 `crawl_preflight.py run --caller luz-system --session <本技能会话或项目根> --topic <任务>`，已有任务加 `--task <任务目录>`，项目加 `--stage <阶段>`；阅读正文后 `conclude --file <补充信息.json>`，再 `check`。补充信息写回所属方案，结论交付 HTML；短任务也保留编号会话与检索结论 HTML。仅 doctor、空结果、手填 URL 或只读经验不算检索完成。本要求覆盖下面旧的条件式调研或无会话例外；不会为每条内部脚本命令重新建立任务。
+
 Templates, the prototype skeleton and the hardware builder are the cheap path, and following them alone is how outputs miss the rules. They are skeletons, not rules. What a system, a screen or a hardware list must contain comes from the rule pages, the user's preferences and past lessons, and the rule card puts all of that in front of you.
 
-1. **Route.** Visual standards, posters and document layout go to Luz-Design; backend to Luz-Dev; prose to Luz-Writing; web research to Luz-Crawl (table below).
-2. **Read the rule card before producing anything.** `py -X utf8 scripts/context.py list` shows the task kinds (system-design, interaction, remote-config, function-list, admin-list, admin-dashboard, admin-form, miniprogram, commerce, ui-recipes, agent-ui, agent-runtime-ui, website, prototype, hardware). `py -X utf8 scripts/context.py <kind> [--topic 词 …]` prints the card: the user's preferences (all binding), matching lessons and facts, the rule text cut from the rule pages (ui-standards.html by layer, the surface page, the system, function-list and hardware pages, and the Luz-Design visual-design.html sections that apply), the tools to use and the checks to pass. Read all of it; one task often needs several cards (a console with lists and a dashboard reads admin-list and admin-dashboard). Cards that share a rule-page section each print it; read a repeated section once. The visual layer of any interface (palette and theme, type roles, icons and illustrations, elevation) also reads Luz-Design's card: `py -X utf8 D:\Codes\Luz-Design\scripts\context.py interface-visual`. For anything a card does not settle, read the named rule-page section in full.
-3. **Produce with the tools the card names.** Where a template, the prototype skeleton or `hw_build.py` differs from the card, follow the card. Sessions get their cards automatically in `raw/00-rules/<kind>.md`: `new_session.py` saves the mode's card (system → system-design, interaction and remote-config, hardware → hardware), `add_mode.py` the stage's (visual → the surface cards named with `--card`, by default admin-list and miniprogram, agent sessions `--card agent-ui --card agent-runtime-ui`; prototype → prototype and interaction), and `--card <kind>` (repeatable) adds more on either.
+1. **Route.** Everything visual (look, composition, cards, the appearance of buttons, icons, images, motion, themes, the prototype's appearance), posters and document layout go to Luz-Design; backend to Luz-Dev; prose to Luz-Writing; web research to Luz-Crawl (table below).
+2. **Read the rule card before producing anything.** `py -X utf8 scripts/context.py list` shows the task kinds (system-design, client-docs, function-list, interaction, remote-config, admin-list, admin-dashboard, admin-form, miniprogram, commerce, agent-ui, agent-runtime-ui, agent-composer, platform-console, queue-capacity, workflow-canvas, rule-engine-ui, scheduler-ui, alert-loop, kb-console, multi-agent, website, prototype, interaction-patterns, nav-levels, hardware). `py -X utf8 scripts/context.py <kind> [--topic 词 …]` prints the card: the user's preferences (all binding), matching lessons and facts, the rule text cut from the rule pages (ui-standards.html by layer, the surface page, the system, function-list and hardware pages; no visual rules), the tools to use and the checks to pass. Read all of it; one task often needs several cards (a console with lists and a dashboard reads admin-list and admin-dashboard). Cards that share a rule-page section each print it; read a repeated section once. The visual layer of any interface (palette and theme, type, composition, the look of cards and buttons, icons, images, motion) is not decided here: read Luz-Design's cards (`interface-visual`, `interface-components`, `interface-layout`, `interface-pattern`, `interface-motion`, `interface-icons`) with `py -X utf8 D:\Codes\Luz-Design\scripts\context.py <kind>`. For anything a card does not settle, read the named rule-page section in full.
+3. **Produce with the tools the card names.** Where a template, the prototype skeleton or `hw_build.py` differs from the card, follow the card. Sessions get their cards automatically in `raw/00-rules/<kind>.md`: `new_session.py` saves the mode's card (system → system-design, interaction and remote-config, hardware → hardware), `add_mode.py` the stage's (visual → the surface cards named with `--card`, by default admin-list and miniprogram, agent sessions `--card agent-ui --card agent-runtime-ui`; prototype → prototype and interaction), and `--card <kind>` (repeatable) adds more on either. In the `visual` and `prototype` stages this skill supplies only the approved pages, entrances, tab bars, components and actions; the look comes from Luz-Design's cards and tools (`style_match.py`, theme tokens, the component library), and BRIEF `## 采用的规则` lists the Design cards applied.
 4. **Record what you applied.** In the session BRIEF, `## 采用的规则` lists one row per rule section (规范页 › 小节) or preference key and how this work applies it. `publish.py` refuses a session without a current card or with an empty table, and validation flags a published session without it. Without a session, name the cards you followed in the reply.
 5. **Pass the checks on the card.** `validate_session.py` (with `--strict-production` before delivery; it runs `check_interaction.py` on the architecture and prototype), Luz-Design's `check_document.py` (interfaces with `--allow interface`), the browser at desktop and 390 px, and for hardware `hw_build.py`, which validates the plan and runs the document check.
 6. **Stop at every approval.** Module scope, architecture, system design, visual board and prototype are each approved by the person, in that order, on the file as it is (hash-bound, `APPROVALS.json`); a hardware list is approved the same way before it is published. At each one, show the artifact, ask, and wait. When a script refuses for a missing approval, that is the answer: never write an approval yourself, never skip a stage (a prototype needs the system design and the visual board before it), never declare a mode by editing the manifest, and never publish around the gate — `add_mode.py` and `publish.py` both check the mode and every upstream approval. A user in a hurry can review several stages in one sitting, but each still gets its own approval. One exception, decided by the user on 2026-10-29: a demo that a platform generates for sales runs in `--approval-mode authorization` — the person confirms the background and signs one authorization before generation, every stage is still produced and checked in order, and the platform records each stage under that authorization (section Approvals below).
 7. **Sediment (mandatory; publish checks it).** Every call writes or confirms at least one note with `experience.py note` and lists its key in BRIEF `## 本次沉淀`; `publish.py` refuses keys missing from `experience/notes.json` or last confirmed before the session was created (section 每次调用后沉淀).
 
+## 职责边界：功能归本技能，视觉归 Luz-Design
+
+完整对照表、交接物和容易划错的几处见 [ui-ownership.md](../Luz-Design/references/ui-ownership.md)，两个技能的规则冲突时以它为准。
+
+| 本技能决定（功能） | 交给 Luz-Design（视觉） |
+|---|---|
+| 页面与路由、每个功能的类别（核心、信息、营销、辅助）与唯一入口归属、标签栏几项与名称顺序、侧栏菜单层级 | 首页的布局范式、模块划分与精简去重，入口怎么排，标签栏与导航的样子 |
+| 用哪些组件承担哪个任务；组件的行为、状态、键盘操作与可访问名称 | 组件库与主题；组件的外观、尺寸、圆角、颜色 |
+| 按钮：哪个动作、文案、可用与禁用条件、结果与反馈、确认与撤销、权限、这页的主动作 | 按钮的层级样式、尺寸、图标图形，悬停、按下、禁用的外观 |
+| 卡片承载什么内容、点了去哪、有哪些操作 | 卡片的构图、层次、圆角、阴影 |
+| 哪些对象要有图或图标，图缺失时怎么降级 | 图的风格与内容、图标集、插画、配图 |
+| 哪个操作要有反馈、变化不许让周围内容跳位、撤销时限、减少动态效果下保留什么 | 动画的形态、时长、缓动 |
+| 窄屏上保留哪些功能，手机上必须能完整操作 | 断点、栅格、各档怎么排 |
+| 有没有外观设置、放在哪一页 | 浅色与深色两套取值 |
+
+本技能的规则与文档里不写颜色、字号、圆角、阴影、描边、图标图形、配图内容、栅格与间距、动画时长和缓动；需要时写“见视觉设计规范某节”。Luz-Design 不增删页面、入口、标签栏项数、组件、按钮与流程，发现需要改动时退回本技能。
+
+功能类型的默认入口位置见 [ui-standards.html](references/ui-standards.html) 二、功能架构 › 入口与内容分层（功能类型的默认入口位置）。每个功能带类别（核心、信息、营销、辅助）和唯一入口归属，这是交给 Luz-Design 设计首页的输入：首页怎么排、分成哪些模块由它决定，但只能在入口归属允许出现在首页的功能里选。
+
+架构阶段交付功能说明时，同时交一份入口表 `entrances.json`：每个前台功能一行，写 `fn`、`name`、`type`、`category`、`entry`（tab、home、mine、context、in-page 五选一）、`destination`、`freq`；格式以 Luz-Design 的 `py -X utf8 D:\Codes\Luz-Design\scripts\page_pattern.py show entrances_schema` 为准。交出前用 `py -X utf8 scripts/entrances_check.py <entrances.json> [--features features.json]` 检查（找不到视觉技能的校验器时只提示，不阻塞）。
+
 ## Not this skill — route instead
 
 | Request | Use |
 |---|---|
-| Colours, type, icons, spacing as standards; posters, brand key visuals, campaign images, Imagegen; layout of reports, reading HTML, Excel, Word (contracts, proposals, reports, minutes), PowerPoint, PDF | **Luz-Design** (`D:\Codes\Luz-Design`) |
+| Colours, type, icons, spacing, composition, the appearance of cards and buttons, images, motion and themes of any interface or prototype; posters, brand key visuals, campaign images, Imagegen; layout of reports, reading HTML, Excel, Word (contracts, proposals, reports, minutes), PowerPoint, PDF | **Luz-Design** (`D:\Codes\Luz-Design`) |
 | Backend services, APIs, databases, business logic, payments, deployment, qualifications, launch | **Luz-Dev** (`D:\Codes\Luz-Dev`) |
 | Articles, copy, agreements, privacy policies and other prose | **Luz-Writing** (`D:\Codes\Luz-Writing`) |
 | Browser search and capture | **Luz-Crawl** (`D:\Codes\Luz-Crawl`), called from here for research |
 
-`new_session.py` and `add_mode.py` refuse document and poster modes and name Luz-Design. Older notes that place system design, prototypes or hardware selection in any other skill are out of date.
+`new_session.py` and `add_mode.py` refuse document and poster modes and name Luz-Design.
 
 ## Layout
 
@@ -37,25 +66,25 @@ D:\Codes\Luz-System\                   the skill (rules, templates, knowledge, s
   SKILL.md   WORKFLOW.md   README.md   LICENSE   NOTICE
   agents\openai.yaml
   references\
-    ui-standards.html                  界面通用规范: seven layers — 设计架构 → 功能架构 → 信息架构与导航 → 页面与版式 → 组件 → 视觉基础 (per-surface parameters) → 文案
+    ui-standards.html                  界面通用规范: seven layers — 设计架构 → 功能架构 → 信息架构与导航 → 页面内容与优先级 → 组件 → 视觉交接 (hand-over to Luz-Design, no visual values) → 文案
     admin-design.html                  网页管理后台设计规范 (same seven layers, admin specifics)
     miniprogram-design.html            小程序设计规范
     agent-design.html                  智能体设计规范
     website-design.html                网站设计规范
     function-list-design.html          系统功能列表规范
     commerce-design.html               交易与营销界面规范
-    ui-recipes.html                    界面实现参考
     config-design.html                 远程配置规范
+    platform-console-design.html       智能体平台配置台设计规范 (queues and capacity, scheduler, alert loop, rule engine and computation, multi-agent, knowledge base, workflow canvas)
     system-design.html                 系统设计规范 (gates, architecture and system-design HTML, prototype panel, phone operability)
     hardware-design.html               硬件设计规范 (business flow → devices → interfaces → protocols → backend; site requirements; list layout)
     hardware\                          hardware knowledge: device categories, protocols, scenarios, research playbook, plan schema
     cards.json                         rule cards: per task kind, the rule-page sections, tools and checks (scripts/context.py)
-    guidelines.css  templates.txt  handoff.md  handoff.schema.json
+    guidelines.css  md-type.css (copy of Luz-Design's Markdown type block for reading pages)  templates.txt  handoff.md  handoff.schema.json
   experience\
     catalog.md  sources.json  patterns.json      software: functions, flows, components, rules, research lessons
     hardware\                                    hardware: products, compatibility, suppliers, queries, lessons
-  examples\unmanned-gym.plan.json   examples\commerce-kit\
-  scripts\                             rule cards (context.py), sessions, publish, validation, experience, hardware build, tests
+  examples\unmanned-gym.plan.json   examples\base-prototype-next\ (admin and mini-program prototypes built from Element Plus and Vant components: a reference for page lists, tokens and layouts)
+  scripts\                             rule cards (context.py), sessions, publish, validation, experience, hardware build and export, client function-list check (features_check.py), tests
 
 D:\Codes\skill输出\Luz-System\         outputs only
   NNN-名称\
@@ -75,14 +104,16 @@ Never write outputs into the skill, and never put rules, templates or scripts in
 | Agent UI | [agent-design.html](references/agent-design.html) | Approved system design; tools and approval points listed |
 | Website or landing page | [website-design.html](references/website-design.html) | Approved system design or brief; main action per page known |
 | Architecture, system-design HTML, prototype panel | [system-design.html](references/system-design.html) | Requirement IDs, exact modules, module approval, research, then architecture approval |
-| Function list | [function-list-design.html](references/function-list-design.html) | Approved functions, pages, actions, states |
+| Function list (in the design page) | [function-list-design.html](references/function-list-design.html) | Approved functions, pages, actions, states |
+| Client function list, business logic to confirm, proposal and architecture-atlas content | [function-list-design.html](references/function-list-design.html) (客户功能清单 and the sections after it), [system-design.html](references/system-design.html) (需求的写法, 方案说明书的内容来源, 架构图的画法); card `client-docs` | Requirements and research recorded; client-documents standard of Luz-Project |
 | Ordering, retail, membership, promotions (prices, coupons, cart, checkout, popups and notices) | [commerce-design.html](references/commerce-design.html) | Transaction model and price rules known; card `commerce` |
 | Remote configuration and hot updates (limits, timeouts, switches, minimum versions, config centre, code updates) | [config-design.html](references/config-design.html) | Card `remote-config`; every system with a client |
-| How to build the effects (struck prices, corner badges, coupon notches, irregular and breakout cards, sticky rails, safe-area bars) | [ui-recipes.html](references/ui-recipes.html) | Card `ui-recipes`; skeleton `commerce-kit.html`, example `examples/commerce-kit/` |
+| Agent platform console (queue and quotas, scheduled tasks, risk-alert loop back to the agent, rule engine and scorecards, config-driven performance and document calculation, multi-agent teams, knowledge-base building, visual workflow canvas) | [platform-console-design.html](references/platform-console-design.html) | Cards `platform-console`, `scheduler-ui`, `alert-loop`, `rule-engine-ui`, `multi-agent`, `kb-console`, `workflow-canvas`; agent-design.html keeps the chat and run UI, this page keeps the console and its contracts |
+| How the effects (struck prices, corner badges, coupon notches, irregular and breakout cards, sticky rails, safe-area bars) are drawn | Luz-Design `references/ui-recipes.html` | Luz-Design card `interface-recipes`; skeleton `commerce-kit.html` in Luz-Design `references/templates.txt`, example `references/ui-kit/commerce-kit/`; when linkage, countdowns, strong notices and add-to-cart fly-ins fire is decided in commerce-design.html |
 | On-site hardware | [hardware-design.html](references/hardware-design.html) and `references/hardware/` | Scale, operation model, budget and site facts recorded |
 | Colour, type, icons, corners, motion, spacing | Luz-Design `references/visual-design.html` | Luz-Design card `interface-visual` |
 
-The UI rules are layered: ui-standards.html holds what every surface shares; each surface page repeats the same seven headings with only its specifics and may tighten, never relax, a common rule. The sixth layer lists per-surface visual parameters; the visual standards themselves (palette from official colour scales, one font stack, type scales, one line-icon set, flat style, radii and shadows, motion) are Luz-Design's [visual-design.html](https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html), and `check_document.py` comes from `D:\Codes\Luz-Design\scripts`. Read [WORKFLOW.md](WORKFLOW.md) for phases and stop conditions, and [experience/catalog.md](experience/catalog.md) before researching.
+The UI rules are layered: ui-standards.html holds what every surface shares; each surface page repeats the same seven headings with only its specifics and may tighten, never relax, a common rule. The sixth layer (视觉交接) decides no visual values: it states what goes to Luz-Design and where the appearance setting lives; the visual standards themselves (palette, type, icons, composition, the look of components, motion, themes) are Luz-Design's [visual-design.html](https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html), and `check_document.py` comes from `D:\Codes\Luz-Design\scripts`. Read [WORKFLOW.md](WORKFLOW.md) for phases and stop conditions, and [experience/catalog.md](experience/catalog.md) before researching.
 
 ## Output baseline
 
@@ -95,10 +126,12 @@ These hold for every deliverable; everything else (the seven layers, each surfac
 - A delivered real system shows only live backend data; dashboards show only metrics the backend returns or the user requests.
 - Real or commercial (商业版) systems ship without the prototype configuration panel and start at a login page with the existing account system. Otherwise the configuration panel is grouped by tab (admin: by menu) plus 全局 and pre-rendered into the delivered file (system-design.html 原型配置面板).
 - Delivered pages work on a 390 px phone (system-design.html, 手机上可操作). Verify at desktop and phone width in a real browser.
+- Product interfaces (admin, mini-program, mobile web, website, agent UI and their interactive prototypes) ship two themes, light and dark: follow `prefers-color-scheme` by default and offer a 跟随系统 / 浅色 / 深色 switch (prototype: the 全局 group of the configuration panel; real systems: the top-bar account menu or settings). Light is the baseline for design and acceptance; dark takes the `dark` mapping of Luz-Design `themes.json`, a second palette and not an inversion. Check both in a real browser (`audit_rendered.py --scheme dark`). Reading pages (module form, architecture, system design page, hardware list, rule pages) stay light only and print light.
+- Reading pages (module form, architecture, system design page, hardware list, rule pages) use the Markdown type hierarchy of Luz-Design `file-design.html` 网页文件 › 排版参数: body 18 px on a desktop (768 px and wider), 16 px on a phone, headings, tables and code in the fixed steps of `references/md-type.css`; the templates carry that block and `hw_render_plan.py` reads it, so write no title or body sizes of your own. Product interfaces (admin, mini-program, agent, website prototypes, UI kits) keep the product type scale of Luz-Design visual-design.html (字体与字号) and do not shrink on a phone.
 
 ## Common control patterns
 
-Login, password field, inputs, pickers, dates, money, search, admin lists, switches, dialogs, toasts, icon buttons, account menu, sidebar, avatars and badges: see ui-standards.html, 五、组件 → 常用控件做法.
+Login, password field, inputs, pickers, dates, money, search, admin lists, switches, dialogs, toasts, icon buttons, account menu, sidebar, avatars and badges: see ui-standards.html, 五、组件 → 常用控件做法. Front-end interaction behaviour (two-state controls, list changes, card interaction, multi-level navigation, the agent input box): cards `interaction-patterns`, `nav-levels`, `agent-composer`; the problem families to sweep are in ui-standards.html, 问题的同类判断 → 交互与排布的问题族; how a wide table behaves (frozen columns, scrolling, column settings) is in card `admin-list`, and what the icon-grid entrance block of a mini-program home page is for in card `miniprogram`. Layout, grids, the numbers of the icon grid, table column widths, card and icon sizes and animation timings are not decided here: they come from Luz-Design cards `interface-layout` (grids, spacing, icon grid, table columns, navigation numbers), `interface-pattern` (which of the six page layouts a page uses, and the UI kit that implements them), `interface-icons` (icons and how they pair with titles and cards) and `interface-motion` (durations, easing, list and card animation).
 
 ## 每次调用后沉淀
 
@@ -119,10 +152,10 @@ Here also: hardware calls run `hw_experience.py search / compat / queries`; prod
 0. Read the rule card for the task (`context.py <kind>`; sessions save it to `raw/00-rules/`), then `experience/catalog.md` and `experience.py search`, and for hardware `hw_experience.py stats / search / compat / suppliers / queries`.
 1. Create the session with `new_session.py` (commands below); it writes the BRIEF, the module intake and the rule cards. Record every user request in BRIEF as a stable REQ-ID with module and acceptance signal.
 2. Software: send the module intake and wait for human module approval. Hardware only: record scale, operation model, existing devices, budget and site facts in `raw/04-hardware/requirements.md`.
-3. Research with LuzCrawl by its SKILL.md 调用协议: `doctor` → `begin "<主题>" --new` (returns the folder) → `experience --query` → `--out <folder>` on every command. Frontend references for software (at least 12 URLs across 5 domains) and models, prices and channels for hardware. Reuse fresh experience sources first.
+3. Research with LuzCrawl by its SKILL.md 调用协议: `doctor` → `begin "<主题>" --new` (returns the folder) → `experience --query` → `--out <folder>` on every command. Frontend references for software (at least 12 URLs across 5 domains) and models, prices and channels for hardware. Reuse fresh experience sources first. Business rules, regulations and platform preconditions are not frontend research records: they come from the preflight conclusions and go into the requirement analysis and business logic.
 4. Write the architecture: roles, functions, pages, navigation, components and actions, flows with recovery, states, integrations (including every device and its protocol when hardware is in scope), traceability, acceptance. Wait for architecture approval.
 5. System design, then product visual board, then interactive prototype, each with its own human approval; exercise the prototype in a real browser.
-6. Hardware: storyboard the whole lifecycle, map every step to devices, fill `raw/04-hardware/plan.json`, then `hw_build.py` (validates, renders `hardware-plan.html`, runs Luz-Design's document check); the person approves the list (`APPROVALS.json` hardware) before it is published.
+6. Hardware: storyboard the whole lifecycle, map every step to devices, fill `raw/04-hardware/plan.json`, then `hw_build.py` (validates, renders `hardware-plan.html`, runs Luz-Design's document check); the person approves the list (`APPROVALS.json` hardware) before it is published; `hw_export.py` then writes the client's Excel (`raw/04-hardware/client/硬件选型清单.xlsx`: sheet 设备清单 and sheet 现场条件) from the same plan.
 7. Sediment: `experience.py harvest` and `experience.py add` for software; `hw_experience.py add experience\hardware\inbox\<file>.json` for hardware; `experience.py note` for preferences, lessons and facts, with the keys listed in BRIEF 本次沉淀 (每次调用后沉淀). Fill BRIEF 采用的规则 from the rule cards.
 8. Publish the final HTML with `publish.py <session> <system_design | visual | prototype | hardware>`; it refuses a session without a current rule card, 采用的规则 or 本次沉淀.
 
@@ -135,6 +168,8 @@ py -X utf8 scripts/new_session.py --name "<名称>硬件选型清单" --modes ha
 py -X utf8 scripts/add_mode.py "<会话目录>" visual --card admin-list --card admin-dashboard --card miniprogram
 py -X utf8 scripts/add_mode.py "<会话目录>" prototype
 py -X utf8 scripts/hw_build.py "<会话目录>"
+py -X utf8 scripts/hw_export.py "<会话目录>"
+py -X utf8 scripts/features_check.py "<项目>\data\client"
 py -X utf8 scripts/publish.py "<会话目录>" prototype
 py -X utf8 scripts/new_session.py icon "<系统名>"
 ~~~
@@ -159,6 +194,7 @@ py -X utf8 scripts/validate_skill.py
 py -X utf8 scripts/validate_skill.py --package-only
 py -X utf8 scripts/experience.py check
 py -X utf8 scripts/hw_experience.py check
+py -X utf8 scripts/features_check.py "<data/client>"
 py -X utf8 scripts/validate_session.py "<会话目录>" --strict-production
 py -X utf8 scripts/check_interaction.py "<会话目录>"
 py -X utf8 D:\Codes\Luz-Design\scripts\check_document.py "<delivered file>" --allow interface
@@ -166,3 +202,28 @@ py -X utf8 -m unittest discover -s scripts -p "test_*.py"
 ~~~
 
 `validate_skill.py` checks the skill structure, the eleven rule pages, the rule cards, the experience library and every session in the output folder. Its first line is the package result (`PACKAGE PASS` or `PACKAGE FAIL`), then the session findings, then the overall `PASS:` or `FAIL:`; `--package-only` skips the sessions. Any ERROR in the session being delivered blocks it; a clean run is necessary, not sufficient.
+
+
+## 客户文件与上下游衔接
+
+**交给客户的文件只有 PDF 和 Excel**（Word 只是方案说明书的排版源，不交给客户；HTML 只给评审、开发和演示）。本技能的 HTML（模块表单、系统架构、系统设计、视觉稿、原型、`hardware-plan.html`）都属于后者；客户拿到的是同一批事实派生出的 PDF 与 Excel，每份文件把自己的内容写完整，不提及其他文件。事实写在数据文件里，成品是它的派生物，不手改成品。
+
+| 客户文件 | 本技能负责的内容 | 数据文件与生成 |
+|---|---|---|
+| 功能清单（含报价清单）Excel | 模块、功能、使用端、角色、基础或可选、业务逻辑、工时；规则卡 `function-list` 与 `client-docs` | `data/client/features.json`，Luz-Project 经 Luz-Design 的表格脚本生成；先跑 `features_check.py` |
+| 业务逻辑确认表 Excel | 每个功能拟定的业务逻辑（`rules` 按“；”拆成逐条）和项目专属的待决规则、只有客户才有的资料 | `features.json` 与 `intake-extra.json`，Luz-Project 生成与回收 |
+| 方案说明书 PDF | 需求分析（现状问题、各使用方的核心需求）、系统构成、角色与权限、业务流程、各系统的功能与业务逻辑、统一业务规则 | Luz-Writing 写，Luz-Design 排版，Luz-Project 编排；内容来源见 system-design.html“方案说明书的内容来源” |
+| 系统架构图册 PDF | 节点与数据流的业务含义、模块输入处理输出、依赖、数据链路、泳道流程、状态、数据隔离、部署、各端功能分布 | `data/client/architecture.json`，Luz-Design 的展示版脚本；画法见 system-design.html“架构图的画法” |
+| 硬件选型清单 Excel | 设备、数量、单价与采购渠道、接口与供电、现场条件 | `raw/04-hardware/plan.json`，本技能 `hw_export.py` 经 Luz-Design 表格脚本生成 |
+
+**输入。** 项目模式读 `project.py context <项目> <阶段> --skill luz-system`（前序阶段产物、`client` 段里的数据文件、客户确认过的答案、待确认变更）；独立调用读用户原话。Luz-Crawl 的前置检索结论是调研的唯一来源；视觉基础来自 Luz-Design 的 `interface-visual` 规则卡。**输出。** 功能清单与业务逻辑进 Luz-Project 的数据文件（稳定功能编号 `FN-001…`，发布后永不复用，改动走变更台账）；架构、系统设计与原型的编号和交互契约进 `HANDOFF.json` 与 `references/handoff.md` 交给 Luz-Dev；每个功能的 `acceptance` 与 `tags` 交给 Luz-Ops 映射测试证据；前端结构与交互要求交给 Luz-Design，色板、字体、图标不在本技能选择。
+
+**项目模式的阶段分工。**
+
+| 阶段 | 本技能做什么 | 第一步 |
+|---|---|---|
+| proposal | 读规则卡 `client-docs`，写 `features.json`（含 `hours`）、给方案与架构图册提供内容；`features_check.py` 零错误后交 Luz-Project 生成 | `py -X utf8 scripts/context.py client-docs` |
+| client-intake | 把每个功能的 `rules` 写成可确认的逻辑，补 `intake-extra.json`（只放项目专属问题） | 同上，再跑 `features_check.py <data/client>` |
+| architecture | 三个页签：功能逻辑架构、前端架构、后端架构。前端页签记录自适应路由、标签栏、页面内容、动作、状态、数据需求与响应式行为，不选色板、字体、图标和阴影（属于 Luz-Design）；后端页签记录技术与服务意图（交给 Luz-Dev）；`project.py link` 登记每个功能的落点 | `context.py system-design` |
+
+没有显式 project context 时保持本技能的编号会话、输出与审批，不创建项目目录；项目阶段用项目的 HTML、JSON 与审批，不套独立会话的旧路径。

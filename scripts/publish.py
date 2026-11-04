@@ -87,6 +87,14 @@ def publish(folder: Path, stage: str) -> Path:
     approval_errors = approval_gate_errors(work, stage)
     if approval_errors:
         raise PermissionError("publish refused, approval gate: " + "; ".join(approval_errors))
+    from crawl_gate import crawl_errors
+    from validate_session import validate_research
+    research_errors = crawl_errors(folder, caller="luz-system")
+    ledger_path = work / "99-delivery" / "APPROVALS.json"
+    selected = json.loads(ledger_path.read_text(encoding="utf-8")).get("module_scope", {}).get("selected_modules", []) if ledger_path.is_file() else []
+    validate_research(work, selected, research_errors)
+    if research_errors:
+        raise ValueError("publish refused, research gate: " + "; ".join(research_errors))
     # Work starts from a current rule card and the BRIEF names the rules it applied (scripts/context.py).
     rule_errors = rule_card_errors(work, require_adopted=True, check_current=True)
     if rule_errors:
@@ -136,6 +144,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FAIL: {exc}", file=sys.stderr)
         return 1
     print(f"PUBLISHED: {target}")
+    if args.stage == "hardware":
+        # The page is for review and development; the client reads an Excel (SKILL.md 客户文件与上下游衔接).
+        raw = work_dir(Path(args.session).resolve()) / "04-hardware"
+        excel, plan = raw / "client" / "硬件选型清单.xlsx", raw / "plan.json"
+        if not excel.is_file() or (plan.is_file() and excel.stat().st_mtime < plan.stat().st_mtime):
+            print("NOTICE: 客户拿到的是 Excel，不是这个网页：先运行 py -X utf8 scripts/hw_export.py <会话目录>（硬件选型清单.xlsx 缺失或早于 plan.json）", file=sys.stderr)
     return 0
 
 

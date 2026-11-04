@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -49,16 +50,29 @@ class RuleCardTests(unittest.TestCase):
 
     def test_preferences_are_always_on_the_card(self) -> None:
         notes = context.load_json(context.NOTES_FILE, {"notes": []})["notes"]
-        prefs = [n["key"] for n in notes if n["kind"] == "preference"]
+        moved = set(context.load_json(context.CARDS_FILE, {}).get("moved_preferences", []))
+        prefs = [n["key"] for n in notes if n["kind"] == "preference" and n["key"] not in moved]
         self.assertTrue(prefs)
         for kind in ("admin-list", "hardware"):
             text, _ = context.make_card(kind, [])
             for key in prefs:
                 self.assertIn(f"（{key}）", text, f"{kind}: {key}")
 
+    def test_preferences_about_how_things_look_moved_to_luz_design(self) -> None:
+        """Visual preferences stay in the store, so older sessions that cite them still validate, but no card prints them."""
+        moved = context.load_json(context.CARDS_FILE, {}).get("moved_preferences", [])
+        keys = {n["key"] for n in context.load_json(context.NOTES_FILE, {"notes": []})["notes"]}
+        self.assertTrue(moved)
+        self.assertTrue(set(moved) <= keys, sorted(set(moved) - keys))
+        for kind in ("admin-list", "miniprogram", "commerce", "prototype"):
+            text, _ = context.make_card(kind, [])
+            for key in moved:
+                self.assertNotIn(f"（{key}）", text, f"{kind}: {key}")
+
     def test_admin_list_card_carries_the_list_rules(self) -> None:
         text, _ = context.make_card("admin-list", [])
-        for phrase in ("默认视图", "20 条", "表头居中", "导出", "网页管理后台设计规范 › 核心规则 › 五、组件 › 分页",
+        for phrase in ("默认视图", "20 条", "导出", "网页管理后台设计规范 › 核心规则 › 五、组件 › 分页",
+                       "网页管理后台设计规范 › 核心规则 › 五、组件 › 表格列宽、冻结与滚动", "冻结", "data-col-strategy",
                        "validate_session.py", "check_document.py"):
             self.assertIn(phrase, text)
 
@@ -67,13 +81,33 @@ class RuleCardTests(unittest.TestCase):
             "miniprogram": ("界面通用规范 › 核心规则 › 二、功能架构 › 入口与内容分层", "小程序设计规范 › 核心规则"),
             "agent-ui": ("界面通用规范 › 核心规则 › 二、功能架构 › 状态体系", "智能体设计规范 › 核心规则"),
             "website": ("界面通用规范 › 核心规则 › 三、信息架构与导航 › 页头与品牌标识", "网站设计规范 › 核心规则"),
-            "admin-dashboard": ("界面通用规范 › 核心规则 › 四、页面与版式 › 数据驾驶舱：重点信息与计算后的信息", "网页管理后台设计规范 › 核心规则 › 五、组件 › 数据驾驶舱"),
+            "admin-dashboard": ("界面通用规范 › 核心规则 › 四、页面内容与优先级 › 数据驾驶舱：重点信息与计算后的信息", "网页管理后台设计规范 › 核心规则 › 五、组件 › 数据驾驶舱"),
             "system-design": ("界面通用规范 › 核心规则 › 二、功能架构", "系统设计规范 › 核心规则"),
         }
         for kind, labels in pairs.items():
             text, _ = context.make_card(kind, [])
             for label in labels:
                 self.assertIn(f"### {label}", text, f"{kind}: {label}")
+
+    def test_platform_console_cards_carry_their_rules(self) -> None:
+        # platform-console-design.html is cut into one card per capability; each card must carry its own rules and contracts.
+        expected = {
+            "platform-console": ["配置与运行参数的边界", "基础与可选", "平台配置台的架构清单"],
+            "queue-capacity": ["公平调度", "Retry-After", "死信与重放", "预计等待"],
+            "scheduler-ui": ["run_as", "misfire", "fire_id", "cron"],
+            "alert-loop": ["恢复载荷", "ALERT_EXPIRED", "STALE_VERSION", "request_id"],
+            "rule-engine-ui": ["黄金样例", "calculate_by_rule", "get_rule_config", "分档累计"],
+            "multi-agent": ["拆分判断", "交接", "委派深度"],
+            "kb-console": ["命中测试", "预过滤", "未命中回流"],
+            "workflow-canvas": ["校验规则", "高风险写入", "max_iterations", "版本策略"],
+        }
+        for kind, phrases in expected.items():
+            self.assertIn(kind, context.card_kinds())
+            text = rule_text(kind)
+            for phrase in phrases:
+                self.assertIn(phrase, text, f"{kind}: {phrase}")
+        listed = {kind for kind in context.card_kinds()}
+        self.assertTrue(set(expected) <= listed)
 
     def test_interaction_and_agent_runtime_rules_reach_their_cards(self) -> None:
         # The closed-loop rules (ui-standards.html) and the agent runtime contract (agent-design.html) are on the cards
@@ -96,10 +130,59 @@ class RuleCardTests(unittest.TestCase):
             for phrase in phrases:
                 self.assertIn(phrase, text, f"{kind}: {phrase}")
 
-    def test_interface_cards_cut_visual_sections_from_luz_design(self) -> None:
-        for kind in ("function-list", "admin-list", "admin-dashboard", "admin-form", "miniprogram", "agent-ui", "website", "prototype"):
+    def test_client_document_content_reaches_the_cards_project_calls(self) -> None:
+        # Luz-Project reads `function-list` for the client function list and business logic; the architecture atlas and the
+        # proposal content come from `client-docs`. Both must say what the client files are and how the data is checked.
+        function_list = rule_text("function-list")
+        for phrase in ("客户功能清单", "业务逻辑的写法", "项目专属问题", "工时估算", "features.json", "intake-extra.json", "没有序号列"):
+            self.assertIn(phrase, function_list, f"function-list: {phrase}")
+        text, _ = context.make_card("function-list", [])
+        self.assertIn("features_check.py", text)
+        client_docs = rule_text("client-docs")
+        for phrase in ("需求的写法", "方案说明书的内容来源", "架构图的画法", "客户文件与开发文件", "个人信息与隐私", "七、客户文件",
+                       "先分析客户的需求，再给出解决方案", "每条线是单向的关系"):
+            self.assertIn(phrase, client_docs, f"client-docs: {phrase}")
+        self.assertIn("client-docs", [kind for kind in context.card_kinds()])
+
+    def test_privacy_and_accessibility_rules_are_on_the_cards_that_design_screens(self) -> None:
+        ui_cards = {"system-design": "个人信息与隐私", "client-docs": "个人信息与隐私", "miniprogram": "隐私保护指引", "hardware": "单独同意"}
+        for kind, phrase in ui_cards.items():
+            self.assertIn(phrase, rule_text(kind), f"{kind}: {phrase}")
+
+    def test_interface_cards_point_to_luz_design_and_print_no_visual_rules(self) -> None:
+        # What a screen contains and does is Luz-System's; its look is Luz-Design's (references/ui-ownership.md there).
+        cards = context.load_json(context.CARDS_FILE, {})["cards"]
+        pointed = ("system-design", "function-list", "admin-list", "admin-dashboard", "admin-form", "miniprogram", "commerce", "agent-ui",
+                   "agent-composer", "website", "prototype", "interaction", "interaction-patterns", "nav-levels", "platform-console",
+                   "workflow-canvas", "alert-loop")
+        for kind in pointed:
+            lines = [t for t in cards[kind]["tools"] if t.startswith("视觉读 Luz-Design 的规则卡 `interface-visual`")]
+            self.assertEqual(len(lines), 1, kind)
+            for name in ("interface-components", "interface-layout", "interface-pattern", "interface-motion", "interface-icons",
+                         "不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"):
+                self.assertIn(name, lines[0], kind)
+        for kind, card in cards.items():
+            self.assertFalse([s["path"] for s in card["sections"] if s.get("root")], f"{kind}: a section is cut from another skill's page")
             text, _ = context.make_card(kind, [])
-            self.assertIn("### 视觉设计规范（Luz-Design） › 核心规则", text, kind)
+            self.assertNotIn("### 视觉设计规范（Luz-Design）", text, kind)
+            self.assertNotIn("### 文件设计规范（Luz-Design）", text, kind)
+
+    def test_cards_moved_to_luz_design_are_retired_everywhere(self) -> None:
+        retired = ("layout-grid", "icon-card-title", "table-layout", "ui-recipes")
+        self.assertFalse(set(retired) & set(context.card_kinds()))
+        pattern = re.compile(r"(?<![\w-])(?:layout-grid|icon-card-title|table-layout|ui-recipes(?!\.html))(?![\w:-])")
+        for rel in ("SKILL.md", "WORKFLOW.md", "README.md", "agents/openai.yaml", "references/cards.json", "scripts/add_mode.py", "scripts/new_session.py"):
+            text = (context.SKILL_ROOT / rel).read_text(encoding="utf-8")
+            self.assertEqual(pattern.findall(text), [], rel)
+
+    def test_default_entrance_positions_are_on_the_cards_that_place_features(self) -> None:
+        # ui-standards.html 二、功能架构 › 入口与内容分层 › 功能类型的默认入口位置: where each type of function lives, the input of the home page design.
+        for kind in ("system-design", "function-list", "miniprogram", "interaction", "nav-levels"):
+            self.assertIn("功能类型的默认入口位置", rule_text(kind), kind)
+
+    def test_the_size_limit_is_kept_by_moving_sections_not_by_cutting_text(self) -> None:
+        cards = context.load_json(context.CARDS_FILE, {})
+        self.assertFalse([k for k, c in cards["cards"].items() for s in c["sections"] if s.get("max_chars")])
 
     def test_missing_cross_skill_page_falls_back_to_its_url(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

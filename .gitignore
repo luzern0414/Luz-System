@@ -7,6 +7,7 @@ __pycache__/
 !.env.example
 .DS_Store
 .tmp-*/
+*.tmp
 
 # Individuals' contacts (mobile numbers, WeChat IDs) stay on this machine
 experience/hardware/contacts.local.json

@@ -1,0 +1,54 @@
+/* Admin page-level layout. Controls are Element Plus's own; this file only places them and sets the density the rules ask for
+   (14 px text, table rows 44–48, cards on a light canvas, white cards with a hairline). */
+html, body, #app { height: 100%; }
+.shell { height: 100dvh; background: var(--luz-canvas); }
+.shell-aside { display: flex; flex-direction: column; background: var(--luz-nav-bg); border-right: 1px solid var(--luz-line); overflow: hidden; }
+.shell-brand { display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 16px; flex: none; font-weight: 600; font-size: 16px; white-space: nowrap; }
+.brand-mark { width: 32px; height: 32px; flex: none; }
+.brand-mark rect { fill: #fff; }
+.brand-mark g { fill: none; stroke: var(--luz-action); stroke-width: 2.75; stroke-linecap: round; stroke-linejoin: round; }
+.shell-menu-scroll { flex: 1 1 auto; min-height: 0; }
+.shell-menu { border-right: 0; background: transparent; }
+.shell-menu .el-menu-item-group__title { padding: 12px 20px 4px; font-size: 14px; color: var(--luz-ink-2); }
+.shell-foot { flex: none; padding: 8px; border-top: 1px solid var(--luz-line); text-align: center; }
+.version-link { color: var(--luz-ink-2); }
+.shell-body { min-width: 0; }
+.shell-header { display: flex; align-items: center; gap: 8px; height: 56px; padding: 0 16px; background: var(--luz-surface); border-bottom: 1px solid var(--luz-line); }
+.env-tag { margin-right: 8px; }
+.account-btn { display: inline-flex; align-items: center; gap: 8px; }
+.account-avatar { border: 1px solid var(--luz-line); background: var(--luz-surface); color: var(--luz-ink-2); }
+.shell-main { padding: 16px 24px 24px; overflow: auto; }
+.version-info { margin-bottom: 16px; }
+.version-notes { padding-left: 4px; }
+.nav-drawer .shell-menu { background: var(--luz-nav-bg); }
+
+/* a page is a stack of cards; the first thing on it is the toolbar (filters and actions), never a title that repeats the menu */
+.lz-page { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-content: start; }   /* minmax(0, …): a wide child must scroll inside its card, not widen the page */
+.lz-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.lz-card { border-radius: var(--luz-radius-card); }
+.lz-card .el-card__body { padding: 16px; }
+.lz-grid { display: grid; gap: 16px; }
+.lz-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.lz-main-rail { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }   /* the rail is narrow: a wide table keeps the room */
+.el-dialog { max-width: calc(100vw - 24px); }   /* dialogs take a pixel width: on a phone they must not outgrow the window */
+@media (max-width: 1100px) { .lz-main-rail { grid-template-columns: minmax(0, 1fr); } }
+
+/* tables: header centred and on the theme's tint (the library's own header colour variable), rows 48 px (the library's large size) */
+.el-table th.el-table__cell > .cell { text-align: center; }
+.el-table .cell { line-height: 22px; }
+.lz-pager { display: flex; justify-content: flex-end; margin-top: 12px; }
+
+/* library literals that break the standard: tabs are 500 (only 400 / 600 / 700 are allowed) and link buttons are 20 px high (targets are 24 px on a desktop pointer, 40 px on a phone) */
+.el-tabs__item { font-weight: 400; }
+.el-tabs__item.is-active { font-weight: 600; }
+.el-pager li.is-active { font-weight: 600; }
+.el-button.is-link, .el-button.is-text { min-height: 24px; min-width: 24px; }
+
+/* on a phone every control is the library's large size (App.vue sets it on the config provider); link and text buttons grow to 40 px as well */
+@media (max-width: 700px) {
+  .el-button.is-link, .el-button.is-text { min-height: 40px; min-width: 40px; }
+  .lz-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .shell-main { padding: 12px 12px 20px; }
+  .demo-fab { right: 12px; bottom: 12px; }
+}
+.demo-fab { width: 48px; height: 48px; }
