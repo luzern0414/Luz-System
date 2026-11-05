@@ -93,6 +93,8 @@ def check_features(spec, quote=None) -> tuple[list[str], list[str]]:
         status = item.get("status", "in-scope")
         if status not in STATUSES:
             errors.append(f"{label}: status 须为 {'、'.join(STATUSES)}")
+        if status == "removed":
+            continue                  # a removed function stays in the file only so that its id is never used again; its text is not read or checked
         roles = item.get("roles")
         if roles is not None and (not isinstance(roles, list) or any(not isinstance(r, str) or not r.strip() for r in roles)):
             errors.append(f"{label}: roles 须为非空文字数组")

@@ -29,6 +29,7 @@
       ],
       "tools": [
         "建会话：`py -X utf8 scripts/new_session.py --name \"<名称>\" --modes system --system-name \"<系统名>\" --modules \"<模块1>,<模块2>\"`（有现场设备用 `--modes system,hardware`）；生成 BRIEF、模块确认页 `raw/01-system/01-module-intake.html` 与本卡，模块由人批准后才往下做",
+        "输出：会话目录 `NNN-名称\\` 的根只有 `raw\\` 和同名汇总页 `NNN-名称.html`，发布的系统设计页就是汇总页；项目任务建会话时加 `--project <状态根>`（或设 LUZ_PROJECT_ROOT），`publish.py` 把页面写进项目的 `docs\\02-产品开发`，会话根只留汇总页和 `raw\\`，项目目录里不放任何原始文件",
         "先查经验：`py -X utf8 scripts/experience.py search <关键词>`；新鲜来源用 `py -X utf8 scripts/experience.py reuse <会话目录> <来源编号…> --module <模块>` 复制进调研，再补采",
         "调研按 Luz-Crawl 的 SKILL.md 调用协议：`doctor` → `begin \"<主题>\" --new`（得到 folder）→ `experience --query` → 每条命令带 `--out <folder>`；至少 12 个网址、5 个可注册域名，页面结构、交互流程、组件状态三类证据，快照放 `raw/01-system/crawl-snapshots/`；只调研用户看得见、用得到的东西",
         "架构 `raw/01-system/03-system-architecture.html` 与系统设计 `raw/01-system/04-system-design.html` 从 `references/templates.txt` 的同名模板起步；模板只是骨架，小节、编号、版式按本卡",
@@ -73,7 +74,7 @@
         "功能清单、报价、项目专属问题写成 `data/client/features.json`、`quote.json`、`intake-extra.json`，写完用 `py -X utf8 scripts/features_check.py <data/client 目录>` 自查；成品 Excel 与 PDF 由 Luz-Project 经 Luz-Design 生成，本技能不手写成品",
         "方案说明书的正文由 Luz-Writing 写（`py -X utf8 D:\\Codes\\Luz-Writing\\scripts\\06-context.py general`），版式由 Luz-Design 的 `docx` 与 `showcase` 规则卡保证；本卡只提供“写什么”",
         "架构图册的图数据写成 `data/client/architecture.json`：节点、数据流、泳道、部署的业务含义取自功能清单和客户确认过的规则，不凭空画",
-        "硬件选型清单的客户 Excel：`py -X utf8 scripts/hw_build.py <会话目录>` 通过后 `py -X utf8 scripts/hw_export.py <会话目录>`",
+        "硬件选型清单的客户 Excel：`py -X utf8 scripts/hw_build.py <会话目录>` 通过后 `py -X utf8 scripts/hw_export.py <会话目录>`（独立任务写在会话根、列进汇总页；项目任务写进项目的 `docs\\01-需求对接`）",
         "业务规则、行业惯例、平台前置条件与法规的来源走 Luz-Crawl 前置检索（`crawl_preflight.py run … conclude … check`），结论写进补充信息再写进需求分析和业务逻辑",
         "架构图册里分层图、泳道图、部署图的画法（配色、连线、字号、排布）由 Luz-Design 的规则卡 `showcase` 规定：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py showcase`；本卡只管图里画什么"
       ],
@@ -475,7 +476,7 @@
         "先查硬件经验：`py -X utf8 scripts/hw_experience.py stats`、`search \"<关键词>\"`、`compat \"<设备>\"`、`suppliers \"<品类>\"`、`queries \"<关键词>\"`；硬件教训读 `experience/hardware/lessons.md`",
         "设备品类与参数读 `references/hardware/hardware-basics.md`，协议读 `references/hardware/protocols.md`，场景读 `references/hardware/scenarios/<场景>.md`，plan.json 字段读 `references/hardware/plan-schema.md`；示例 `examples/unmanned-gym.plan.json`",
         "调研按 Luz-Crawl 的 SKILL.md 调用协议：`doctor` → `begin \"<主题>\" --new`（得到 folder）→ `experience --query` → 每条命令带 `--out <folder>`；`py -X utf8 scripts/hw_crawl_digest.py <folder>` 整理候选与来源；实物图 `py -X utf8 scripts/hw_fetch_images.py search <产品id> \"<品牌 型号>\"`",
-        "生成：`py -X utf8 scripts/hw_build.py <会话目录>` 校验 plan.json、生成 `raw/04-hardware/hardware-plan.html` 并跑 Luz-Design 文档检查；清单由人批准后（`raw/99-delivery/APPROVALS.json` 的 hardware 一项）发布 `py -X utf8 scripts/publish.py <会话目录> hardware`"
+        "生成：`py -X utf8 scripts/hw_build.py <会话目录>` 校验 plan.json、生成 `raw/04-hardware/hardware-plan.html` 并跑 Luz-Design 文档检查；清单由人批准后（`raw/99-delivery/APPROVALS.json` 的 hardware 一项），先 `py -X utf8 scripts/hw_export.py <会话目录>` 导出客户的 Excel（独立任务放会话根，项目任务写进项目的 `docs\\01-需求对接`），再发布 `py -X utf8 scripts/publish.py <会话目录> hardware`，汇总页把 Excel 列进去"
       ],
       "checks": [
         "`py -X utf8 scripts/hw_build.py <会话目录>` 返回 0（方案零错误、文档检查通过），缺实物图的 WARN 补齐",

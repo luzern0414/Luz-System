@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Publish one stage artifact as the session's single final HTML: <session>/<session-folder>.html."""
+"""Publish one stage artifact. Standalone task: it becomes the session's summary page <session>/<session-folder>.html (the
+deliverable files beside it are listed in it). Project task: it is written to the project's docs\\02-产品开发 and the session
+root gets a summary page that lists it; nothing but raw\\ and that page stays in the session root."""
 from __future__ import annotations
 
 import argparse
@@ -9,11 +11,17 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import project_link
+import session_output
 from validate_session import (
+    ARCHITECTURE_PATH,
+    OUTPUT_LAYOUT,
     PROTOTYPE_PATH,
     SYSTEM_DESIGN_PATH,
     VISUAL_PATH,
     final_html,
+    layout_findings,
+    root_files,
     rule_card_errors,
     sediment_errors,
     sha256_file,
@@ -24,6 +32,7 @@ from validate_session import (
 )
 
 STAGE_PATHS = {
+    "architecture": ARCHITECTURE_PATH,
     "system_design": SYSTEM_DESIGN_PATH,
     "visual": VISUAL_PATH,
     "prototype": PROTOTYPE_PATH,
@@ -31,6 +40,7 @@ STAGE_PATHS = {
 }
 # The rule card each stage is built from (references/cards.json), named in the refusal message.
 STAGE_CARDS = {
+    "architecture": "system-design",
     "system_design": "system-design",
     "visual": "admin-list | miniprogram | website | agent-ui",
     "prototype": "prototype",
@@ -38,8 +48,9 @@ STAGE_CARDS = {
 }
 # A stage belongs to a mode, and add_mode.py adds a mode only after the stages before it are approved by a person.
 # Publishing checks the same chain, so a stage written without its approvals is never delivered.
-STAGE_MODES = {"system_design": "system", "visual": "visual", "prototype": "prototype", "hardware": "hardware"}
+STAGE_MODES = {"architecture": "system", "system_design": "system", "visual": "visual", "prototype": "prototype", "hardware": "hardware"}
 UPSTREAM_APPROVALS = {
+    "architecture": ("module_scope", "architecture"),
     "system_design": ("module_scope", "architecture"),
     "visual": ("module_scope", "architecture", "system_design"),
     "prototype": ("module_scope", "architecture", "system_design", "visual"),
@@ -76,7 +87,8 @@ def approval_gate_errors(work: Path, stage: str) -> list[str]:
     return errors
 
 
-def publish(folder: Path, stage: str) -> Path:
+def publish(folder: Path, stage: str, name: str | None = None) -> Path:
+    """Publish `stage`; `name` (名称 or NN-名称) is the file name of the page in the project's docs\\02-产品开发 (project task)."""
     folder = folder.resolve()
     work = work_dir(folder)
     if stage not in STAGE_PATHS:
@@ -115,17 +127,36 @@ def publish(folder: Path, stage: str) -> Path:
         errors.extend(tab_icon_errors(root, source.name))
     if errors:
         raise ValueError("stage artifact fails the HTML contract: " + "; ".join(errors))
-    for item in folder.iterdir():
-        if item.is_file() and item.suffix.lower() == ".html" and item != final_html(folder):
-            raise ValueError(f"unexpected HTML at the session root: {item.name}")
-    target = final_html(folder)
-    shutil.copyfile(source, target)
+    # The root of the session is checked before anything is written: only raw\ and, beside the summary page, deliverable files.
     manifest_path = work / "99-delivery" / "MANIFEST.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("output_layout") == OUTPUT_LAYOUT:
+        root_errors, _ = layout_findings(folder, manifest, check_listed=False)
+        if root_errors:
+            raise ValueError("publish refused, session root: " + "; ".join(root_errors))
+    else:                                    # an older session: its root is not held to the new layout, but no second HTML may sit there
+        for item in folder.iterdir():
+            if item.is_file() and item.suffix.lower() == ".html" and item != final_html(folder):
+                raise ValueError(f"unexpected HTML at the session root: {item.name}")
+    target = final_html(folder)
+    record = {"stage": stage, "source": STAGE_PATHS[stage], "source_sha256": sha256_file(source)}
+    if manifest.get("project"):
+        # Project task: the page goes to the project directory only; the session root gets a summary page that lists it.
+        project = manifest["project"]
+        if not Path(project["deliver_root"]).is_dir():
+            raise FileNotFoundError(f"the project directory does not exist: {project['deliver_root']}")
+        doc_name, purpose = session_output.STAGE_DOCS[stage]
+        page = project_link.doc_target(project, "development", name or doc_name, ".html")
+        page.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, page)
+        session_output.project_result(manifest, stage, page.stem.split("-", 1)[-1], purpose, page)
+        session_output.write_summary(folder, manifest)
+    else:
+        text = source.read_bytes().decode("utf-8")
+        target.write_bytes(session_output.inject_deliverables(text, root_files(folder)).encode("utf-8"))
     manifest["final"] = {
         "path": target.name,
-        "stage": stage,
-        "source": STAGE_PATHS[stage],
+        **record,
         "sha256": sha256_file(target),
         "published_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
@@ -137,19 +168,22 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("session", help="Numbered session folder in the output root")
     parser.add_argument("stage", choices=sorted(STAGE_PATHS), help="Stage artifact to publish")
+    parser.add_argument("--as", dest="name", help="Project task: the page's file name in docs\\02-产品开发, 名称 or NN-名称 "
+                        "(default: the stage's name; a page with the same name is replaced and keeps its number)")
     args = parser.parse_args(argv)
     try:
-        target = publish(Path(args.session), args.stage)
+        target = publish(Path(args.session), args.stage, args.name)
     except Exception as exc:
         print(f"FAIL: {exc}", file=sys.stderr)
         return 1
     print(f"PUBLISHED: {target}")
     if args.stage == "hardware":
         # The page is for review and development; the client reads an Excel (SKILL.md 客户文件与上下游衔接).
-        raw = work_dir(Path(args.session).resolve()) / "04-hardware"
-        excel, plan = raw / "client" / "硬件选型清单.xlsx", raw / "plan.json"
+        folder = Path(args.session).resolve()
+        excel, plan = session_output.hardware_list_target(folder, session_output.read_manifest(folder)), work_dir(folder) / "04-hardware" / "plan.json"
         if not excel.is_file() or (plan.is_file() and excel.stat().st_mtime < plan.stat().st_mtime):
-            print("NOTICE: 客户拿到的是 Excel，不是这个网页：先运行 py -X utf8 scripts/hw_export.py <会话目录>（硬件选型清单.xlsx 缺失或早于 plan.json）", file=sys.stderr)
+            print("NOTICE: 客户拿到的是 Excel，不是这个网页：先运行 py -X utf8 scripts/hw_export.py <会话目录>，再重新发布本页把它列进去"
+                  "（硬件选型清单.xlsx 缺失或早于 plan.json）", file=sys.stderr)
     return 0
 
 

@@ -13,10 +13,13 @@ import unicodedata
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import project_link  # noqa: E402
+from validate_session import OUTPUT_LAYOUT, SESSION_RE  # noqa: E402
+
 SKILL_ROOT = Path(__file__).resolve().parents[1]
 # The skill holds rules, templates and scripts; every session it creates is an output and lives here.
 OUTPUT_ROOT = Path(r"D:\Codes\skill输出\Luz-System")
-SESSION_RE = re.compile(r"^(\d{3,})-(.+)$")
 INVALID = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
 # Luz-System owns system design, product visual, interactive prototype and hardware.
 # Posters, brand visuals and document layout belong to Luz-Design (D:\Codes\Luz-Design).
@@ -364,7 +367,10 @@ def create_session(
     modules: list[str] | None = None,
     cards: list[str] | None = None,
     approval_mode: str = "per_stage",
+    project: dict | None = None,
 ) -> Path:
+    """Create `NNN-名称\\` with raw\\ in it. The root of a session holds only raw\\ and the summary page `NNN-名称.html`, which
+    publish.py writes. `project` (project_link.load) marks a project task: its results go to the project directory."""
     requested_modules = list(dict.fromkeys(modules or []))
     validate_creation(modes, session_kind, system_name, requested_modules, approval_mode)
     kinds = rule_card_kinds(modes, cards)
@@ -375,7 +381,7 @@ def create_session(
     for item in root.iterdir():
         match = SESSION_RE.match(item.name)
         if item.is_dir() and match:
-            sequences.append(int(match.group(1)))
+            sequences.append(int(match.group(1)))      # older two-digit and underscore names count too: a number is never reused
     next_sequence = max(sequences, default=0) + 1
 
     while True:
@@ -423,6 +429,9 @@ def create_session(
             manifest["requested_modules"] = requested_modules
         if approval_mode == "authorization":
             manifest["approval_mode"] = approval_mode
+        manifest["output_layout"] = OUTPUT_LAYOUT          # sessions without it are older: validation only hints at their layout
+        if project:
+            manifest["project"] = {**project, "published": []}
         (delivery / "MANIFEST.json").write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
@@ -470,12 +479,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--approval-mode", choices=APPROVAL_MODES, default="per_stage",
                         help="per_stage (default): a person approves each stage; authorization: a platform demo session where a "
                              "person signs one authorization before generation (APPROVALS.json authorizations)")
+    parser.add_argument("--project", help="Project task: the project's state root, project directory or Luz-Project session folder "
+                        f"(default: the environment variable {project_link.ENV_VAR}). Results are then written only to the project directory's docs\\")
     args = parser.parse_args(argv)
     root = Path(args.root).resolve() if args.root else OUTPUT_ROOT
     kind = args.session_kind
     if args.modes == "system" and kind == "general":
         kind = "system"
     try:
+        project = project_link.load(args.project)
         folder = create_session(
             root,
             args.name,
@@ -485,11 +497,14 @@ def main(argv: list[str] | None = None) -> int:
             modules=parse_csv(args.modules),
             cards=args.card,
             approval_mode=args.approval_mode,
+            project=project,
         )
     except Exception as exc:
         print(f"FAIL: {type(exc).__name__}: {exc}", file=sys.stderr)
         return 1
     print(str(folder))
+    if project:
+        print(f"PROJECT: results go to {project['deliver_root']}\\docs; the session root keeps only the summary page and raw\\", file=sys.stderr)
     print_card_hint(folder)
     return 0
 

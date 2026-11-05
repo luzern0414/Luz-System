@@ -1,13 +1,13 @@
 """先读规则卡：py -X utf8 scripts/context.py hardware --session "<会话目录>"（规则、偏好、教训、工具与检查；本脚本只是骨架）
 
 校验 raw/04-hardware/plan.json → 生成 raw/04-hardware/hardware-plan.html → 用 Luz-Design 文档检查脚本验收；
-交付时用 publish.py <会话> hardware 发布为会话唯一的最终 HTML。
-给客户的是 Excel：方案通过校验后用 hw_export.py <会话> 生成 raw/04-hardware/client/硬件选型清单.xlsx（HTML 只给评审与开发）。
+给客户的是 Excel：方案通过校验后用 hw_export.py <会话> 生成 硬件选型清单.xlsx（独立任务放会话根，项目任务写进项目的 docs/01-需求对接；HTML 只给评审与开发）。
+交付时先导出 Excel，再用 publish.py <会话> hardware 发布为会话的汇总页（独立任务）或写进项目的 docs/02-产品开发（项目任务）。
 
 用法：
   py -X utf8 scripts/hw_build.py "<会话目录>"
 
-会话根目录只放最终 HTML 和 raw/；校验与检查结果写入 raw/build-report.json。
+会话根目录只放汇总页、它列出的成品文件和 raw/；校验与检查结果写入 raw/04-hardware/build-report.json。
 """
 from __future__ import annotations
 

@@ -89,6 +89,11 @@ REQUIRED = [
     "scripts/test_rule_visual_lint.py",
     "scripts/entrances_check.py",
     "scripts/test_entrances_check.py",
+    "scripts/check_output_layout.py",
+    "scripts/make_summary.py",
+    "scripts/project_link.py",
+    "scripts/session_output.py",
+    "scripts/test_output_layout.py",
 ]
 RULE_PAGES = [
     ("ui-standards.html", "ui", "界面通用规范"),
@@ -438,6 +443,10 @@ def md_type_errors() -> list[str]:
     if css_path.is_file() and md_block(css_path.read_text(encoding="utf-8")) != block:
         errors.append("references/guidelines.css must carry the Markdown type block of references/md-type.css between its luz-md-type markers; run "
                       "py -X utf8 D:/Codes/Luz-Design/scripts/sync_md_type.py --only Luz-System --write")
+    summary_path = ROOT / "scripts" / "make_summary.py"
+    if summary_path.is_file() and block not in summary_path.read_text(encoding="utf-8"):
+        errors.append("scripts/make_summary.py (the summary page generator, a mirror shared by the seven skills) must carry the Markdown type block of "
+                      "references/md-type.css; run py -X utf8 D:/Codes/Luz-Design/scripts/sync_md_type.py --only Luz-System --write")
     return errors
 
 

@@ -9,7 +9,7 @@ Luz System turns a scoped request into an auditable system design: what the syst
 
 ## 调用协议（每次调用都按顺序做，不可跳过）
 
-**先判定模式与检索。** 若提供显式 project context / `LUZ_PROJECT_ROOT`，先按 [project-mode.md](../Luz-Project/references/project-mode.md) 读取 `project.py context <project> <stage> --skill luz-system`；项目阶段使用项目 HTML/JSON 与审批，不套 standalone 的旧会话路径。没有项目上下文就沿用本技能编号会话，不创建完整项目目录。
+**先判定模式与检索。** 若提供显式 project context / `LUZ_PROJECT_ROOT`（指项目状态根），先读取 `project.py context <project> <stage> --skill luz-system`，建会话时加 `--project`（默认取 `LUZ_PROJECT_ROOT`）：源文件、过程文件和审批记录在会话的 `raw\`，成果只写进项目目录的 `docs\`，项目不保存任何原始文件（见下面的 Layout）。没有项目上下文就是独立任务，不创建完整项目目录。
 
 **项目模式下的原型。** design 阶段的可交互原型（每个系统、设备端一个单文件，各占设计文档一页签、只放原型，路径写进“前端规范”；`03-手机原型.html`、`04-后台原型.html`）的行为、数据与场景遵守本技能的 `prototype`、`interaction-patterns`、`nav-levels` 规则卡（外观、组件库与动效由 Luz-Design 规定，项目模式下原型随前端界面设计阶段由 Luz-Design 交付）：场景配置面板按端的一级导航分类、场景逐一列出、全局含网络、外观（跟随系统 / 浅色 / 深色）、减少动态、角色、重置演示数据；手机宽度可完整操作，浅色与深色两种外观下每页都能打开（`audit_rendered.py --scheme dark`）；`project.py document` 读构建出的文件，缺减少动态效果分支、对话框角色或配置面板就不放行。**原型的控件一律来自所选组件库的真实组件**（Luz-Design 规则卡 `interface-components`，库登记在 `Luz-Design/references/component-libraries.json`）：每个前端先选一个库，写进前端架构；不手写 HTML/CSS 自造控件，不由模型直接写整页代码；`prototype` 块写 `library`，构建后用 `audit_rendered.py --library <编号>` 逐页核对。**文本框的聚焦样式、焦点轮廓与点按高亮不在本技能规定**，按 Luz-Design 的规则卡 `interface-visual`、`interface-components` 执行，`audit_rendered.py` 报“聚焦框”算不通过（键盘可达与焦点不被遮挡见 `ui-standards.html` 五、组件 › 无障碍底线）。页面清单、令牌与六种布局可参考 `examples/base-prototype-next/`（用 Element Plus 与 Vant 的真实组件构建：后台 17 页、小程序 25 页）；它只是参考，按本次内容推导页面，不整套复制。
 
@@ -87,12 +87,17 @@ D:\Codes\Luz-System\                   the skill (rules, templates, knowledge, s
   scripts\                             rule cards (context.py), sessions, publish, validation, experience, hardware build and export, client function-list check (features_check.py), tests
 
 D:\Codes\skill输出\Luz-System\         outputs only
-  NNN-名称\
-    NNN-名称.html                      the single final deliverable
-    raw\                               BRIEF, 00-rules (rule cards), research, crawl snapshots, 01-system, 02-visual, 03-prototype, 04-hardware, 99-delivery
+  NNN-名称\                            three digits, largest number plus one, never reused (older two-digit and underscore names stay readable)
+    NNN-名称.html                      summary page, same name as the folder
+    硬件选型清单.xlsx                  deliverable files of a standalone task, listed in the page
+    raw\                               BRIEF, 00-rules (rule cards), 00-crawl, research, crawl snapshots, 01-system, 02-visual, 03-prototype, 04-hardware, 99-delivery
 ```
 
-Never write outputs into the skill, and never put rules, templates or scripts into the output folder. `publish.py <session> <stage>` copies the chosen stage artifact to the session root as `NNN-名称.html`; the root holds nothing else. Personal contacts (`experience/hardware/contacts.local.json`) and third-party product photos (`experience/hardware/images/`) stay on this machine and are ignored by git.
+Never write outputs into the skill, and never put rules, templates or scripts into the output folder. The root holds only `raw\` and the summary page, which `publish.py <session> <architecture | system_design | visual | prototype | hardware>` writes from the stage page: the system design page is itself the summary page (one h1 first, `lang="zh-CN"`, zoom not disabled, the md-type block of the reading templates) and lists the files beside it in a section 成果文件. `check_output_layout.py session <会话目录> [--project-linked]` is the check; `validate_session.py` runs it for every session with `output_layout` in its MANIFEST, an older session keeps its layout and only gets a hint.
+
+**Project task** (`new_session.py --project <状态根>` or `LUZ_PROJECT_ROOT`, the state root: the folder holding `project.json`; its `deliver_root` is the project directory, and a project not yet migrated keeps `project.json` and the results in the project root): `publish.py … [--as <名称>]` writes the page to `docs\02-产品开发\NN-名称.html` and `hw_export.py` the hardware list to `docs\01-需求对接\NN-硬件选型清单.xlsx` (the same name keeps its number); the session root keeps `raw\` and a generated summary page listing the results by their paths in the project, and the project holds no source or process file.
+
+Personal contacts (`experience/hardware/contacts.local.json`) and third-party product photos (`experience/hardware/images/`) stay on this machine and are ignored by git.
 
 ## Route
 
@@ -155,9 +160,9 @@ Here also: hardware calls run `hw_experience.py search / compat / queries`; prod
 3. Research with LuzCrawl by its SKILL.md 调用协议: `doctor` → `begin "<主题>" --new` (returns the folder) → `experience --query` → `--out <folder>` on every command. Frontend references for software (at least 12 URLs across 5 domains) and models, prices and channels for hardware. Reuse fresh experience sources first. Business rules, regulations and platform preconditions are not frontend research records: they come from the preflight conclusions and go into the requirement analysis and business logic.
 4. Write the architecture: roles, functions, pages, navigation, components and actions, flows with recovery, states, integrations (including every device and its protocol when hardware is in scope), traceability, acceptance. Wait for architecture approval.
 5. System design, then product visual board, then interactive prototype, each with its own human approval; exercise the prototype in a real browser.
-6. Hardware: storyboard the whole lifecycle, map every step to devices, fill `raw/04-hardware/plan.json`, then `hw_build.py` (validates, renders `hardware-plan.html`, runs Luz-Design's document check); the person approves the list (`APPROVALS.json` hardware) before it is published; `hw_export.py` then writes the client's Excel (`raw/04-hardware/client/硬件选型清单.xlsx`: sheet 设备清单 and sheet 现场条件) from the same plan.
+6. Hardware: storyboard the whole lifecycle, map every step to devices, fill `raw/04-hardware/plan.json`, then `hw_build.py` (validates, renders `hardware-plan.html`, runs Luz-Design's document check); the person approves the list (`APPROVALS.json` hardware) before it is published; `hw_export.py` writes the client's Excel (`硬件选型清单.xlsx`: sheet 设备清单 and sheet 现场条件, from the same plan) beside the summary page or into the project, and comes before `publish.py` so the page lists it.
 7. Sediment: `experience.py harvest` and `experience.py add` for software; `hw_experience.py add experience\hardware\inbox\<file>.json` for hardware; `experience.py note` for preferences, lessons and facts, with the keys listed in BRIEF 本次沉淀 (每次调用后沉淀). Fill BRIEF 采用的规则 from the rule cards.
-8. Publish the final HTML with `publish.py <session> <system_design | visual | prototype | hardware>`; it refuses a session without a current rule card, 采用的规则 or 本次沉淀.
+8. Publish the summary page with `publish.py <session> <architecture | system_design | visual | prototype | hardware>`; it refuses a session without a current rule card, 采用的规则 or 本次沉淀.
 
 ~~~powershell
 py -X utf8 scripts/context.py list
@@ -165,11 +170,12 @@ py -X utf8 scripts/context.py admin-list --topic 订单 导出
 py -X utf8 scripts/new_session.py --name "<名称>" --modes system --system-name "<系统名>" --modules "<模块1>,<模块2>"
 py -X utf8 scripts/new_session.py --name "<名称>" --modes system,hardware --system-name "<系统名>" --modules "<模块1>"
 py -X utf8 scripts/new_session.py --name "<名称>硬件选型清单" --modes hardware
+py -X utf8 scripts/new_session.py --name "<名称>" --modes system --system-name "<系统名>" --modules "<模块1>" --project "<状态根>"
 py -X utf8 scripts/add_mode.py "<会话目录>" visual --card admin-list --card admin-dashboard --card miniprogram
 py -X utf8 scripts/add_mode.py "<会话目录>" prototype
 py -X utf8 scripts/hw_build.py "<会话目录>"
 py -X utf8 scripts/hw_export.py "<会话目录>"
-py -X utf8 scripts/features_check.py "<项目>\data\client"
+py -X utf8 scripts/features_check.py "<状态根>\data\client"
 py -X utf8 scripts/publish.py "<会话目录>" prototype
 py -X utf8 scripts/new_session.py icon "<系统名>"
 ~~~
@@ -196,6 +202,7 @@ py -X utf8 scripts/experience.py check
 py -X utf8 scripts/hw_experience.py check
 py -X utf8 scripts/features_check.py "<data/client>"
 py -X utf8 scripts/validate_session.py "<会话目录>" --strict-production
+py -X utf8 scripts/check_output_layout.py session "<会话目录>" [--project-linked]
 py -X utf8 scripts/check_interaction.py "<会话目录>"
 py -X utf8 D:\Codes\Luz-Design\scripts\check_document.py "<delivered file>" --allow interface
 py -X utf8 -m unittest discover -s scripts -p "test_*.py"
@@ -206,7 +213,7 @@ py -X utf8 -m unittest discover -s scripts -p "test_*.py"
 
 ## 客户文件与上下游衔接
 
-**交给客户的文件只有 PDF 和 Excel**（Word 只是方案说明书的排版源，不交给客户；HTML 只给评审、开发和演示）。本技能的 HTML（模块表单、系统架构、系统设计、视觉稿、原型、`hardware-plan.html`）都属于后者；客户拿到的是同一批事实派生出的 PDF 与 Excel，每份文件把自己的内容写完整，不提及其他文件。事实写在数据文件里，成品是它的派生物，不手改成品。
+**交给客户的文件只有 PDF 和 Excel**（Word 只是方案说明书的排版源，不交给客户；HTML 只给评审、开发和演示）。本技能的 HTML（模块表单、系统架构、系统设计、视觉稿、原型、`hardware-plan.html`）都属于后者；客户拿到的是同一批事实派生出的 PDF 与 Excel，每份文件把自己的内容写完整，不提及其他文件。事实写在数据文件里，成品是它的派生物，不手改成品。项目里客户文件只在 `docs\01-需求对接`（Luz-Project 写入；硬件选型清单由 `hw_export.py` 直接写入），数据文件与描述文件都留在状态根，不进项目目录。
 
 | 客户文件 | 本技能负责的内容 | 数据文件与生成 |
 |---|---|---|
@@ -214,7 +221,7 @@ py -X utf8 -m unittest discover -s scripts -p "test_*.py"
 | 业务逻辑确认表 Excel | 每个功能拟定的业务逻辑（`rules` 按“；”拆成逐条）和项目专属的待决规则、只有客户才有的资料 | `features.json` 与 `intake-extra.json`，Luz-Project 生成与回收 |
 | 方案说明书 PDF | 需求分析（现状问题、各使用方的核心需求）、系统构成、角色与权限、业务流程、各系统的功能与业务逻辑、统一业务规则 | Luz-Writing 写，Luz-Design 排版，Luz-Project 编排；内容来源见 system-design.html“方案说明书的内容来源” |
 | 系统架构图册 PDF | 节点与数据流的业务含义、模块输入处理输出、依赖、数据链路、泳道流程、状态、数据隔离、部署、各端功能分布 | `data/client/architecture.json`，Luz-Design 的展示版脚本；画法见 system-design.html“架构图的画法” |
-| 硬件选型清单 Excel | 设备、数量、单价与采购渠道、接口与供电、现场条件 | `raw/04-hardware/plan.json`，本技能 `hw_export.py` 经 Luz-Design 表格脚本生成 |
+| 硬件选型清单 Excel | 设备、数量、单价与采购渠道、接口与供电、现场条件 | `raw/04-hardware/plan.json`，本技能 `hw_export.py` 经 Luz-Design 表格脚本生成（独立任务放会话根） |
 
 **输入。** 项目模式读 `project.py context <项目> <阶段> --skill luz-system`（前序阶段产物、`client` 段里的数据文件、客户确认过的答案、待确认变更）；独立调用读用户原话。Luz-Crawl 的前置检索结论是调研的唯一来源；视觉基础来自 Luz-Design 的 `interface-visual` 规则卡。**输出。** 功能清单与业务逻辑进 Luz-Project 的数据文件（稳定功能编号 `FN-001…`，发布后永不复用，改动走变更台账）；架构、系统设计与原型的编号和交互契约进 `HANDOFF.json` 与 `references/handoff.md` 交给 Luz-Dev；每个功能的 `acceptance` 与 `tags` 交给 Luz-Ops 映射测试证据；前端结构与交互要求交给 Luz-Design，色板、字体、图标不在本技能选择。
 
@@ -224,6 +231,6 @@ py -X utf8 -m unittest discover -s scripts -p "test_*.py"
 |---|---|---|
 | proposal | 读规则卡 `client-docs`，写 `features.json`（含 `hours`）、给方案与架构图册提供内容；`features_check.py` 零错误后交 Luz-Project 生成 | `py -X utf8 scripts/context.py client-docs` |
 | client-intake | 把每个功能的 `rules` 写成可确认的逻辑，补 `intake-extra.json`（只放项目专属问题） | 同上，再跑 `features_check.py <data/client>` |
-| architecture | 三个页签：功能逻辑架构、前端架构、后端架构。前端页签记录自适应路由、标签栏、页面内容、动作、状态、数据需求与响应式行为，不选色板、字体、图标和阴影（属于 Luz-Design）；后端页签记录技术与服务意图（交给 Luz-Dev）；`project.py link` 登记每个功能的落点 | `context.py system-design` |
+| architecture | 交 `01-系统架构.html`（四个页签：技术栈、总体架构、功能与技术方案、决策与质量，每个功能一张功能卡，标准见 dev-documents.md）；有界面的项目同时交界面功能说明（页面与路由、入口、标签栏、组件、按钮动作、状态、数据需求、文案键，不选色板、字体、图标和阴影，属于 Luz-Design）、入口表 `entrances*.json` 和原型逻辑，登记为本阶段产物（`project.py artifact … --kind frontend-spec \| frontend-spec-page \| entrances \| proto-logic`）；后端细节交给 Luz-Dev；`project.py link` 登记每个功能的落点 | `context.py system-design` |
 
-没有显式 project context 时保持本技能的编号会话、输出与审批，不创建项目目录；项目阶段用项目的 HTML、JSON 与审批，不套独立会话的旧路径。
+没有显式 project context 时是独立任务，不创建项目目录；项目任务的成果去向见 Layout。

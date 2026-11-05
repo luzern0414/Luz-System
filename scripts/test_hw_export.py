@@ -63,7 +63,7 @@ class HardwareExportTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             session = session_with_plan(tmp)
             self.assertEqual(hw_export.main([str(session), "--spec-only"]), 0)
-            spec = json.loads((session / "raw" / "04-hardware" / "client" / "hardware-list.spec.json").read_text(encoding="utf-8"))
+            spec = json.loads((session / "raw" / "04-hardware" / "hardware-list.spec.json").read_text(encoding="utf-8"))
             self.assertEqual([s["sheet"] for s in spec["sheets"]], ["设备清单", "现场条件"])
             if MAKE_XLSX.is_file():
                 try:
@@ -71,7 +71,9 @@ class HardwareExportTests(unittest.TestCase):
                 except ImportError:
                     self.skipTest("openpyxl is not installed")
                 self.assertEqual(hw_export.main([str(session)]), 0)
-                self.assertTrue((session / "raw" / "04-hardware" / "client" / "硬件选型清单.xlsx").is_file())
+                # A standalone task: the Excel sits beside the summary page, not in raw\.
+                self.assertTrue((session / "硬件选型清单.xlsx").is_file())
+                self.assertFalse((session / "raw" / "04-hardware" / "client").exists())
 
     def test_invalid_plan_is_not_exported(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

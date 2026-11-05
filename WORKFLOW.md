@@ -1,6 +1,6 @@
 # Luz System workflow
 
-Sessions live in `D:\Codes\skill输出\Luz-System\NNN-名称\`: the single final `NNN-名称.html` at the root and every working file under `raw\`. Rules and templates live in `references\` of the skill, accumulated knowledge in `experience\`. Luz System covers the whole system design — software (architecture, function list, the function design of product interfaces, prototype behaviour) and on-site hardware. Everything visual (look, composition, cards, the appearance of buttons, icons, images, motion, themes, the prototype's appearance) and document layout come from Luz-Design (its `references/ui-ownership.md` draws the line); backend, interfaces, payments, regulations and compliance implementation belong to Luz-Dev.
+Sessions live in `D:\Codes\skill输出\Luz-System\NNN-名称\` (three-digit number): the root holds only the summary page `NNN-名称.html` and `raw\`, which keeps every working file; a standalone task's deliverable files (the hardware list Excel) sit beside the page and are listed in it. In a project task the results are written only to the project directory's `docs\` and the project keeps no source file (SKILL.md, Layout). Rules and templates live in `references\` of the skill, accumulated knowledge in `experience\`. Luz System covers the whole system design — software (architecture, function list, the function design of product interfaces, prototype behaviour) and on-site hardware. Everything visual (look, composition, cards, the appearance of buttons, icons, images, motion, themes, the prototype's appearance) and document layout come from Luz-Design (its `references/ui-ownership.md` draws the line); backend, interfaces, payments, regulations and compliance implementation belong to Luz-Dev.
 
 ## 0 Rule card and experience first
 
@@ -46,7 +46,7 @@ When the user wants one page with the function list, an operable mini-program, a
 
 ## 7 Hardware
 
-When the system needs on-site devices, add `--modes hardware` (or create a hardware-only session). Record scale, operation model, existing devices, budget and site facts in `raw/04-hardware/requirements.md`. Follow `references/hardware-design.html`: storyboard the whole lifecycle, map every step to devices, check interfaces against the compatibility library, give every networked device an access mode and protocol, make offline fallbacks explicit, and turn fire, power and network into site requirements. Research models, prices and channels with LuzCrawl (same protocol as above; site lessons in `references/hardware/research-playbook.md`), write `raw/04-hardware/plan.json`, then run `scripts/hw_build.py <session>`, which validates the plan, renders `raw/04-hardware/hardware-plan.html` and runs Luz-Design's document check. Show the list to the person and record their approval of the file (`APPROVALS.json` hardware) before publishing it. The client reads an Excel, not the page: after the plan validates, `scripts/hw_export.py <session>` writes `raw/04-hardware/client/硬件选型清单.xlsx` (sheets 设备清单 and 现场条件) through Luz-Design's table script and its document check; `hardware-plan.html` stays the review and development page. List every device as an integration in the system architecture when software and hardware share the session.
+When the system needs on-site devices, add `--modes hardware` (or create a hardware-only session). Record scale, operation model, existing devices, budget and site facts in `raw/04-hardware/requirements.md`. Follow `references/hardware-design.html`: storyboard the whole lifecycle, map every step to devices, check interfaces against the compatibility library, give every networked device an access mode and protocol, make offline fallbacks explicit, and turn fire, power and network into site requirements. Research models, prices and channels with LuzCrawl (same protocol as above; site lessons in `references/hardware/research-playbook.md`), write `raw/04-hardware/plan.json`, then run `scripts/hw_build.py <session>`, which validates the plan, renders `raw/04-hardware/hardware-plan.html` and runs Luz-Design's document check. Show the list to the person and record their approval of the file (`APPROVALS.json` hardware) before publishing it. The client reads an Excel, not the page: after the plan validates, `scripts/hw_export.py <session>` writes `硬件选型清单.xlsx` (sheets 设备清单 and 现场条件) through Luz-Design's table script and its document check, beside the summary page (a project task: into the project's `docs\01-需求对接`); `hardware-plan.html` stays the review and development page. Export before publishing, so the summary page lists the Excel. List every device as an integration in the system architecture when software and hardware share the session.
 
 Pages follow Luz-Design's visual standards and its `check_document.py` (`D:\Codes\Luz-Design\scripts`); reports, spreadsheets and Word documents produced alongside a system go to Luz-Design.
 
@@ -54,7 +54,7 @@ Pages follow Luz-Design's visual standards and its `check_document.py` (`D:\Code
 
 Run `experience.py harvest <session> --industry <行业>` and add judged knowledge with `experience.py add <file.json>`: components, design ideas, frontend rules, type-scale facts, research lessons. For hardware, add products, price samples, compatibility, suppliers and query outcomes with `hw_experience.py add experience\hardware\inbox\<file>.json`; personal contacts go only to the local contacts file. Write or confirm notes with `experience.py note` and list their keys in BRIEF `## 本次沉淀`; fill BRIEF `## 采用的规则` from the rule cards.
 
-Then publish the final HTML with `scripts/publish.py <session> <system_design | visual | prototype | hardware>`; nothing else may sit next to `raw/`. Publishing refuses a session without a current rule card in `raw/00-rules/`, with an empty 采用的规则, or with an empty or stale 本次沉淀.
+Then publish the summary page with `scripts/publish.py <session> <architecture | system_design | visual | prototype | hardware> [--as <名称>]`; next to `raw/` only that page and the listed deliverable files may sit (a project task: only that page, the stage page goes to `docs\02-产品开发`). Publishing refuses a session without a current rule card in `raw/00-rules/`, with an empty 采用的规则, or with an empty or stale 本次沉淀.
 
 ## 9 Validate and deliver
 
@@ -64,6 +64,7 @@ py -X utf8 scripts/context.py check
 py -X utf8 scripts/validate_skill.py
 py -X utf8 scripts/experience.py check
 py -X utf8 scripts/validate_session.py "<session-folder>" --strict-production
+py -X utf8 scripts/check_output_layout.py session "<session-folder>" [--project-linked]
 py -X utf8 scripts/check_interaction.py "<session-folder>"
 py -X utf8 scripts/hw_experience.py check
 py -X utf8 D:\Codes\Luz-Design\scripts\check_document.py "<final html>" --allow interface
@@ -77,9 +78,9 @@ Any artifact change invalidates its approval hash and all downstream gates. `pub
 
 交给客户的只有 PDF 和 Excel，HTML 只给评审、开发和演示（SKILL.md“客户文件与上下游衔接”）。完整项目里，`luz-project` 提供已批准的需求和 Crawl 任务，本技能按阶段做：
 
-1. **proposal**：读规则卡 `client-docs`，把需求写成需求项（可验证、单一、无歧义，见 system-design.html“需求的写法”），再写 `data/client/features.json`——模块、功能、使用端、角色、基础或可选、业务逻辑、工时、标签、验收；方案说明书的需求分析与解决方案内容、系统架构图册的节点与数据流按 system-design.html“方案说明书的内容来源”“架构图的画法”提供。`py -X utf8 scripts/features_check.py <项目>\data\client` 零错误后交 Luz-Project 生成客户的 Excel 与 PDF；工时是估算，须请用户确认。
+1. **proposal**：读规则卡 `client-docs`，把需求写成需求项（可验证、单一、无歧义，见 system-design.html“需求的写法”），再写 `data/client/features.json`——模块、功能、使用端、角色、基础或可选、业务逻辑、工时、标签、验收；方案说明书的需求分析与解决方案内容、系统架构图册的节点与数据流按 system-design.html“方案说明书的内容来源”“架构图的画法”提供。`py -X utf8 scripts/features_check.py <状态根>\data\client` 零错误后交 Luz-Project 生成客户的 Excel 与 PDF；工时是估算，须请用户确认。
 2. **client-intake**：每个功能的 `rules` 就是“拟定逻辑”：先给方案让客户确认或修改；`intake-extra.json` 只放项目专属的待决规则和只有客户才有的资料，不问每个项目都一样的通用信息。
-3. **architecture**：产出三个页签的系统架构 HTML（功能逻辑架构、前端架构、后端架构）及机器可读的编号，登记产物与哈希，停在架构批准。批准后 Luz-Design 只取前端结构与交互要求做视觉决定，Luz-Dev 取架构与随后的设计交接；功能在架构里的落点用 `project.py link FN-001 --arch …` 登记。
+3. **architecture**：产出系统架构 HTML（写进项目的 `docs/02-产品开发`，标准见 SKILL.md）及机器可读的编号，登记产物与哈希，停在架构批准。批准后 Luz-Design 只取前端结构与交互要求做视觉决定，Luz-Dev 取架构与随后的设计交接；功能在架构里的落点用 `project.py link FN-001 --arch …` 登记。
 4. 客户新增需求、改规则、补细节：先在 Luz-Project 的变更台账登记，再改数据文件；已发布的功能编号不复用，删除用变更把 status 置为 removed。
 
 单独调用本技能不创建项目目录，也不等待下游阶段。

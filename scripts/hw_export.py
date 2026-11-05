@@ -7,10 +7,12 @@ Client files are PDF and Excel only; hardware-plan.html (hw_build.py) is the rev
 same plan into the Excel the client reads: sheet 设备清单 (what to buy, how many, what it costs, where to buy) and sheet 现场条件
 (what the site must provide). The layout comes from Luz-Design (make_xlsx.py, 表格文件); the plan is validated first.
 
-  py -X utf8 scripts/hw_export.py "<会话目录>"            writes raw/04-hardware/client/硬件选型清单.xlsx
-  py -X utf8 scripts/hw_export.py "<会话目录>" --spec-only  writes only the make_xlsx spec (no Excel is built)
+  py -X utf8 scripts/hw_export.py "<会话目录>"            writes 硬件选型清单.xlsx beside the summary page (standalone task) or
+                                                           docs\\01-需求对接\\NN-硬件选型清单.xlsx in the project directory (project task)
+  py -X utf8 scripts/hw_export.py "<会话目录>" --spec-only  writes only the make_xlsx spec (raw/04-hardware/hardware-list.spec.json)
 
 The unit price is the sample taken from the linked source; devices without a price show 询价 and the channel to ask.
+A standalone task lists the file in its summary page: run publish.py hardware again after the export.
 """
 from __future__ import annotations
 
@@ -22,6 +24,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import hw_plan_lib as pl  # noqa: E402
+import session_output as so  # noqa: E402
+from validate_session import final_html  # noqa: E402
 
 LUZ_DESIGN = Path(r"D:\Codes\Luz-Design")
 LEVEL_TAGS = {"必选": "1F3A5F", "推荐": "1F3A5F", "可选": "9A6A1F"}
@@ -122,7 +126,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("session", type=Path)
     ap.add_argument("--spec-only", action="store_true")
     args = ap.parse_args(argv)
-    raw = args.session.resolve() / "raw" / "04-hardware"
+    session = args.session.resolve()
+    raw = session / "raw" / "04-hardware"
     plan = pl.load(raw / "plan.json")
     errors, warnings = pl.validate(plan)
     for w in warnings:
@@ -132,10 +137,8 @@ def main(argv: list[str] | None = None) -> int:
     if errors:
         print("方案校验有错误，未导出。")
         return 1
-    out_dir = raw / "client"
-    out_dir.mkdir(parents=True, exist_ok=True)
     spec = build_spec(plan)
-    spec_path = out_dir / "hardware-list.spec.json"
+    spec_path = raw / "hardware-list.spec.json"
     spec_path.write_text(json.dumps(spec, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"spec: {spec_path}")
     if args.spec_only:
@@ -144,10 +147,22 @@ def main(argv: list[str] | None = None) -> int:
     if not builder.is_file():
         print("ERROR 找不到 Luz-Design scripts/make_xlsx.py，只写出了描述文件")
         return 1
-    target = out_dir / "硬件选型清单.xlsx"
+    manifest = so.read_manifest(session) if (session / "raw" / "99-delivery" / "MANIFEST.json").is_file() else None
+    target = so.hardware_list_target(session, manifest)
+    target.parent.mkdir(parents=True, exist_ok=True)
     run = subprocess.run([sys.executable, "-X", "utf8", str(builder), str(spec_path), str(target)], capture_output=True, text=True, encoding="utf-8", cwd=str(builder.parent))
     print((run.stdout + run.stderr).strip())
-    return run.returncode
+    if run.returncode != 0:
+        return run.returncode
+    if manifest and manifest.get("project"):
+        # Project task: the Excel is a result in the project directory; the summary page lists it.
+        so.project_result(manifest, "hardware-list", so.HARDWARE_LIST[0], so.HARDWARE_LIST[1], target)
+        so.write_manifest(session, manifest)
+        so.refresh_summary(session)
+    elif final_html(session).is_file():
+        print("NOTICE: 汇总页还没有列出这份 Excel：重新运行 py -X utf8 scripts/publish.py <会话目录> hardware", file=sys.stderr)
+    print(f"xlsx: {target}")
+    return 0
 
 
 if __name__ == "__main__":

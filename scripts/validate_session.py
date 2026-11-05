@@ -18,11 +18,16 @@ from pathlib import Path
 from typing import Callable, Iterable
 from urllib.parse import unquote, urlparse
 
-SESSION_RE = re.compile(r"^(\d{3,})-(.+)$")
-# A session folder holds exactly one final HTML named after the folder, plus raw/ with every working file:
-# brief, research, crawl snapshots, architecture, stage artifacts, approvals and manifest.
+# NNN-名称 is the format of every new session; the older two-digit and underscore names are still read (and count in the numbering).
+SESSION_RE = re.compile(r"^(\d{2,})[-_](.+)$")
+# The root of a session holds only raw/ (every working file: brief, research, crawl snapshots, architecture, stage artifacts,
+# approvals, manifest) and the summary page NNN-名称.html named after the folder. The system design page is that summary page;
+# a deliverable file of a standalone task (the hardware list Excel) sits beside it and is listed in it.
 RAW_DIR = "raw"
-PUBLISHABLE_STAGES = ("system_design", "visual", "prototype", "hardware")
+PUBLISHABLE_STAGES = ("architecture", "system_design", "visual", "prototype", "hardware")
+# MANIFEST "output_layout" of the sessions new_session.py creates today. A session without it follows an older layout:
+# validation only hints at what differs and never fails it for that.
+OUTPUT_LAYOUT = "2026-11"
 
 
 def work_dir(folder: Path) -> Path:
@@ -31,6 +36,45 @@ def work_dir(folder: Path) -> Path:
 
 def final_html(folder: Path) -> Path:
     return folder / f"{folder.name}.html"
+
+
+DELIVERABLE_FILE_EXT = {".pdf", ".xlsx", ".xls", ".docx", ".pptx", ".png", ".jpg", ".jpeg", ".webp", ".svg", ".zip", ".csv"}
+
+
+def root_files(folder: Path) -> list[Path]:
+    """The deliverable files beside the summary page of a standalone task: the page lists every one of them."""
+    return sorted(p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in DELIVERABLE_FILE_EXT)
+
+
+def read_manifest_quietly(folder: Path) -> dict | None:
+    try:
+        data = json.loads((work_dir(folder) / "99-delivery" / "MANIFEST.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def layout_findings(folder: Path, manifest: dict | None, *, strict: bool = False, check_listed: bool = True) -> tuple[list[str], list[str]]:
+    """(errors, notes) of the session root against the output standard: only raw/ and the summary page, plus the deliverables of a
+    standalone task listed in that page (`check_listed`); a project task keeps nothing but the summary page and raw/
+    (check_output_layout.py)."""
+    import check_output_layout
+    linked = bool(manifest and manifest.get("project"))
+    errors, notes = check_output_layout.check_session(folder, linked)
+    final = final_html(folder)
+    published = bool(manifest and manifest.get("final"))
+    if not final.is_file() and not published and not strict:
+        # A session in progress has no summary page yet; it is written by publish.py.
+        errors = [e for e in errors if not e.startswith("缺少与目录同名的汇总页")]
+    for item in sorted(folder.iterdir()) if folder.is_dir() else []:
+        if item.is_file() and item.suffix.lower() in {".md", ".json"}:
+            errors.append(f"根目录多出 {item.name}（说明、记录和数据文件是过程文件，放进 raw\\）")
+    if check_listed and final.is_file() and not linked:
+        page = final.read_text(encoding="utf-8", errors="replace")
+        for item in root_files(folder):
+            if item.name not in page:
+                errors.append(f"根目录的成品 {item.name} 没有列在汇总页里（成品放好后重新运行 publish.py）")
+    return list(dict.fromkeys(errors)), notes
 SESSION_ID_RE = re.compile(r"^SES-(\d{3,})$")
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 HTML_LINK_RE = re.compile(r'(?:href|src)="([^"]+)"')
@@ -2033,9 +2077,15 @@ def validate(
         from crawl_gate import crawl_errors
         errors.extend(crawl_errors(folder, caller="luz-system"))
     session = work_dir(folder)
-    for item in folder.iterdir():
-        if item.name not in {RAW_DIR, final_html(folder).name}:
-            errors.append(f"session folder may only contain {final_html(folder).name} and {RAW_DIR}/; found {item.name}")
+    # The root of a session against the output standard: an error for a session created in this layout, a hint for an older one.
+    early = read_manifest_quietly(folder)
+    layout_errors, layout_notes = layout_findings(folder, early, strict=strict)
+    if early and early.get("output_layout") == OUTPUT_LAYOUT:
+        errors.extend(f"output layout: {e}" for e in layout_errors)
+        if warnings is not None:
+            warnings.extend(f"output layout: {n}" for n in layout_notes)
+    elif warnings is not None:
+        warnings.extend(f"older output layout, only a hint: {m}" for m in layout_errors + layout_notes)
     if not session.is_dir():
         return errors + [f"missing {RAW_DIR}/ working folder"]
     match = SESSION_RE.match(folder.name)
@@ -2080,14 +2130,20 @@ def validate(
                 errors.append(f"{final.name} exists but MANIFEST.json has no final record; publish it with scripts/publish.py")
             elif record.get("sha256") != actual:
                 errors.append(f"{final.name} differs from its published hash; republish it with scripts/publish.py")
-            elif not source.is_file() or sha256_file(source) != actual:
+            elif not source.is_file() or sha256_file(source) != (record.get("source_sha256") or actual):
+                # The page is the stage page (plus the list of the deliverables beside it) or, in a project task, a summary page
+                # built from the stage's results; source_sha256 is the hash of the stage page it was made from.
                 errors.append(f"{final.name} no longer matches its source {record.get('source')}; republish it")
             final_root = parse_html(final, errors)
             if final_root is not None:
                 errors.extend(tab_icon_errors(final_root, final.name))
+            for item in (manifest.get("project") or {}).get("published", []):
+                delivered = Path(str((manifest.get("project") or {}).get("deliver_root", ""))) / str(item.get("path", ""))
+                if warnings is not None and not delivered.is_file():
+                    warnings.append(f"project result is not in the project directory (moved or not written yet): {item.get('path')}")
         elif record:
             errors.append(f"MANIFEST.json records a final HTML but {final.name} is missing")
-        expected_title = folder.name.split("-", 1)[1] if "-" in folder.name else ""
+        expected_title = match.group(2) if match else ""
         if expected_title and manifest.get("title") != expected_title:
             errors.append("MANIFEST.json title differs from the folder title")
         sid = SESSION_ID_RE.match(str(manifest.get("session_id", "")))

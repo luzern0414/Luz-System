@@ -38,6 +38,13 @@ class FeatureListTests(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])
 
+    def test_a_removed_function_is_not_read_again(self) -> None:
+        def drop(spec):
+            spec["features"].append({"id": "FN-004", "module": "M02", "name": "额度提醒", "surface": "web-admin", "roles": ["店长"], "tier": "基础",
+                                     "summary": "额度提醒", "rules": "用完前提醒", "status": "removed", "version": 2, "history": ["CHG-001", "CHG-002"]})
+        errors, warnings = run(drop, quote={"unit_price": 500})
+        self.assertEqual((errors, warnings), ([], []))          # no hours, no numbers in the rule: nobody needs them for a removed function
+
     def test_empty_verb_name_is_an_error(self) -> None:
         errors, _ = run(lambda s: s["features"][0].update(name="支持预约"))
         self.assertTrue(any("空动词" in e for e in errors), errors)

@@ -228,11 +228,11 @@ class SessionFlowTests(unittest.TestCase):
             final = publish(session, "prototype")
             self.assertEqual(final.name, session.name + ".html")
             self.assertEqual(sorted(p.name for p in session.iterdir()), sorted(["raw", final.name]))
-            self.assertFalse(any("final" in e or "may only contain" in e for e in validate(session, allow_live_crawl_offline=True)))
+            self.assertFalse(any("final" in e or "output layout" in e for e in validate(session, allow_live_crawl_offline=True)))
             final.write_text(final.read_text(encoding="utf-8") + "<!-- edited -->", encoding="utf-8")
             self.assertTrue(any("differs from its published hash" in e for e in validate(session, allow_live_crawl_offline=True)))
-            (session / "notes.md").write_text("x", encoding="utf-8")
-            self.assertTrue(any("may only contain" in e for e in validate(session, allow_live_crawl_offline=True)))
+            (session / "notes.txt").write_text("x", encoding="utf-8")
+            self.assertTrue(any("output layout" in e and "notes.txt" in e for e in validate(session, allow_live_crawl_offline=True)))
 
     def test_sessions_and_modes_save_their_rule_cards(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
