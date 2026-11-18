@@ -96,5 +96,13 @@
     "ok": true,
     "via": "云端每日校准",
     "note": "进−出会累计漂移，需每日清零/比对"
+  },
+  {
+    "a": "经典 ESP32 GPIO34",
+    "b": "无源干接点门磁与外部 3.3V 上拉",
+    "ok": true,
+    "note": "GPIO34 为只输入引脚，检测干接点需外部上拉；数字输入复用应核对 ESP-IDF rtcio_ll_function_select 与 IO_MUX。仅电平回读不能替代人工磁铁开合和门磁安装验收，不连接锁控负载。",
+    "source": "https://github.com/espressif/esp-idf/blob/v5.4.2/components/hal/esp32/include/hal/rtc_io_ll.h",
+    "checked": "2026-11-05"
   }
 ]

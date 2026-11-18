@@ -1,6 +1,6 @@
 """Reading pages carry the shared Markdown type block (Luz-Design references/md-type.css, copied to references/md-type.css here):
-the rule stylesheet and the reading-page templates hold the same block text, the hardware list generator reads the copy at run time and
-keeps no title or body sizes of its own, and the product skeletons keep their own product type scale."""
+the rule stylesheet and the reading-page templates hold the same block text, the hardware list generator reads the Luz-Design master at run
+time (the copy here equals it) and keeps no title or body sizes of its own, and the product skeletons keep their own product type scale."""
 from __future__ import annotations
 
 import re

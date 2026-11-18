@@ -7,6 +7,7 @@
 | 字段 | 类型 | 说明 |
 |---|---|---|
 | `title` | 字符串 | HTML 主标题，例如"无人健身房硬件选型清单" |
+| `budget_requested` | 对象 | 缺省 = 没有人要求预算 = 客户清单和评审页不带任何价格（没有单价、小计、合计、预算节）。用户明确要求预算时写 `{requested_by, requested_at, request_note}`（谁、何时、用什么原话），缺任何一项校验都报错、价格不显示；写了才在清单里出现“参考价”，一律标“参考价”、不写成“报价”，评审页注明“参考价来自公开页面，非报价”，表格里无价设备写“待询价”、标题下不加说明行，且每台带价设备必须有 `url`。人工报价单由用户另给时按项目的报价政策走（来源是用户提供的文件），不写进本字段 |
 | `conclusions` | 对象 | 各节结论（一句话），键：`ops` `topology` `bom` `access` `flows` `site` `placement` `risk` `budget`；可省略 |
 | `site_requirements` | 数组 | 额外的现场需求：`{item, demand, detail}`（脚本已自动算 PoE、12V、220V，这里补消防联动接点、上行带宽、出站端口等） |
 | `scenario` | 数组 | **系统方案**（必填）：`[{stage, role, when, steps:[{action, response, devices:[id], function, exception}]}]`，见下节 |
@@ -47,7 +48,7 @@
 | `name` | 是 | 设备名（中文），例如"人脸识别门禁一体机" |
 | `category` | 是 | 清单类别：门禁通行 / 人流监控 / 动火离人 / 视频感知 / 求助广播 / 智能电控 / 边缘网关 / 业务终端 / 现场条件 / 云端软件 / 使用端 |
 | `tier` | 是 | `field` 现场设备、`edge` 门店边缘（网关、NVR、算法盒，以及现场网络等现场条件节点）、`cloud` 云端、`client` 使用端 |
-| `site` | 否 | `true` 表示现场条件（消防、供电、基础网络），不采购、不进预算，图上虚线框"现场提供"；必须写 `requirement` |
+| `site` | 否 | `true` 表示现场条件（消防、供电、基础网络），不采购、不计价，图上虚线框"现场提供"；必须写 `requirement` |
 | `requirement` | site 必填 | 对甲方或施工方的要求，例如"提供 6 个 PoE 口（≥60 W）与 1 个千兆上联" |
 | `experience_id` | 否 | 引用经验库产品 id：参数、价格样本，以及实物图 `experience/hardware/images/<id>.jpg` |
 | `image` | 否 | 指定实物图路径（不用经验库图时） |
@@ -66,10 +67,10 @@
 | `access_mode` | 是 | `A` 设备直连云、`B` 厂商云中转、`C` 门店边缘网关、`D` 本地闭环、`-` 不联网 |
 | `level` | 是 | 必选 / 推荐 / 可选 |
 | `qty` | 否 | 数量，默认 1 |
-| `unit_price` | 二选一 | 单价（元），必须同时给 `url`（价格出处）；未核实留空 → 显示"询价" |
-| `url` `url_label` | 随单价 | 价格出处链接；label 默认 1688 链接显示"1688"，其他显示"价格出处" |
-| `contact` | 二选一 | 无单价时必填：`{name, phone, website, website_label, email, qr}` 至少一项能联系上；有单价时也建议给厂家渠道 |
-| `purchase` | 否 | `false` 表示不采购（云端、小程序等），不进清单与预算 |
+| `unit_price` | 否 | 调研到的参考价（元），必须同时给 `url`（来源页面）；是调研数据，不得自拟、估算或当作报价。只有顶层写了 `budget_requested` 才会出现在客户清单与评审页，否则不显示；未核实留空，要求预算时显示"询价" |
+| `url` `url_label` | 渠道二选一 | 来源页面或采购页面链接；label 默认 1688 链接显示"1688"，其他显示"出处页面"。带价时就是参考价的来源 |
+| `contact` | 渠道二选一 | `{name, phone, website, website_label, email, qr}` 至少一项能联系上；没有 `url` 时必填，有 `url` 时也建议给厂家渠道 |
+| `purchase` | 否 | `false` 表示不采购（云端、小程序等），不进清单与参考价合计 |
 
 ## links[]
 
@@ -87,7 +88,8 @@
 
 - id 唯一、引用存在、每台设备至少一条连接；
 - 现场与门店设备必须有品牌、型号、参数、接口、供电；
-- 采购设备必须"有单价 + 出处链接"或"有联系方式（电话/网站/二维码）"；
+- 采购设备必须有采购渠道：出处页面链接 `url`，或联系方式（电话/网站/二维码）；带了 `unit_price` 就必须有 `url`；
+- `budget_requested` 缺省 = 不带价格；写了就必须有 `requested_by`、`requested_at`、`request_note`，`requested_by` 是具体的人；方案里有单价却没有 `budget_requested` 只给提醒；
 - 现场条件（site）不采购，必须写 requirement；
 - 数据/信号链路必须写协议；韦根、干接点、继电器不能直连云端；
 - 标为 PoE 的链路一端必须是 PoE 供电设备（poe_source 或 poe_budget_w）；给了预算时负载不超过 80%（本技能的设计余量，不是 IEEE 的要求），端口够用；

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import ipaddress
 import json
 import os
@@ -24,7 +25,6 @@ SESSION_RE = re.compile(r"^(\d{2,})[-_](.+)$")
 # approvals, manifest) and the summary page NNN-名称.html named after the folder. The system design page is that summary page;
 # a deliverable file of a standalone task (the hardware list Excel) sits beside it and is listed in it.
 RAW_DIR = "raw"
-PUBLISHABLE_STAGES = ("architecture", "system_design", "visual", "prototype", "hardware")
 # MANIFEST "output_layout" of the sessions new_session.py creates today. A session without it follows an older layout:
 # validation only hints at what differs and never fails it for that.
 OUTPUT_LAYOUT = "2026-11"
@@ -123,13 +123,6 @@ SYSTEM_DESIGN_PATH = "01-system/04-system-design.html"
 LEGACY_SYSTEM_DESIGN_PATH = "01-system/03-system-design.html"
 VISUAL_PATH = "02-visual/visual-board.html"
 PROTOTYPE_PATH = "03-prototype/interactive-prototype.html"
-APPROVAL_ARTIFACTS = {
-    "module_scope": "01-system/01-module-intake.html",
-    "architecture": ARCHITECTURE_PATH,
-    "system_design": SYSTEM_DESIGN_PATH,
-    "visual": VISUAL_PATH,
-    "prototype": PROTOTYPE_PATH,
-}
 SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
 DATA_ID_PATTERNS = {
     "data-function-id": re.compile(r"^F-\d{3,}$"),
@@ -738,8 +731,7 @@ def validate_html_top_contract(root: Node, label: str, errors: list[str]) -> Non
             errors.append(f"{label} must keep source, capture date, and evidence status outside delivery HTML")
 
 
-# Two themes (Luz-Design visual-design.html 深色与浅色两套主题): a product interface (admin, mini-program, agent, website, prototype) carries a dark theme beside
-# the light one, so the dark colours of its dark theme blocks are not judged as dark surfaces of the light theme. A dark theme block is a rule inside
+# 产品是否需要深色主题由功能合同决定；已有深色块中的颜色不按浅色主题的大面积深色判定。深色块包括
 # @media (prefers-color-scheme: dark), or one whose selector names the dark theme: [data-theme="dark"], [data-scheme=dark], html.dark, .dark.
 DARK_SELECTOR_RE = re.compile(r"""\[data-(?:theme|scheme|bs-theme|color-mode)\s*=\s*["']?dark["']?\s*\]|\.dark(?![\w-])""", re.I)
 DARK_MEDIA_RE = re.compile(r"@media[^{]*prefers-color-scheme\s*:\s*dark", re.I)
@@ -809,7 +801,8 @@ def is_appearance_radio(node: Node) -> bool:
 def validate_light_html(path: Path, errors: list[str], min_px: float = 14.0, *, product_ui: bool | None = None,
                         warnings: list[str] | None = None) -> Node | None:
     """Light-page contract. A product interface (``product_ui``; by default the pages checked at the 12px interface floor) may also carry a dark theme:
-    dark colours inside its dark theme blocks are not dark surfaces. Reading pages stay light only. ``warnings`` asks for the missing-dark-theme finding."""
+    dark colours inside its dark theme blocks are not dark surfaces. Reading pages stay light only.
+    Theme count comes from the functional contract; this generic check does not require another theme."""
     if product_ui is None:
         product_ui = min_px < 14.0
     root = parse_html(path, errors)
@@ -825,9 +818,6 @@ def validate_light_html(path: Path, errors: list[str], min_px: float = 14.0, *, 
     style = full_style
     if product_ui:
         style, dark_style = split_theme_blocks(full_style)
-        if warnings is not None and not dark_style.strip():
-            warnings.append(f"{path.name}: product interface has no dark theme block (@media (prefers-color-scheme: dark) or [data-theme=\"dark\"]); "
-                            "it ships a light and a dark theme (Luz-Design visual-design.html 深色与浅色两套主题)")
     if re.search(r"color-scheme\s*:\s*dark", style, re.I):
         errors.append(f"{path.name} must use a light color scheme" + (" outside its dark theme blocks" if product_ui else ""))
     for finding in size_violations(full_style, min_px):
@@ -917,12 +907,6 @@ def parse_module_form(session: Path, approvals: dict | None, errors: list[str]) 
         if extra:
             errors.append("approved module list contains a module absent from the intake: " + ", ".join(extra))
     return system_name, checkbox_values
-
-
-def sibling_items(node: Node) -> list[Node | str]:
-    if node.parent is None:
-        return []
-    return node.parent.children
 
 
 def direct_visible_text(node: Node) -> str:
@@ -1983,9 +1967,6 @@ def validate_prototype(
     root = validate_light_html(path, errors, min_px=12.0, warnings=warnings)
     if root is None:
         return
-    if warnings is not None and not has_appearance_switch(root):
-        warnings.append('interactive-prototype has no 外观 switch: a role="radiogroup" with aria-label="外观" holding three role="radio" buttons '
-                        "(跟随系统 / 浅色 / 深色) in the global group of the configuration panel (system-design.html 原型配置面板)")
     main = first(root, "main")
     if main is None or main.get("data-artifact") != "interactive-prototype":
         errors.append('interactive-prototype must declare data-artifact="interactive-prototype"')
@@ -2073,12 +2054,21 @@ def validate(
     if not session.is_dir():
         return [f"session folder does not exist: {session}"]
     folder = session
+    early = read_manifest_quietly(folder)
     if strict or final_html(folder).is_file():
-        from crawl_gate import crawl_errors
-        errors.extend(crawl_errors(folder, caller="luz-system"))
+        if early and early.get("modes") == ["hardware"]:
+            from hw_crawl_gate import generation_errors
+            errors.extend(generation_errors(folder))
+        else:
+            definition = importlib.util.spec_from_file_location("_system_validate_own_crawl", Path(__file__).with_name("crawl_gate.py"))
+            own_gate = importlib.util.module_from_spec(definition)
+            definition.loader.exec_module(own_gate)
+            project = (early or {}).get("project") or {}
+            record = (early or {}).get("final") or {}
+            stage = project.get("stage") or record.get("template_stage") or str(record.get("stage") or "summary").replace("_", "-")
+            errors.extend(own_gate.crawl_errors(project.get("state_root") or folder, stage, caller="luz-system", state_root=project.get("state_root")))
     session = work_dir(folder)
     # The root of a session against the output standard: an error for a session created in this layout, a hint for an older one.
-    early = read_manifest_quietly(folder)
     layout_errors, layout_notes = layout_findings(folder, early, strict=strict)
     if early and early.get("output_layout") == OUTPUT_LAYOUT:
         errors.extend(f"output layout: {e}" for e in layout_errors)
@@ -2103,7 +2093,16 @@ def validate(
     if not (session / "99-delivery" / "APPROVALS.json").is_file():
         errors.append("missing APPROVALS.json")
 
+    source_stages: dict[str, dict] = {}
     if manifest:
+        for source_stage in (manifest.get("source_ui_publications") or {}):
+            try:
+                if source_stage not in {"visual", "prototype"}:
+                    raise ValueError(f"未知 UI 来源阶段: {source_stage}")
+                from publish import verify_ui_publication
+                source_stages[source_stage] = verify_ui_publication(folder, manifest, source_stage)
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                errors.append(f"完整 UI 发布核验失败：{exc}")
         required = {"schema_version", "session_id", "sequence", "folder", "title", "created_at", "session_kind", "status", "modes", "approvals_file", "stages", "deliverables", "assumptions", "verification", "notes"}
         missing = sorted(required - set(manifest))
         if missing:
@@ -2134,6 +2133,21 @@ def validate(
                 # The page is the stage page (plus the list of the deliverables beside it) or, in a project task, a summary page
                 # built from the stage's results; source_sha256 is the hash of the stage page it was made from.
                 errors.append(f"{final.name} no longer matches its source {record.get('source')}; republish it")
+            if record.get("template_id"):
+                try:
+                    definition = importlib.util.spec_from_file_location("_system_final_design_templates", Path(__file__).resolve().parents[2] / "Luz-Design" / "scripts" / "template_library.py")
+                    library = importlib.util.module_from_spec(definition)
+                    definition.loader.exec_module(library)
+                    library.require_selected(folder, "luz-system", record.get("template_stage"), final, record["template_id"], phase="post")
+                    if record.get("kind") == "source-ui-summary":
+                        if record.get("stage") not in source_stages:
+                            raise ValueError("最终 UI 汇总页没有通过完整来源包核验")
+                        archive = folder / f"{record['stage']}-source.zip"
+                        # The archive is bound to the template of the package's real type, recorded when it was published.
+                        library.require_selected(folder, "luz-system", record.get("template_stage"), archive,
+                                                 source_stages[record["stage"]]["template_id"], phase="post")
+                except (OSError, ValueError, KeyError, TypeError) as exc:
+                    errors.append(f"正式输出模板或 UI 来源检查失败：{exc}")
             final_root = parse_html(final, errors)
             if final_root is not None:
                 errors.extend(tab_icon_errors(final_root, final.name))
@@ -2204,6 +2218,8 @@ def validate(
                 "visual": VISUAL_PATH,
                 "prototype": PROTOTYPE_PATH,
             }
+            for source_stage, publication in source_stages.items():
+                expected_paths[source_stage] = publication["path"]
             for name, expected_path in expected_paths.items():
                 item = stages.get(name)
                 if not isinstance(item, dict):
@@ -2226,9 +2242,9 @@ def validate(
         mode_dirs = {"system": "01-system", "visual": "02-visual", "prototype": "03-prototype", "hardware": "04-hardware", "document": "03-documents"}
         for mode in modes:
             folder = mode_dirs.get(mode)
-            if folder and not (session / folder).is_dir():
+            if folder and mode not in source_stages and not (session / folder).is_dir():
                 errors.append(f"{mode} mode is declared but {folder}/ is missing")
-            for rel in MODE_REQUIRED.get(mode, []):
+            for rel in ([] if mode in source_stages else MODE_REQUIRED.get(mode, [])):
                 if not (session / rel).is_file():
                     errors.append(f"{mode} mode missing required file: {rel}")
 
@@ -2329,9 +2345,9 @@ def validate(
             errors.append(f"approved architecture requires {ARCHITECTURE_PATH}")
         if system_approved and design_path is None:
             errors.append("approved system_design requires a system design HTML")
-        if visual_approved and not (session / VISUAL_PATH).is_file():
+        if visual_approved and "visual" not in source_stages and not (session / VISUAL_PATH).is_file():
             errors.append(f"approved visual requires {VISUAL_PATH}")
-        if prototype_approved and not (session / PROTOTYPE_PATH).is_file():
+        if prototype_approved and "prototype" not in source_stages and not (session / PROTOTYPE_PATH).is_file():
             errors.append(f"approved prototype requires {PROTOTYPE_PATH}")
 
         requirements: list[dict[str, str]] = []
@@ -2359,9 +2375,13 @@ def validate(
             if not architecture_approved:
                 errors.append("system-design HTML exists before architecture approval")
             validate_system_design(session, system_name, selected, errors, approved_ids=approved_ids)
-        if (session / VISUAL_PATH).is_file() and not poster_session:
+        for source_stage, publication in source_stages.items():
+            approved = approvals.get(source_stage, {}) if approvals else {}
+            if approved.get("status") == "approved" and (approved.get("artifact_path") != publication["path"] or approved.get("artifact_sha256") != publication["sha256"]):
+                errors.append(f"{source_stage} approval must bind the published complete UI archive")
+        if (session / VISUAL_PATH).is_file() and not poster_session and "visual" not in source_stages:
             validate_visual(session / VISUAL_PATH, selected, approved_ids, errors, warnings)
-        if (session / PROTOTYPE_PATH).is_file():
+        if (session / PROTOTYPE_PATH).is_file() and "prototype" not in source_stages:
             architecture_hash = approvals.get("architecture", {}).get("artifact_sha256") if approvals else None
             validate_prototype(session, selected, approved_ids, architecture_hash, errors, warnings)
 
@@ -2403,7 +2423,12 @@ def validate(
             continue
         # raw/00-crawl holds the shared Luz-Crawl preflight evidence; its page format belongs to Luz-Crawl and is checked by
         # crawl_gate (crawl_preflight.py check), not by this skill's page contract.
-        if "00-crawl" in path.relative_to(session).parts:
+        if any(part in {"00-crawl", "00-design"} for part in path.relative_to(session).parts):
+            continue
+        if (("visual" in source_stages and "02-visual" in path.relative_to(session).parts)
+                or ("prototype" in source_stages and "03-prototype" in path.relative_to(session).parts)):
+            # Legacy initialization pages are not the published UI. The
+            # complete external source has its own stronger immutable audit.
             continue
         # Visual boards and prototypes render interfaces (12px auxiliary text allowed); every other page, including a
         # standalone poster's 02-visual, keeps the 14px floor.
@@ -2412,6 +2437,10 @@ def validate(
         validate_light_html(path, errors, min_px=12.0 if interface else 14.0)
     for path in session.rglob("*"):
         if not path.is_file() or path.suffix.lower() not in {".md", ".html"}:
+            continue
+        if "00-design" in path.relative_to(session).parts:
+            # Immutable template snapshots are inputs with unfilled slots,
+            # checked by the Design binding rather than as rendered documents.
             continue
         try:
             text = path.read_text(encoding="utf-8")

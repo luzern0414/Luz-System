@@ -1,86 +1,148 @@
-# Luz System workflow
+# Luz System 工作流
 
-Sessions live in `D:\Codes\skill输出\Luz-System\NNN-名称\` (three-digit number): the root holds only the summary page `NNN-名称.html` and `raw\`, which keeps every working file; a standalone task's deliverable files (the hardware list Excel) sit beside the page and are listed in it. In a project task the results are written only to the project directory's `docs\` and the project keeps no source file (SKILL.md, Layout). Rules and templates live in `references\` of the skill, accumulated knowledge in `experience\`. Luz System covers the whole system design — software (architecture, function list, the function design of product interfaces, prototype behaviour) and on-site hardware. Everything visual (look, composition, cards, the appearance of buttons, icons, images, motion, themes, the prototype's appearance) and document layout come from Luz-Design (its `references/ui-ownership.md` draws the line); backend, interfaces, payments, regulations and compliance implementation belong to Luz-Dev.
+入口、顺序和硬边界在 [SKILL.md](SKILL.md)，规则在规则卡和 `references/` 的规范页。本页写各阶段的进入条件、命令、产物和停止条件。
 
-## 0 Rule card and experience first
+## 目录
 
-Run `py -X utf8 scripts/context.py <kind>` and read the whole rule card before anything else: it carries the user's preferences, matching lessons, the rule text for this kind of task (ui-standards.html by layer, the surface page, the system, function-list and hardware pages; no visual rules, the visual layer is read from Luz-Design's cards), the tools and the checks. `py -X utf8 scripts/context.py list` shows the kinds; a task touching several surfaces reads several cards. Sessions save them to `raw/00-rules/` (`new_session.py` and `add_mode.py`, `--card <kind>` for more). Templates, the prototype skeleton and `hw_build.py` are skeletons; the card decides. Then read `experience/catalog.md` and search it with `scripts/experience.py search`; for hardware, run `scripts/hw_experience.py stats`, `search`, `compat`, `suppliers` and `queries`. Reuse matching functions, interaction flows, components, palettes, type scales, rules, and research lessons; record in BRIEF `## 采用的规则` which rules the session applies and how.
+```text
+D:\Codes\Luz-System\
+  SKILL.md  WORKFLOW.md  README.md
+  references\    十一份规范页、cards.json（规则卡）、templates.txt（会话模板）、handoff.md 与 handoff.schema.json、hardware\（硬件知识）
+  experience\    notes.json、sources.json、patterns.json、catalog.md；hardware\ 是硬件经验库
+  scripts\       规则卡、会话、发布、校验、经验、硬件生成与导出、测试
+  examples\      硬件方案示例 unmanned-gym.plan.json
 
-## 每次调用后沉淀
+E:\Skill输出\Luz-System\NNN-名称\
+  NNN-名称.html                          汇总页，与目录同名
+  硬件选型清单.xlsx  <阶段>-source.zip    独立任务的成品，列在汇总页里
+  raw\                                   BRIEF.md、00-rules、00-crawl、00-design、01-system、02-visual、03-prototype、04-hardware、99-delivery
+```
 
-Every call, including short questions and fixes that create no session, searches the experience store at the start and writes or confirms at least one note before finishing; in a session the keys go into BRIEF `## 本次沉淀`. Commands, fields, caps and the privacy rules are in SKILL.md, section 每次调用后沉淀.
+序号三位，取最大序号加一，不复用；旧的两位序号和下划线名称仍可读取。`py -X utf8 scripts/check_output_layout.py session "<会话>" [--project-linked]` 检查布局；带 `output_layout` 的会话由 `validate_session.py` 一并检查，更早的会话只给提示。
 
-## 1 Session and requirement ledger
+## 模板与生成器
 
-Capture only facts supplied by the user. Create one numbered session with `scripts/new_session.py`. A system session (`--modes system`, or `system,hardware` when devices are in scope) begins with `raw/BRIEF.md`, `raw/01-system/01-module-intake.html`, an empty `raw/01-system/02-research.md`, the rule cards, the approval ledger and the manifest. In the BRIEF, translate each request into a stable REQ-ID with the verbatim request, exact module, and acceptance signal. Missing scope or ambiguous modules stop the session before research or design.
+| 产物 | 模板编号 | 绑定位置与生成器 |
+|---|---|---|
+| 系统架构页、系统设计页 | `system-architecture`、`system-design` | 阶段原稿和汇总页各选一次；从 Luz-Design `templates/documents/reading/` 的同名模板起稿，`publish.py` 核对模板外壳，正文不另写样式或脚本 |
+| 硬件方案页 | `hardware-plan` | `raw/04-hardware/hardware-plan.html` 和汇总页各选一次；`hw_build.py` 用 Luz-Design 的 `references/hardware-plan.template.html` 与 `references/md-type.css` 生成 |
+| 硬件选型清单 | `xlsx` | 选在 `硬件选型清单.xlsx`（项目任务选在 docs 里的目标文件）；`hw_export.py` 调用 Luz-Design 的 `make_xlsx.py` |
+| 完整 UI 包 | 组件复用包 `ui-component-output`；可运行前端包 `frontend-app-task`、`frontend-web-workspace`、`frontend-existing` | 选在 `<阶段>-source.zip`，汇总页另选 `reading-html`；Luz-Design 的 `ui_package.py check` 报出包的类型，`publish.py` 按它核对，未登记的类型拒绝 |
+| 只出阅读汇总 | `reading-html` | 建会话时已按 `summary` 阶段为汇总页选好；Luz-Design 的 `make_summary.py` 生成 |
 
-## 2 Module approval
+选择保存模板文件、SHA-256 和快照；生成器写完登记最终哈希，交付检查再核一次，只留选择记录不算数。
 
-Send the module intake; the human selects and approves the exact modules.
+## 会话与需求台账
 
-## 3 Frontend research with LuzCrawl
+进入条件：读完规则卡，查过经验（`experience/catalog.md`、`experience.py search`；硬件另跑 `hw_experience.py stats`、`search`、`compat`、`suppliers`、`queries`）。
 
-Reuse fresh experience sources first with `experience.py reuse` (snapshots copied into `raw/`, valid for 180 days), then crawl only what the library does not cover. Research is mandatory before any design writing: run LuzCrawl from `D:\Codes\Luz-Crawl` by its SKILL.md 调用协议 — `doctor` → `begin "<主题>" --new` (returns the folder) → `experience --query` → `--out <folder>` on every command. Cover both how products in the industry choose their core tasks and home-page entries, and the specifications for typography, tables, navigation, and layout of every surface in scope. Research only what users see and do: page structure, navigation, interaction flows, component states, and visual treatment. Require at least 12 unique URLs across 5 registrable domains: at least 3 page-structure, 3 interaction-flow, and 2 component-state sources. Business rules, regulations, payment callbacks, and other backend sources are rejected by the validator as frontend research records; they are not lost: industry practice, platform preconditions and regulations come from the Luz-Crawl preflight (`crawl_preflight.py run … conclude … check`), and its conclusions are written into the requirement analysis and the business logic (system-design.html 需求的写法), never into `02-research.md`.
+```powershell
+py -X utf8 scripts/new_session.py --name "<名称>" --modes system --system-name "<系统名>" --modules "<模块1>,<模块2>"
+py -X utf8 scripts/new_session.py --name "<名称>" --modes system,hardware --system-name "<系统名>" --modules "<模块1>"
+py -X utf8 scripts/new_session.py --name "<名称>硬件选型清单" --modes hardware
+py -X utf8 scripts/new_session.py --name "<名称>" --modes system --system-name "<系统名>" --modules "<模块1>" --project "<状态根>"
+```
 
-Product UI work also requires component-library research: with LuzCrawl open the specification and component pages of the libraries registered in Luz-Design `references/visual-design.html` 组件与组件库 (`component-libraries.json`; how to research them: `references/ui-standards.html` 参考组件库) for every component type in scope (tables, filters, forms, dashboards, mini-program lists), record the library and component each main component follows in the system design, and borrow behaviour and defaults, not visual style.
+系统会话得到 `raw/BRIEF.md`、`raw/01-system/01-module-intake.html`、空的 `02-research.md`、规则卡、`APPROVALS.json` 和 `MANIFEST.json`。模式自带的卡：system 是 `system-design`、`interaction`、`remote-config`，hardware 是 `hardware`；其它卡用 `--card <类型>` 补，可重复。BRIEF 只记用户给的事实：每条要求写成稳定的 REQ 编号，带原话、所属模块和验收信号。范围缺失或模块有歧义时停下。文档和海报模式会被拒绝并指向 Luz-Design。
 
-Each research record names the capture it comes from and its HTTP status on the access date, and the capture's `content.json` is copied into `raw/01-system/crawl-snapshots/` (template research.md). Hash-routed documentation pages (`#/route`) count as separate URLs. How LuzCrawl batches, queues and handles rate limits is its own business; site-specific lessons (for example the NN/g limit) are in the experience store.
+## 模块批准
 
-## 4 Frontend architecture
+发出模块表单，用户勾选并批准确切的模块。未批准不进入调研和架构。
 
-Create `raw/01-system/03-system-architecture.html` with stable role, function, page, navigation, component, action, flow, state, and page-data IDs. Sections: 范围与角色权限, 模块与功能, 页面与路由, 导航树, 组件与动作, 交互流程与异常, 界面状态, 页面数据, 追溯矩阵, 验收标准. Every approved module has at least one interface state. Write the interaction contract from the template (references/system-design.html 架构的交互字段): every page `data-entry`, `data-goal`, `data-primary-action`, `data-exit`, `data-states`; actions `data-feedback` and, when destructive, `data-confirm` or `data-undo`; entities `data-lifecycle`; states `data-transitions`; flows `data-success`. `validate_session.py` runs `check_interaction.py`: an architecture written to the contract fails on gaps, island pages and duplicate entries. With an agent in scope, add the item 智能体运行时与底座 from the architecture checklist and read the agent-ui and agent-runtime-ui cards. When the agent platform console is in scope (queues and quotas, scheduled tasks, the risk-alert loop back to the agent, rules and config-driven calculation, knowledge bases, workflow canvas, multi-agent teams), also write the matching checklist items (排队与容量, 定时任务, 预警闭环, 规则配置, 知识库, 业务流编排, 智能体协同) and read the cards platform-console, queue-capacity, scheduler-ui, alert-loop, rule-engine-ui, kb-console, workflow-canvas and multi-agent (`--card <kind>` saves them into the session). Each user-required function cites REQ-IDs; each inferred function cites at least two research records and stays unconfirmed until resolved. Stop for human architecture approval.
+## 调研
 
-Keep the architecture and every later page generated from one specification file so IDs never drift.
+写设计之前完成，分两类：
 
-Reading pages (the module form, architecture, system design, function list page and hardware list, plus the rule pages) set their text hierarchy like a rendered Markdown document, from Luz-Design `references/file-design.html` 网页文件 › 排版参数 (the sizes live only there and in the block below). The block lives in `references/md-type.css` (a copy of the Luz-Design master, kept equal by `D:\Codes\Luz-Design\scripts\sync_md_type.py`); the templates carry it between `luz-md-type` markers and `hw_render_plan.py` reads the file when it renders, so a page does not write its own title or body sizes. Product interfaces (prototype, visual board, UI kits) keep the product type scale instead.
+- **阶段前置检索**（SKILL.md 协议第 3 步）：行业做法、平台前置条件和法规，结论写进需求分析和业务逻辑。
+- **前端参考调研**，记在 `raw/01-system/02-research.md`。先 `py -X utf8 scripts/experience.py reuse "<会话>" <来源编号…> --module <模块>` 复用 180 天内的来源，再按 Luz-Crawl 的调用协议补采（`doctor` → `begin "<主题>" --new` → `experience --query` → 每条命令带 `--out`）。只调研用户看得见、用得到的东西：页面结构、导航、交互流程、组件状态。至少 12 个网址、5 个可注册域名，其中页面结构 3 条、交互流程 3 条、组件状态 2 条。每条记录写明所依据的归档和访问当日的状态码，归档的 `content.json` 复制到 `raw/01-system/crawl-snapshots/`。业务规则、法规和后端来源写进这份记录会被校验器拒绝。
 
-## 5 System design
+产品界面还要查组件库：库登记在 Luz-Design 的 `references/component-libraries.json`，查法见 ui-standards.html“参考组件库”。在系统设计里写明每个主要组件依据哪个库的哪个组件，只借行为和默认值。
 
-Create `raw/01-system/04-system-design.html` after architecture approval. Apply the system HTML contract in `references/system-design.html`; design layer by layer with `references/ui-standards.html` (设计架构 → 功能架构 → 信息架构与导航 → 页面内容与优先级 → 组件 → 视觉交接 → 文案) and, for each layer, the same-named layer of every surface the product has (`references/admin-design.html`, `references/miniprogram-design.html`, `references/agent-design.html`, `references/website-design.html`), `references/platform-console-design.html` for the console behind an agent platform, plus `references/function-list-design.html` for the function list and `references/commerce-design.html` (card `commerce`) when the product sells, takes orders, runs promotions or keeps members; retain traceability, and stop for human approval.
+## 架构
 
-## 6 Visual and prototype
+产物 `raw/01-system/03-system-architecture.html`，带稳定的角色、功能、页面、导航、组件、动作、流程、状态和页面数据编号。小节：范围与角色权限、模块与功能、页面与路由、导航树、组件与动作、交互流程与异常、界面状态、页面数据、追溯矩阵、验收标准。
 
-The look of the visual board and of the prototype is Luz-Design's work: read its cards (`interface-visual`, `interface-components`, `interface-layout`, `interface-motion`, `interface-icons`), run its `style_match.py` and have the style confirmed. This skill supplies only the approved system design (pages, entrances, tab bars, components, actions) and never adds, removes or moves any of them to suit a look; such a change goes back to the system design. List the Design cards applied in BRIEF `## 采用的规则`. Create `raw/02-visual/visual-board.html` after system-design approval; it shows the interfaces at their real sizes, so it follows the prototype's type rules (Luz-Design's type roles). Stop for human visual approval. Then create `raw/03-prototype/interactive-prototype.html`: every button uses an approved action ID (inside `<dialog>` or `role="dialog"`, the button that submits the action repeats the opening action's ID and is not a second entry; a generic confirm and the cancel, close and done buttons carry `data-control` instead), views use approved page IDs, simulated data covers loading, empty, error, success, and disabled states. Prototypes render real interfaces with one font family and the product type roles of Luz-Design `references/visual-design.html` (七级字体角色; mini-programs use its compact usage), never italic; reading pages use the Markdown type block above, not the product scale. Check every admin page at 1280, 1366, 1440, and 1920 px for content clipped at the right edge. Walk every operation trigger → feedback → result → return; one action has one visible entry per page. An agent session (agent rule cards in `raw/00-rules/`) gets the seven run states in its skeleton (templates.txt agent-run-states.html); keep one `data-state` block per state. Exercise the prototype in a browser with no script errors, save the acceptance screenshot, and approve both hashes.
+- 每个页面写交互契约：`data-entry`、`data-goal`、`data-primary-action`、`data-exit`、`data-states`；动作写 `data-feedback`，破坏性动作写 `data-confirm` 或 `data-undo`；对象写 `data-lifecycle`，状态写 `data-transitions`，流程写 `data-success`。`py -X utf8 scripts/check_interaction.py "<会话>"` 对缺项、孤岛页面和重复入口报错。
+- 用户要求的功能引用 REQ 编号；推断的功能至少引用两条调研记录，确认前保持未确认。
+- 有智能体时写“智能体运行时与底座”；有平台配置台时写对应的清单项，并读对应规则卡。
+- 有界面时同时交入口表 `entrances.json`：`py -X utf8 scripts/entrances_check.py <entrances.json> [--features features.json]`，格式见 `py -X utf8 scripts/entrances_check.py --schema`。
+- 含硬件时把每台设备列为集成。
 
-When the user wants one page with the function list, an operable mini-program, and the admin console, follow “Integrated system design page” in `SKILL.md`.
+架构和之后的页面出自同一份规格，编号不漂移。停下等架构批准。
 
-## 7 Hardware
+## 系统设计
 
-When the system needs on-site devices, add `--modes hardware` (or create a hardware-only session). Record scale, operation model, existing devices, budget and site facts in `raw/04-hardware/requirements.md`. Follow `references/hardware-design.html`: storyboard the whole lifecycle, map every step to devices, check interfaces against the compatibility library, give every networked device an access mode and protocol, make offline fallbacks explicit, and turn fire, power and network into site requirements. Research models, prices and channels with LuzCrawl (same protocol as above; site lessons in `references/hardware/research-playbook.md`), write `raw/04-hardware/plan.json`, then run `scripts/hw_build.py <session>`, which validates the plan, renders `raw/04-hardware/hardware-plan.html` and runs Luz-Design's document check. Show the list to the person and record their approval of the file (`APPROVALS.json` hardware) before publishing it. The client reads an Excel, not the page: after the plan validates, `scripts/hw_export.py <session>` writes `硬件选型清单.xlsx` (sheets 设备清单 and 现场条件) through Luz-Design's table script and its document check, beside the summary page (a project task: into the project's `docs\01-需求对接`); `hardware-plan.html` stays the review and development page. Export before publishing, so the summary page lists the Excel. List every device as an integration in the system architecture when software and hardware share the session.
+架构批准后写 `raw/01-system/04-system-design.html`：按 system-design.html 的网页合同，界面逐层按 ui-standards.html 和各端规范页的同名层，保留追溯关系。停下等批准。
 
-Pages follow Luz-Design's visual standards and its `check_document.py` (`D:\Codes\Luz-Design\scripts`); reports, spreadsheets and Word documents produced alongside a system go to Luz-Design.
+## 视觉与原型
 
-## 8 Sediment and publish
+外观归 Luz-Design。本技能只提供已批准的页面、入口、标签栏、组件和动作，不为迁就外观增删或移动它们；要改就退回系统设计。
 
-Run `experience.py harvest <session> --industry <行业>` and add judged knowledge with `experience.py add <file.json>`: components, design ideas, frontend rules, type-scale facts, research lessons. For hardware, add products, price samples, compatibility, suppliers and query outcomes with `hw_experience.py add experience\hardware\inbox\<file>.json`; personal contacts go only to the local contacts file. Write or confirm notes with `experience.py note` and list their keys in BRIEF `## 本次沉淀`; fill BRIEF `## 采用的规则` from the rule cards.
+1. `py -X utf8 scripts/add_mode.py "<会话>" visual --card admin-list --card miniprogram`，之后 `add_mode.py "<会话>" prototype`。它检查上游批准、登记阶段并存规则卡：visual 默认存 `admin-list` 和 `miniprogram`，智能体会话用 `--card agent-ui --card agent-runtime-ui`；prototype 存 `prototype` 和 `interaction`。它同时写入的 `02-visual/visual-board.html`、`03-prototype/interactive-prototype.html` 是旧会话的占位骨架，不是成品。
+2. 把界面需求写成 `luz-ui-requirements/2` 合同（[动作归属与业务规则](references/handoff.md#动作归属与业务规则)）并检查：`py -X utf8 scripts/ui_requirements.py <文件>`。Luz-Design 在自己的会话里按组件复用合同构建、审阅，并通过 `ui_package.py check`。
+3. 发布完整包：`py -X utf8 scripts/publish.py "<会话>" <visual|prototype> --source-session <Design 会话> --source-package <其 raw 内的完整包> --source-entry <登记入口>`，或在 `MANIFEST.json` 的 `source_ui_sources[阶段]` 写同名三项。发布会重新核验，导出保留全部文件的 `<阶段>-source.zip`，生成带下载链接的汇总页；阶段批准绑定这个 ZIP。`publish.py "<会话>" <阶段> --check-ui` 只读重验。单页、内部组件库和手填的审计标签不能代替完整包。
 
-Then publish the summary page with `scripts/publish.py <session> <architecture | system_design | visual | prototype | hardware> [--as <名称>]`; next to `raw/` only that page and the listed deliverable files may sit (a project task: only that page, the stage page goes to `docs\02-产品开发`). Publishing refuses a session without a current rule card in `raw/00-rules/`, with an empty 采用的规则, or with an empty or stale 本次沉淀.
+集成页（功能清单、小程序、后台同在一页）：三部分的编号来自架构，小程序与后台共用一套演示数据，页面由 Luz-Design 作为完整 UI 包构建。
 
-## 9 Validate and deliver
+旧会话已有的视觉板和原型仍按原合同校验：按钮用已批准的动作编号，视图用已批准的页面编号，演示数据覆盖加载、空、错误、成功、禁用；后台页在 1280、1366、1440、1920 宽度下不被右侧裁切；智能体会话保留七种运行状态各一块。
 
-~~~powershell
-py -X utf8 -m py_compile scripts/*.py
-py -X utf8 scripts/context.py check
-py -X utf8 scripts/validate_skill.py
-py -X utf8 scripts/experience.py check
-py -X utf8 scripts/validate_session.py "<session-folder>" --strict-production
-py -X utf8 scripts/check_output_layout.py session "<session-folder>" [--project-linked]
-py -X utf8 scripts/check_interaction.py "<session-folder>"
-py -X utf8 scripts/hw_experience.py check
-py -X utf8 D:\Codes\Luz-Design\scripts\check_document.py "<final html>" --allow interface
-py -X utf8 -m unittest discover -s scripts -p "test_*.py"
-~~~
+## 硬件
 
-Any artifact change invalidates its approval hash and all downstream gates. `publish.py <session> <stage>` refuses a stage whose mode was never declared or whose upstream approvals (module scope, architecture, system design, visual, in that order; for hardware, the hardware list itself) are missing or no longer match their files; a refusal means stop and ask the person, not route around it. A platform demo session (`--approval-mode authorization`) replaces the per-stage stops with one authorization the person signs before generation; every stage is still produced and checked, and each record cites the authorization (SKILL.md, Approvals). A preview, fabricated source list, missing snapshot, unapproved stable ID, broken prototype action, or missing browser acceptance screenshot is not a completed deliverable.
+进入条件：规模、运营模式、已有设备、预算和现场事实记在 `raw/04-hardware/requirements.md`，预算只是选型约束。按 hardware-design.html 梳理完整业务流程，把每一步映射到设备，接口对照兼容库，每台联网设备写接入方式与协议，断网兜底写明，消防、供电、网络写成现场条件。型号、渠道和参考价用 Luz-Crawl 调研：`hw_crawl_digest.py <任务目录>` 整理候选，`hw_fetch_images.py` 补实物图，站点经验见 `references/hardware/research-playbook.md`。方案写进 `raw/04-hardware/plan.json`，字段见 `references/hardware/plan-schema.md`。
 
+```powershell
+py -X utf8 scripts/hw_build.py "<会话>"
+py -X utf8 scripts/hw_export.py "<会话>"
+py -X utf8 scripts/publish.py "<会话>" hardware
+```
 
-## 客户文件与 Luz-Project 交接
+`hw_build.py` 校验方案、生成 `raw/04-hardware/hardware-plan.html` 并跑 Luz-Design 文档检查。清单由用户批准后，先 `hw_export.py` 导出 `硬件选型清单.xlsx`（设备清单、现场条件两张表），再发布，汇总页才能列出它；项目任务的 Excel 写进 `docs\01-需求对接`。客户清单默认没有任何价格列；用户明确要求预算、`plan.json` 写了 `budget_requested`（谁、何时、原话）才带“参考价”，逐项有来源链接，无价设备写“待询价”且不进合计。
 
-交给客户的只有 PDF 和 Excel，HTML 只给评审、开发和演示（SKILL.md“客户文件与上下游衔接”）。完整项目里，`luz-project` 提供已批准的需求和 Crawl 任务，本技能按阶段做：
+## 审批
 
-1. **proposal**：读规则卡 `client-docs`，把需求写成需求项（可验证、单一、无歧义，见 system-design.html“需求的写法”），再写 `data/client/features.json`——模块、功能、使用端、角色、基础或可选、业务逻辑、工时、标签、验收；方案说明书的需求分析与解决方案内容、系统架构图册的节点与数据流按 system-design.html“方案说明书的内容来源”“架构图的画法”提供。`py -X utf8 scripts/features_check.py <状态根>\data\client` 零错误后交 Luz-Project 生成客户的 Excel 与 PDF；工时是估算，须请用户确认。
-2. **client-intake**：每个功能的 `rules` 就是“拟定逻辑”：先给方案让客户确认或修改；`intake-extra.json` 只放项目专属的待决规则和只有客户才有的资料，不问每个项目都一样的通用信息。
-3. **architecture**：产出系统架构 HTML（写进项目的 `docs/02-产品开发`，标准见 SKILL.md）及机器可读的编号，登记产物与哈希，停在架构批准。批准后 Luz-Design 只取前端结构与交互要求做视觉决定，Luz-Dev 取架构与随后的设计交接；功能在架构里的落点用 `project.py link FN-001 --arch …` 登记。
-4. 客户新增需求、改规则、补细节：先在 Luz-Project 的变更台账登记，再改数据文件；已发布的功能编号不复用，删除用变更把 status 置为 removed。
+`raw/99-delivery/APPROVALS.json` 记录每次批准的状态、产物路径、SHA-256、时间、批准人和备注：模块范围、架构、系统设计、视觉、原型（附浏览器验收截图），有硬件时加硬件清单。产物一改，它的批准和下游门禁都失效。`add_mode.py` 和 `publish.py` 检查模式和全部上游批准，顺序是模块范围、架构、系统设计、视觉；硬件只看硬件清单自己的批准。用户可以一次审阅多个阶段，但每个阶段单独批准。预览、编造的来源、缺快照、未批准的编号、坏掉的原型动作、缺浏览器验收截图，都不算完成。
 
-单独调用本技能不创建项目目录，也不等待下游阶段。
+**平台演示的一次授权**（`new_session.py --approval-mode authorization`）只限软件演示会话，不含硬件，Luz-Dev 不接收这类会话。
+
+- 用户确认背景并点击生成时，平台把背景存成独立文件，在 `APPROVALS.json` 的 `authorizations` 追加一条：`id`（如 `AUTH-001`）、`authorized_by`、`authorized_at`、`scope`、`statement`、`context_path`、`context_sha256`。`scope` 取 `module_scope`、`architecture`、`system_design`、`visual`、`prototype`。
+- 每个阶段过检查后，平台照常写该阶段记录：`status` 为 `approved`，`approval_basis` 为 `authorization`，带 `authorization_id`，`approved_by` 是签署人。
+- 校验只在这些条件都满足时接受：会话是授权模式，阶段在授权范围内，签署人是真人，记录晚于签署，背景文件与哈希一致，引用的是当时有效的授权。
+- 失败的执行可在同一授权下恢复。背景变了或要重做阶段，就重新授权（`AUTH-002`，用自己的背景文件），此后的记录引用新授权。
+
+## 沉淀与发布
+
+- 软件：`py -X utf8 scripts/experience.py harvest "<会话>" --industry <行业>` 收割已交付会话，`experience.py add <文件.json>` 加入判断过的模式和来源。
+- 硬件：`py -X utf8 scripts/hw_experience.py add experience\hardware\inbox\<文件>.json` 合并产品、价格样本、接口匹配、渠道和查询效果。产品按品牌和型号合并，每款留最近 5 条价格样本；个人联系方式只写 `experience/hardware/contacts.local.json`。
+- 偏好、教训、事实用 `experience.py note`（SKILL.md“沉淀”），键写进 BRIEF“本次沉淀”；没有会话时在回复里说明写了哪些键。`list [--kind]` 列出，`prune` 执行上限并列出 180 天未确认的，`check` 查重复、缺字段、超限和隐私数据。
+- 代表客户调用本技能的程序（如生成演示的平台）直接写通用经验，不需人工逐条确认：先搜索并确认已有键，不新建重复键，不记客户背景。
+- BRIEF“采用的规则”逐条写规则小节或偏好键，以及本次怎么落实。
+- `py -X utf8 scripts/publish.py "<会话>" <阶段>` 把阶段页发布成汇总页，并列出旁边的成品。缺当前规则卡、“采用的规则”为空、“本次沉淀”为空或键过期（不在 `notes.json`，或最后确认早于会话创建）、缺上游批准或本阶段检索，都会被拒绝。项目任务不发布：它报错并给出该阶段的 `project.py document` 命令。
+- 页面图标：模板按系统名填 `{{TAB_ICON}}` 和 `{{BRAND_MARK}}`，手写页面用 `py -X utf8 scripts/new_session.py icon "<系统名>"` 取得；最终页缺图标会被拒绝。
+- `LUZ_EXPERIENCE_STORE=<notes.json 路径>` 只用于测试和演练，把经验的读写都指向那个文件；真实交付不设置。
+
+## 校验
+
+```powershell
+py -X utf8 scripts/validate_session.py "<会话>" --strict-production
+py -X utf8 scripts/check_interaction.py "<会话>"
+py -X utf8 scripts/check_output_layout.py session "<会话>" [--project-linked]
+py -X utf8 scripts/features_check.py "<状态根>\data\client"
+py -X utf8 D:\Codes\Luz-Design\scripts\check_document.py "<交付文件>" --allow interface
+```
+
+`validate_session.py` 会对架构和旧会话的原型运行 `check_interaction.py`；`--strict-production` 另外核对调研来源仍可访问，并要求交付记录完整。阅读页的文档检查不加 `--allow interface`。列表默认每页 20 行，缺分页器或默认行数不符时 `validate_session.py` 给出警告。技能包自身的检查命令见 SKILL.md“校验”；`validate_skill.py` 先打印 `PACKAGE PASS` 或 `PACKAGE FAIL`，不带 `--package-only` 时再列输出目录里各会话的问题。
+
+## 项目任务
+
+入口是 SKILL.md“项目模式”，路径照 Luz-Project 的 [runbook.md](../Luz-Project/references/runbook.md)。各阶段本技能做什么：
+
+| 阶段 | 做什么 | 先读的卡 |
+|---|---|---|
+| proposal | 把需求写成可验证的需求项，写 `data/client/features.json`（模块、功能、使用端、角色、基础或可选、业务逻辑、标签、验收），给方案说明书和架构图册提供内容；`features_check.py` 零错误后交 Luz-Project 生成 | `client-docs`、`function-list` |
+| client-intake | 每个功能的 `rules` 写成可确认的拟定逻辑；`intake-extra.json` 只放项目专属的待决问题和只有客户才有的资料 | `function-list` |
+| architecture | 交 `01-系统架构.html` 的事实数据（技术栈、总体架构、功能与技术方案、决策与质量四个页签，每个功能一张功能卡）；有界面的项目同时交界面功能说明、入口表和 UI 需求合同，按 Luz-Project [dev-documents.md](../Luz-Project/references/dev-documents.md)“随附产物”登记；`project.py link` 登记每个功能的落点 | `system-design` |
+
+- 人日和报价：项目在 `config/documents.json` 打开 `estimate.workdays`、`estimate.quote`（带要求人、日期、原话）才写。人日写 `hours` 和 `hours_basis`，用户批准前标“拟定”；报价数字只来自人工报价单 `quote.json`，缺了就把“等待人工报价”列为用户待办并停下。
+- 功能编号 `FN-001…` 发布后不复用；新增、改规则、删除先在 Luz-Project 的变更台账登记，再改数据文件。
+- 交接：架构、系统设计和原型的编号与交互契约进 `HANDOFF.json`（[handoff.md](references/handoff.md)）给 Luz-Dev；每个功能的 `acceptance` 和 `tags` 给 Luz-Ops 映射测试证据；界面功能说明和入口表给 Luz-Design。
+- 待审的永远只有 `project.py next` 指定的那一个文件；不自己判定“用户已批准”，修改意见走 `project.py review`。design 阶段的原型由 Luz-Design 交付，本技能只提供行为和数据规则。

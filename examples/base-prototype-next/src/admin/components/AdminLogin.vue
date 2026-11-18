@@ -12,7 +12,7 @@ const errors = reactive({ user: '', pass: '' })
 const loading = ref(false)
 const fails = ref(0)
 const mfa = reactive({ open: false, code: '', error: '', loading: false, role: 'A' })
-const ACCOUNTS = { admin: 'A', front1: 'F' }
+import '../../../../demo-account.js'
 
 async function submit() {
   errors.user = form.user.trim() ? '' : '请输入账号'
@@ -28,8 +28,8 @@ async function submit() {
   }
   loading.value = false
   if (fails.value >= 5) { errors.pass = '连续输错 5 次，账号已锁定 10 分钟'; return }
-  const role = ACCOUNTS[form.user.trim()]
-  if (!role || form.pass !== 'Admin@2026') {
+  const role = globalThis.LuzDemoAccount.roleFor(form.user, form.pass)
+  if (!role) {
     fails.value++
     errors.pass = '账号或密码错误' + (fails.value >= 3 ? `，还可再试 ${5 - fails.value} 次` : '')
     return
@@ -68,7 +68,7 @@ function enter(role) {
         <el-form-item label="密码" :error="errors.pass"><el-input v-model="form.pass" type="password" show-password autocomplete="current-password" placeholder="请输入密码" size="large" /></el-form-item>
         <el-button type="primary" size="large" native-type="submit" :loading="loading" class="login-submit">登录</el-button>
       </el-form>
-      <p class="muted small login-hint">演示账号：admin（超级管理员，需验证码 123456）、front1（前台），密码 Admin@2026</p>
+      <p class="muted small login-hint">演示账号：admin（超级管理员，需验证码 123456）、front1（前台），初始演示密码 Admin@2026</p>
     </el-card>
 
     <el-dialog v-model="mfa.open" title="输入验证码" width="380px" align-center :close-on-click-modal="false" :show-close="false">

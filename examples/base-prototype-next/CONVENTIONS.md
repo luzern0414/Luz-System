@@ -97,6 +97,7 @@ export const meta = {
 ```powershell
 cd examples/base-prototype-next
 # 构建到你自己的目录（不要用默认的输出位置，别人也在构建）
+npm ci                                            # 仅在缺开发依赖时恢复锁定版本
 node build.mjs admin --out <你的私有目录>          # 或 mini
 # 逐页逐场景验证：控制台零错误、没有横向滚动、页面不空；加 --audit 再核对控件来源与文字规则
 py -X utf8 scripts/verify.py admin --html <你的私有目录>\admin.html --only <你的页面编号,…> --audit

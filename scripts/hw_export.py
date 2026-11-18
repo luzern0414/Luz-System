@@ -4,21 +4,28 @@
 Read the rule card first: py -X utf8 scripts/context.py hardware --session "<会话目录>"
 
 Client files are PDF and Excel only; hardware-plan.html (hw_build.py) is the review and development page. This command turns the
-same plan into the Excel the client reads: sheet 设备清单 (what to buy, how many, what it costs, where to buy) and sheet 现场条件
-(what the site must provide). The layout comes from Luz-Design (make_xlsx.py, 表格文件); the plan is validated first.
+same plan into the Excel the client reads: sheet 设备清单 (what to buy, how many, where to buy) and sheet 现场条件 (what the site
+must provide). The layout comes from Luz-Design (make_xlsx.py, 表格文件); the plan is validated first.
+
+Budget policy (user, 2026-11-05): the list carries no price column by default (no unit price, subtotal or total). Only when the plan
+has budget_requested (who asked, when, in what words) does the sheet add 参考价（元）, subtotals and a 参考价合计; every figure is the
+sample on its linked source page (a reference price, not a quotation); the spec then carries allow_quote and quote_evidence for Luz-Design's check.
+Luz-Design allows no subtitle or note under a table title, so everything the client must know is a field of the table: the column is
+named 参考价, every priced row links its source page, a device without a price says 待询价 and one summary row counts those devices.
 
   py -X utf8 scripts/hw_export.py "<会话目录>"            writes 硬件选型清单.xlsx beside the summary page (standalone task) or
                                                            docs\\01-需求对接\\NN-硬件选型清单.xlsx in the project directory (project task)
   py -X utf8 scripts/hw_export.py "<会话目录>" --spec-only  writes only the make_xlsx spec (raw/04-hardware/hardware-list.spec.json)
 
-The unit price is the sample taken from the linked source; devices without a price show 询价 and the channel to ask.
+With prices on, a device without one shows 待询价 and the channel to ask. A quotation a person supplied separately follows the project policy
+(estimate.quote, quote.json), never this plan.
 A standalone task lists the file in its summary page: run publish.py hardware again after the export.
 """
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
-import subprocess
 import sys
 from pathlib import Path
 
@@ -26,9 +33,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import hw_plan_lib as pl  # noqa: E402
 import session_output as so  # noqa: E402
 from validate_session import final_html  # noqa: E402
+from hw_crawl_gate import generation_errors, template_binding, research_context  # noqa: E402
 
 LUZ_DESIGN = Path(r"D:\Codes\Luz-Design")
 LEVEL_TAGS = {"必选": "1F3A5F", "推荐": "1F3A5F", "可选": "9A6A1F"}
+UNPRICED = "待询价"  # the price cell of a device that has no reference price; such a device is in no subtotal or total
 
 
 def channel(device: dict) -> str:
@@ -41,25 +50,29 @@ def channel(device: dict) -> str:
     return f"联系{contact['name']}询价" if contact.get("name") else ""
 
 
-def device_rows(plan: dict) -> list[list]:
+def device_rows(plan: dict, prices: bool = False) -> list[list]:
+    """Row layout: 类别, 设备, 品牌型号, 规格, 数量 [, 参考价, 小计 when prices], 接口与供电, 采购渠道, 类型."""
     rows = []
     for d in plan["devices"]:
         if not d.get("purchase", True) or d.get("site"):
             continue
         qty = d.get("qty", 1)
         price = d.get("unit_price")
-        rows.append([
+        row = [
             d.get("category", "其他"),
             d["name"],
             " ".join(x for x in (d.get("brand"), d.get("model")) if x) or "—",
             d.get("specs") or "—",
             qty,
-            price if price is not None else None,
-            round(price * qty, 2) if price is not None else None,
+        ]
+        if prices:
+            row += [price if price is not None else UNPRICED, round(price * qty, 2) if price is not None else None]
+        row += [
             "；".join(x for x in (d.get("interfaces"), f"供电 {d['power']}" if d.get("power") else "") if x) or "—",
             channel(d) or "询价",
             d.get("level", "必选"),
-        ])
+        ]
+        rows.append(row)
     return rows
 
 
@@ -76,35 +89,44 @@ def site_rows(plan: dict) -> list[list]:
 
 
 def build_spec(plan: dict) -> dict:
-    rows = device_rows(plan)
-    by_level: dict[str, float] = {}
-    for r in rows:
-        if r[6] is not None:
-            by_level[r[9]] = by_level.get(r[9], 0) + r[6]
-    unpriced = sum(1 for r in rows if r[6] is None)
-    footer = [{"label": f"{lv}小计", "values": {"小计（元）": round(by_level[lv], 2)}} for lv in LEVEL_TAGS if lv in by_level]
-    footer.append({"label": "合计", "values": {"小计（元）": round(sum(by_level.values()), 2)}})
+    prices = pl.show_prices(plan)
+    rows = device_rows(plan, prices)
     title = plan.get("title") or "硬件选型清单"
-    devices_sheet = {
-        "sheet": "设备清单",
-        "columns": [
-            {"name": "类别", "merge": True},
-            {"name": "设备", "type": "text"},
-            {"name": "品牌型号", "type": "longtext"},
-            {"name": "规格", "type": "longtext"},
-            {"name": "数量（台）", "type": "number"},
-            {"name": "单价（元）", "type": "money"},
-            {"name": "小计（元）", "type": "money"},
-            {"name": "接口与供电", "type": "longtext"},
-            {"name": "采购渠道", "type": "longtext", "muted": True},
-            {"name": "类型", "tags": LEVEL_TAGS},
-        ],
-        "rows": rows,
-        "group_by": ["类别"],
-        "footer": footer,
-    }
-    if unpriced:
-        devices_sheet["subtitle"] = f"另有 {unpriced} 项设备待询价，未计入合计"
+    columns = [
+        {"name": "类别", "merge": True},
+        {"name": "设备", "type": "text"},
+        {"name": "品牌型号", "type": "longtext"},
+        {"name": "规格", "type": "longtext"},
+        {"name": "数量（台）", "type": "number"},
+    ]
+    if prices:
+        columns += [{"name": "参考价（元）", "type": "money"}, {"name": "小计（元）", "type": "money"}]
+    columns += [
+        {"name": "接口与供电", "type": "longtext"},
+        {"name": "采购渠道", "type": "longtext", "muted": True},
+        {"name": "类型", "tags": LEVEL_TAGS},
+    ]
+    devices_sheet = {"sheet": "设备清单", "columns": columns, "rows": rows, "group_by": ["类别"]}
+    spec: dict = {"title": title, "theme": "default"}
+    if prices:
+        # sub = index of 小计, level = index of 类型 in a priced row
+        by_level: dict[str, float] = {}
+        for r in rows:
+            if r[6] is not None:
+                by_level[r[-1]] = by_level.get(r[-1], 0) + r[6]
+        footer = [{"label": f"{lv}小计", "values": {"小计（元）": round(by_level[lv], 2)}} for lv in LEVEL_TAGS if lv in by_level]
+        footer.append({"label": "参考价合计", "values": {"小计（元）": round(sum(by_level.values()), 2)}})
+        # No subtitle (Luz-Design make_xlsx.py refuses one): the devices still to be quoted are counted in a row of their own, outside every total.
+        pending = sum(r[4] for r in rows if r[6] is None)
+        if pending:
+            footer.append({"label": f"{UNPRICED}设备小计", "values": {"数量（台）": pending}})
+        devices_sheet["footer"] = footer
+        req = plan["budget_requested"]
+        # Luz-Design's xlsx check (make_xlsx.py "allow_quote") releases the amount cells only with this evidence: who asked for a budget,
+        # in what words, and that every figure is a reference price taken from the source page named in its row.
+        spec["allow_quote"] = True
+        spec["quote_evidence"] = {"requested_by": req["requested_by"], "requested_at": req["requested_at"], "request_note": req["request_note"],
+                                  "evidence": "每项参考价取自设备行采购渠道中的来源页面，非报价"}
     site_sheet = {
         "sheet": "现场条件",
         "columns": [
@@ -118,7 +140,8 @@ def build_spec(plan: dict) -> dict:
     sheets = [devices_sheet]
     if site_sheet["rows"]:
         sheets.append(site_sheet)
-    return {"title": title, "theme": "default", "sheets": sheets}
+    spec["sheets"] = sheets
+    return spec
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -127,6 +150,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--spec-only", action="store_true")
     args = ap.parse_args(argv)
     session = args.session.resolve()
+    research_errors = generation_errors(session)
+    if research_errors:
+        for error in research_errors:
+            print("ERROR", error, file=sys.stderr)
+        return 1
     raw = session / "raw" / "04-hardware"
     plan = pl.load(raw / "plan.json")
     errors, warnings = pl.validate(plan)
@@ -149,11 +177,34 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     manifest = so.read_manifest(session) if (session / "raw" / "99-delivery" / "MANIFEST.json").is_file() else None
     target = so.hardware_list_target(session, manifest)
+    try:
+        template_binding(session, target, "xlsx")
+    except (OSError, ValueError) as exc:
+        print(f"ERROR {exc}", file=sys.stderr)
+        return 1
     target.parent.mkdir(parents=True, exist_ok=True)
-    run = subprocess.run([sys.executable, "-X", "utf8", str(builder), str(spec_path), str(target)], capture_output=True, text=True, encoding="utf-8", cwd=str(builder.parent))
-    print((run.stdout + run.stderr).strip())
-    if run.returncode != 0:
-        return run.returncode
+    # The System entry point already checked this task's research. Reuse Design's
+    # pure renderer and output check, without starting another business session.
+    original_path = list(sys.path)
+    try:
+        sys.path.insert(0, str(builder.parent))
+        definition = importlib.util.spec_from_file_location("_hardware_design_xlsx", builder)
+        renderer = importlib.util.module_from_spec(definition)
+        definition.loader.exec_module(renderer)
+        from design_output_gate import verified_output_context
+        evidence_root, stage = research_context(session)
+        context = verified_output_context(evidence_root, "luz-system", stage, target, "xlsx")
+        allow = renderer.estimate_allow(spec)
+        renderer.build(spec, target, context=context)
+        code = renderer.verify_output(target, "xlsx", bool(spec.get("sheets")), allow)
+    except (OSError, ValueError, ImportError) as exc:
+        print(f"ERROR 硬件清单排版失败：{exc}", file=sys.stderr)
+        return 1
+    finally:
+        sys.path[:] = original_path
+    if code:
+        return code
+    template_binding(session, target, "xlsx", post=True, generator="Luz-System/scripts/hw_export.py")
     if manifest and manifest.get("project"):
         # Project task: the Excel is a result in the project directory; the summary page lists it.
         so.project_result(manifest, "hardware-list", so.HARDWARE_LIST[0], so.HARDWARE_LIST[1], target)

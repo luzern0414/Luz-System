@@ -2,49 +2,183 @@
   "schema_version": "1.0",
   "skill": "luz-system",
   "note_command": "py -X utf8 scripts/experience.py note --kind preference|lesson|fact --key <主题> --text \"<一句话原则>\" [--why \"<依据>\"]；硬件另用 py -X utf8 scripts/hw_experience.py add experience/hardware/inbox/<文件>.json",
-  "moved_preferences": ["admin-density-14px", "b2b-status-light-ui", "b2b-status-text-and-surface", "b2b-tool-graphite", "backend-workbench-noise-reduction", "commercial-miniprogram-density", "html-tab-icon-required", "imagegen-decorative-elements", "no-blue-focus-box", "ui-adaptive-readable-text", "一物一图", "单一字体栈", "卡片等高", "后台浅底", "扁平线性风格", "表格居中", "默认头像", "stable-display-no-jump-no-flash"],
   "always": [],
   "cards": {
     "system-design": {
       "title": "系统设计（需求 → 模块范围 → 架构 → 系统设计页）",
       "summary": "需求台账、模块批准、Luz-Crawl 调研、系统架构与系统设计网页",
-      "keywords": ["系统设计", "架构", "模块", "审阅页", "修订", "MANIFEST", "单元格", "调研", "来源", "reuse", "交互契约", "闭环", "孤岛页", "死角页", "智能体底座", "运行时"],
+      "keywords": [
+        "系统设计",
+        "架构",
+        "模块",
+        "审阅页",
+        "修订",
+        "MANIFEST",
+        "单元格",
+        "调研",
+        "来源",
+        "reuse",
+        "交互契约",
+        "闭环",
+        "孤岛页",
+        "死角页",
+        "智能体底座",
+        "运行时"
+      ],
       "sections": [
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["工作流程"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "不可绕过的网页文件门禁"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "系统设计网页文件的版式"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "系统架构清单"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "需求的写法"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "架构图的画法"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "架构的交互字段"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["平台矩阵"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["输出契约"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "入口与内容分层"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "权限与角色"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "状态体系"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "信息架构"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "导航与返回"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "页面交互契约"]}
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "工作流程"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "不可绕过的网页文件门禁"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "系统设计网页文件的版式"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "系统架构清单"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "需求的写法"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "架构图的画法"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "架构的交互字段"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "平台矩阵"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "入口与内容分层"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "权限与角色"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "状态体系"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "信息架构"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "导航与返回"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "页面交互契约"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "建会话：`py -X utf8 scripts/new_session.py --name \"<名称>\" --modes system --system-name \"<系统名>\" --modules \"<模块1>,<模块2>\"`（有现场设备用 `--modes system,hardware`）；生成 BRIEF、模块确认页 `raw/01-system/01-module-intake.html` 与本卡，模块由人批准后才往下做",
-        "输出：会话目录 `NNN-名称\\` 的根只有 `raw\\` 和同名汇总页 `NNN-名称.html`，发布的系统设计页就是汇总页；项目任务建会话时加 `--project <状态根>`（或设 LUZ_PROJECT_ROOT），`publish.py` 把页面写进项目的 `docs\\02-产品开发`，会话根只留汇总页和 `raw\\`，项目目录里不放任何原始文件",
+        "输出：会话目录 `NNN-名称\\` 的根只有 `raw\\` 和同名汇总页 `NNN-名称.html`，发布的系统设计页就是汇总页；项目任务建会话时加 `--project <状态根>`（或设 LUZ_PROJECT_ROOT），会话只放过程文件，`publish.py` 在项目任务里不写 docs（失败并给出该阶段的 `project.py document` 命令），`docs\\02-产品开发\\01-系统架构.html` 由 Luz-Project 生成，项目目录里不放任何原始文件",
         "先查经验：`py -X utf8 scripts/experience.py search <关键词>`；新鲜来源用 `py -X utf8 scripts/experience.py reuse <会话目录> <来源编号…> --module <模块>` 复制进调研，再补采",
         "调研按 Luz-Crawl 的 SKILL.md 调用协议：`doctor` → `begin \"<主题>\" --new`（得到 folder）→ `experience --query` → 每条命令带 `--out <folder>`；至少 12 个网址、5 个可注册域名，页面结构、交互流程、组件状态三类证据，快照放 `raw/01-system/crawl-snapshots/`；只调研用户看得见、用得到的东西",
-        "架构 `raw/01-system/03-system-architecture.html` 与系统设计 `raw/01-system/04-system-design.html` 从 `references/templates.txt` 的同名模板起步；模板只是骨架，小节、编号、版式按本卡",
+        "架构 `raw/01-system/03-system-architecture.html` 与系统设计 `raw/01-system/04-system-design.html` 用 Luz-Design 的阅读页模板（`templates/documents/reading/` 下的同名文件，模板编号 `system-architecture`、`system-design`）；`publish.py` 核对模板外壳，正文不另写样式或脚本，小节与编号按本卡",
         "界面各端另读对应规则卡：`py -X utf8 scripts/context.py admin-list | admin-dashboard | admin-form | miniprogram | agent-ui | website | function-list`，用 `--card` 存进会话",
-        "架构按 `references/templates.txt` 的 system-architecture.html 起步，每个页面写交互契约（`data-entry`、`data-goal`、`data-primary-action`、`data-exit`、`data-states`），对象写 `data-lifecycle`，状态写 `data-transitions`，流程写 `data-success`；只读自查：`py -X utf8 scripts/check_interaction.py <会话目录>`",
+        "架构的每个页面写交互契约（`data-entry`、`data-goal`、`data-primary-action`、`data-exit`、`data-states`），对象写 `data-lifecycle`，状态写 `data-transitions`，流程写 `data-success`，写法照架构模板里的示例；只读自查：`py -X utf8 scripts/check_interaction.py <会话目录>`",
         "有智能体时，架构写出“智能体运行时与底座”一项，并另读规则卡 agent-ui 与 agent-runtime-ui；后端实现见 Luz-Dev `references/agent-foundation.md`",
         "交给客户的是 PDF 和 Excel，不是这里的网页；客户文件的内容与写法读规则卡 `client-docs`，功能清单写成数据文件并用 `py -X utf8 scripts/features_check.py` 自查",
         "没有放进本卡的通用规则另读：设计原则与业务状态命名读 ui-standards.html（规则卡 `interaction`、`agent-ui` 已含设计原则），内容来源与维护闭环（架构清单“内容来源与文案”一项的依据）读规则卡 `remote-config`、`admin-form`，列表的默认视图读规则卡 `admin-list`，页面与各端的规范对照读 system-design.html“设计规则的位置”",
-        "入口表：架构阶段交付功能说明时同时交 `entrances.json`（每个前台功能一行：类型、类别、唯一入口归属、目的地、使用频次），视觉技能据此设计首页，不增删入口；格式运行 `py -X utf8 D:\\Codes\\Luz-Design\\scripts\\page_pattern.py show entrances_schema`，写完用 `py -X utf8 scripts/entrances_check.py <entrances.json> [--features features.json]` 检查",
+        "项目模式（Luz-Project 编排；用户只逐个审批 docs 里的文件，评审页、Crawl 记录、规则卡记录、自检是不让用户审、也不向用户罗列的内部步骤，但必须做完）：开工前 `project.py next <项目>` 与 `checklist <项目> architecture`；读完本卡后 `project.py step <项目> architecture rules --note \"读了…；采用的规则：…\"`；写完阶段事实数据、界面功能说明、入口表并过 check_interaction.py、entrances_check.py、check_document.py 后 `project.py step <项目> architecture specialist --note \"<产出了什么；自检结论>\"`（这两步只能自己记）；`01-系统架构.html` 由 `project.py document` 生成，只向用户出示 `next` 指定的这一个文件，不自己判定已批准，修改意见走 `project.py review`；本技能没有动作门；见 SKILL.md“项目模式”",
+        "入口表：架构阶段交付功能说明时同时交 `entrances.json`（每个前台功能一行：类型、类别、唯一入口归属、目的地、使用频次），视觉技能据此设计首页，不增删入口；格式运行 `py -X utf8 scripts/entrances_check.py --schema`，写完用 `py -X utf8 scripts/entrances_check.py <entrances.json> [--features features.json]` 检查",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR；交付前加 `--strict-production`",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <系统设计页.html>` 零 ERROR（阅读页的版式按 Luz-Design 文件设计规范“网页文件 › 排版参数”，不加 --allow interface）",
-        "模块、架构、系统设计各由人批准，`raw/99-delivery/APPROVALS.json` 记录哈希；脚本和模型不能代替批准",
+        "独立会话：模块、架构、系统设计各由人批准，`raw/99-delivery/APPROVALS.json` 记录哈希；脚本和模型不能代替批准。项目模式：`01-系统架构.html` 由用户经 `project.py approve --doc` 逐个审批，会话里的批准账本不替代它",
         "浏览器 1440 与 390 宽打开系统设计页：第一行是主标题、无说明文字、手机上可操作",
         "`py -X utf8 scripts/check_interaction.py <会话目录>` 零 ERROR（写了交互契约的架构缺项即报错），WARN 逐条处理或在架构里写明理由"
       ]
@@ -52,26 +186,141 @@
     "client-docs": {
       "title": "客户文件的内容（功能清单、业务逻辑、方案与架构图册、硬件清单）",
       "summary": "交给客户的只有 PDF 和 Excel：系统设计为它们提供的内容与写法——需求写法、功能数据、可确认的业务逻辑、方案说明书的需求分析与解决方案、架构图的画法",
-      "keywords": ["客户", "方案说明书", "架构图册", "功能清单", "报价", "业务逻辑确认", "需求分析", "解决方案", "架构图", "泳道", "部署图", "features", "proposal", "architecture", "硬件清单", "个人信息"],
+      "keywords": [
+        "客户",
+        "方案说明书",
+        "架构图册",
+        "功能清单",
+        "报价",
+        "业务逻辑确认",
+        "需求分析",
+        "解决方案",
+        "架构图",
+        "泳道",
+        "部署图",
+        "features",
+        "proposal",
+        "architecture",
+        "硬件清单",
+        "个人信息"
+      ],
       "sections": [
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "需求的写法"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "客户功能清单"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "功能的粒度与基础、可选"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "业务逻辑的写法"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "项目专属问题"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "工时估算"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "方案说明书的内容来源"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "客户文件与开发文件"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "架构图的画法"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "系统架构清单"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "个人信息与隐私"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["质量门禁"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["质量门禁"]},
-        {"page": "hardware-design.html", "title": "硬件设计规范", "path": ["核心规则", "七、客户文件"]}
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "需求的写法"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "客户功能清单"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "功能的粒度与基础、可选"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "业务逻辑的写法"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "项目专属问题"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "人日与报价（可选，默认不写）"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "方案说明书的内容来源"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "客户文件与开发文件"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "架构图的画法"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "系统架构清单"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "个人信息与隐私"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "hardware-design.html",
+          "title": "硬件设计规范",
+          "path": [
+            "核心规则",
+            "七、客户文件"
+          ]
+        }
       ],
       "tools": [
         "项目模式先读 `py -X utf8 D:\\Codes\\Luz-Project\\scripts\\project.py context <项目> <阶段> --skill luz-system` 取前序产物与客户答案；客户文件的目录、顺序和门禁以 `D:\\Codes\\Luz-Project\\references\\client-documents.md` 为准",
-        "功能清单、报价、项目专属问题写成 `data/client/features.json`、`quote.json`、`intake-extra.json`，写完用 `py -X utf8 scripts/features_check.py <data/client 目录>` 自查；成品 Excel 与 PDF 由 Luz-Project 经 Luz-Design 生成，本技能不手写成品",
+        "项目模式的步骤：开工前 `project.py next <项目>` 与 `checklist <项目> <阶段>`（proposal 或 client-intake）；读完本卡与 `function-list` 卡后 `project.py step <项目> <阶段> rules --note \"读了…；采用的规则：…\"`；features.json、intake-extra.json 过 features_check.py 后 `project.py step <项目> <阶段> specialist --note \"<产出了什么；自检结论>\"`（只能自己记）。用户逐个审批 docs 里的文件，一次一个：方案阶段 02 → 03 → 04，业务逻辑确认表单独一个；评审页与 Crawl 记录是内部步骤，不让用户审；客户的回填表是客户输入，不审批",
+        "功能清单、项目专属问题写成 `data/client/features.json`、`intake-extra.json`，写完用 `py -X utf8 scripts/features_check.py <data/client 目录>` 自查（读状态根 `config/documents.json` 的 `estimate`；读不到按人日与报价都关）；默认不写人日、预算、报价，只有 `estimate.workdays` / `estimate.quote` 开启（带 requested_by、requested_at、request_note 三项证据）才写，报价只来自人工提供的 `quote.json`（provided_by、provided_at、request_note、evidence、unit_price），用户还没给数字就把“等待人工报价”列为用户待办并停下；成品 Excel 与 PDF 由 Luz-Project 经 Luz-Design 生成，本技能不手写成品",
         "方案说明书的正文由 Luz-Writing 写（`py -X utf8 D:\\Codes\\Luz-Writing\\scripts\\06-context.py general`），版式由 Luz-Design 的 `docx` 与 `showcase` 规则卡保证；本卡只提供“写什么”",
         "架构图册的图数据写成 `data/client/architecture.json`：节点、数据流、泳道、部署的业务含义取自功能清单和客户确认过的规则，不凭空画",
         "硬件选型清单的客户 Excel：`py -X utf8 scripts/hw_build.py <会话目录>` 通过后 `py -X utf8 scripts/hw_export.py <会话目录>`（独立任务写在会话根、列进汇总页；项目任务写进项目的 `docs\\01-需求对接`）",
@@ -80,8 +329,8 @@
       ],
       "checks": [
         "`py -X utf8 scripts/features_check.py <data/client 目录>` 零 ERROR",
-        "每份客户文件把自己的内容写完整，不出现《…》、配套文件、见某某表；方案里不写价格；客户看的文字里没有技术词和内部编号",
-        "需求项逐条可判定、追溯矩阵无缺口；由调研推断的需求标为待确认，没有进基础功能和报价",
+        "每份客户文件把自己的内容写完整，不出现《…》、配套文件、见某某表；方案里默认不写人日、预算和价格（明确要求且有人工数字才写，缺依据就停下问用户）；客户看的文字里没有技术词、内部编号，也没有人日、工时、预算、报价这些词",
+        "需求项逐条可判定、追溯矩阵无缺口；由调研推断的需求标为待确认，没有进基础功能",
         "架构图每条线有箭头和说明、有图例、一张图一个抽象层次；部署图一个环境一张图",
         "有个人信息的系统写了“个人信息与隐私”一项；有人脸识别的硬件方案写了单独同意、替代方式和提示标识",
         "客户拿到的只有 PDF 和 Excel；网页只给评审、开发和演示"
@@ -89,245 +338,1118 @@
     },
     "function-list": {
       "title": "系统功能列表（客户功能清单、业务逻辑与页面功能表）",
-      "summary": "客户的功能清单与报价（features.json）、可确认的业务逻辑、项目专属问题；以及评审页里按模块、页面、功能、动作、状态列出的功能表",
-      "keywords": ["features", "intake-extra", "业务逻辑", "列表", "功能", "功能列表", "功能清单", "可选", "基础", "客户", "工时", "报价", "确认表"],
+      "summary": "客户的功能清单（features.json；人日与报价默认不写，明确要求才有，报价只来自人工）、可确认的业务逻辑、项目专属问题；以及评审页里按模块、页面、功能、动作、状态列出的功能表",
+      "keywords": [
+        "features",
+        "intake-extra",
+        "业务逻辑",
+        "列表",
+        "功能",
+        "功能列表",
+        "功能清单",
+        "可选",
+        "基础",
+        "客户",
+        "工时",
+        "人日",
+        "报价",
+        "确认表"
+      ],
       "sections": [
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["适用范围"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["工作流程"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "客户功能清单"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "功能的粒度与基础、可选"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "业务逻辑的写法"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "项目专属问题"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "工时估算"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "设计理念"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "字体"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "配色"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "图案"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "列结构"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "对齐"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "内容写法"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "窄屏"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["核心规则", "平台能力在功能列表里的分组"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["输出契约"]},
-        {"page": "function-list-design.html", "title": "系统功能列表规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "入口与内容分层"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "内容来源与维护闭环"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "状态体系"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "七、文案", "界面文案"]}
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "适用范围"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "工作流程"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "客户功能清单"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "功能的粒度与基础、可选"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "业务逻辑的写法"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "项目专属问题"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "人日与报价（可选，默认不写）"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "设计理念"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "字体"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "配色"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "图案"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "列结构"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "对齐"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "内容写法"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "窄屏"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "核心规则",
+            "平台能力在功能列表里的分组"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "function-list-design.html",
+          "title": "系统功能列表规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "入口与内容分层"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "内容来源与维护闭环"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "状态体系"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "七、文案",
+            "界面文案"
+          ]
+        }
       ],
       "tools": [
         "功能、页面、动作与状态编号取自已批准的系统架构 `raw/01-system/03-system-architecture.html`，不另起编号；完整项目里功能编号是 `data/client/features.json` 的 `FN-001…`，发布后永不复用",
-        "客户的功能清单写成 `data/client/features.json`（模块、功能、使用端、角色、基础或可选、业务逻辑、工时、标签、验收），报价单价写 `quote.json`，项目专属问题写 `intake-extra.json`；成品 Excel 由 Luz-Project 经 Luz-Design 生成，不手改，也不手写 Excel",
+        "客户的功能清单写成 `data/client/features.json`（模块、功能、使用端、角色、基础或可选、业务逻辑、标签、验收），项目专属问题写 `intake-extra.json`；默认不写人日、预算、报价；只有用户或客户明确要求、`config/documents.json` 的 `estimate.workdays` 打开（带 requested_by、requested_at、request_note）时才加 `hours` 与 `hours_basis`（估算依据），`estimate.quote` 打开时才有 `quote.json`，单价与金额只能来自人工报价单，不得自拟、暂估或套用示例值；成品 Excel 由 Luz-Project 经 Luz-Design 生成，不手改，也不手写 Excel",
         "写完先自查：`py -X utf8 scripts/features_check.py <data/client 目录>`；方案说明书与架构图册的内容另读规则卡 `client-docs`",
         "页面交互的闭环（一个动作一个按钮、对象与状态闭环）读规则卡 `interaction`，业务状态命名读 ui-standards.html“业务状态命名”",
-        "放进集成页时是“系统功能列表”一节（SKILL.md 集成系统设计页）；单独交付时作为系统设计页的一部分",
+        "放进集成页时是“系统功能列表”一节（WORKFLOW.md“视觉与原型”）；单独交付时作为系统设计页的一部分",
         "表格版式（客户 Excel）交给 Luz-Design：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py xlsx`",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
       ],
       "checks": [
-        "`py -X utf8 scripts/features_check.py <data/client 目录>` 零 ERROR，WARN 逐条看过；工时已请用户确认",
+        "`py -X utf8 scripts/features_check.py <data/client 目录>` 零 ERROR，WARN 逐条看过；默认状态下客户文件里没有人日、工时、预算、金额；开启人日时工时已请用户确认；开启报价时 `quote.json` 的人工证据齐全",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <页面.html> --allow interface` 零 ERROR（评审页里的功能表）",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR",
         "浏览器 1280 与 390 宽核对评审页：列结构与合并单元格符合本页，表格在自己的容器里横向滚动、页面本身没有横向滚动（字体、对齐与配色的验收按 Luz-Design 文件设计规范“网页文件”）",
-        "客户的 Excel 生成后重新打开：没有序号列和功能编号，分组列在前并纵向合并，基础功能小计、可选功能小计、报价合计公式结果正确"
+        "客户的 Excel 生成后重新打开：没有序号列和功能编号，分组列在前并纵向合并；默认只有“功能清单”一张工作表、没有工时与金额列；开启人日才有“工时（人天）”列，开启报价才有报价清单，其小计与合计公式结果正确且数字与人工报价单一致"
       ]
     },
     "admin-list": {
       "title": "后台列表页（默认视图、筛选、分页、列宽与冻结、导出）",
       "summary": "订单、会员、线索、工单等后台列表与表格",
-      "keywords": ["列表", "表格", "默认视图", "筛选", "分页", "导出", "空列", "后台", "列宽", "冻结", "滚动"],
+      "keywords": [
+        "列表",
+        "表格",
+        "默认视图",
+        "筛选",
+        "分页",
+        "导出",
+        "空列",
+        "后台",
+        "列宽",
+        "冻结",
+        "滚动"
+      ],
       "sections": [
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "标题不重复导航"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "列表的默认视图"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "精简：删掉没有信息量的东西"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "信息密度"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "列表与表格"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "分页与加载更多"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "筛选"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "导出"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "标签与状态"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "三、信息架构与导航", "侧栏与顶栏"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "三、信息架构与导航", "列表的默认视图"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "四、页面内容与优先级"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "五、组件", "表格与列表"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "五、组件", "表格列宽、冻结与滚动"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "五、组件", "分页"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "五、组件", "筛选"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "五、组件", "导出"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "六、视觉交接"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["案例样本", "获客后台列表与驾驶舱的改正"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["案例样本", "后台订单列表的结构推导"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "无障碍底线"]}
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "标题不重复导航"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "列表的默认视图"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "精简：删掉没有信息量的东西"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "信息密度"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "列表与表格"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "分页与加载更多"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "筛选"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "导出"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "标签与状态"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "侧栏与顶栏"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "列表的默认视图"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "表格与列表"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "表格列宽、冻结与滚动"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "分页"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "筛选"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "导出"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "六、视觉交接"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "案例样本",
+            "获客后台列表与驾驶舱的改正"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "案例样本",
+            "后台订单列表的结构推导"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "无障碍底线"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "入口与内容分层"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "动手前用 Luz-Crawl 查参考组件库（Ant Design / ProComponents 的 ProTable、TDesign、Arco、Semi、Element Plus 的表格、筛选与分页），在设计说明写明主要组件跟随哪一家，借行为不借外观",
-        "原型从 `references/templates.txt` 的 interactive-prototype.html 起步（`py -X utf8 scripts/add_mode.py <会话目录> prototype`）；模板自带分页条，默认 20 条/页",
+        "原型的产出与发布见规则卡 `prototype`，`references/templates.txt` 的 interactive-prototype.html 骨架仅供旧会话沿用（它自带分页条，默认 20 条/页）",
         "导出文件的版式交给 Luz-Design：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py xlsx`",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
         "表格列宽、冻结与滚动的行为在本卡的“表格列宽、冻结与滚动”，列定义先写进 `data-col-strategy`（每列的类型与宽度规则）；多级菜单读 `nav-levels`；行内开关、列表变更与卡片交互读 `interaction-patterns`"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR（含分页与表格单元格的 WARN 要处理，六列以上的表格声明列宽策略）",
         "`py -X utf8 scripts/check_interaction.py <会话目录>` 零警告：六列以上声明了列宽策略，八列以上有横向滚动容器",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <页面.html> --allow interface` 零 ERROR",
         "浏览器 1440×900 首屏装得下足够做决定的内容；1280、1366、1440、1920 宽右侧无截断；逐个列表写出默认视图（筛选、时间范围、排序、理由）",
         "视觉层的验收（聚焦框、字体与图标、对比度、点击区域、组件库的真实组件）按上面所读 Luz-Design 规则卡里的检查执行，本卡不重复",
-        "外观设置：默认跟随系统，“外观”跟随系统 / 浅色 / 深色三选一可用并记住选择；浅色与深色两套主题各验一遍（取值由 Luz-Design 规则卡 `interface-components` 规定）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`）与浅色下各零问题",
-        "用最长的真实数据（长名称、最大金额、长备注）撑一遍：固定列不变形、操作列始终可见、没有页面级横向滚动，翻页前后列宽不变，被截断的文字悬停显示全文"
+        "外观与主题按已确认需求和来源能力确定，不默认要求双主题或外观三选一。验证所有实际支持的主题；仅在已确认需求要求时检查主题切换和选择记忆，要求浅色与深色时分别验收两套。取值由 Luz-Design 规则卡 `interface-components` 规定；需要深色审计时运行 `py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`），浅色按实际支持情况验收。显式 source-locked 保留来源能力，不为通过通用规则新增主题或控件。",
+        "用最长的真实数据（长名称、最大金额、长备注）撑一遍：固定列不变形、操作列始终可见、没有页面级横向滚动，翻页前后列宽不变，被截断的文字悬停显示全文",
+        "完整可配置模板库逐页记录：来源/版本/许可/平台、入口目标、动作与具体结果、关闭返回、原生参数、依赖和未覆盖范围；新增模板显示于对应端的真实配置与预览。不能只测首页或用成功提示代替保存。",
+        "验证输入校验、数据保存后再进入、取消/失败恢复、所有菜单目的地与草稿、完整JSON往返和刷新。新完整来源只核对原生能力，缺口继续取源。移动Web、本地交互、原生小程序和生产服务分别报告。"
       ]
     },
     "admin-dashboard": {
       "title": "后台数据驾驶舱",
-      "summary": "首个菜单的经营数据页：指标、趋势、排行、异常",
-      "keywords": ["页面布局", "布局模式", "主次布局", "泳道", "看板", "驾驶舱", "指标", "图表", "趋势", "排行", "统计", "卡片", "后台"],
+      "summary": "有经营数据任务时的指标、趋势、排行与异常",
+      "keywords": [
+        "页面布局",
+        "布局模式",
+        "主次布局",
+        "泳道",
+        "看板",
+        "驾驶舱",
+        "指标",
+        "图表",
+        "趋势",
+        "排行",
+        "统计",
+        "卡片",
+        "后台"
+      ],
       "sections": [
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "页面布局的选择"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "数据驾驶舱：重点信息与计算后的信息"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "信息密度"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "界面的丰富度"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "精简：删掉没有信息量的东西"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "图表"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "卡片"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "二、功能架构", "菜单与模块"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "三、信息架构与导航", "侧栏与顶栏"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "四、页面内容与优先级"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "五、组件", "数据驾驶舱"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "六、视觉交接"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["案例样本"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["质量门禁"]}
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "页面布局的选择"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "数据驾驶舱：重点信息与计算后的信息"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "信息密度"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "界面的丰富度"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "精简：删掉没有信息量的东西"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "图表"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "卡片"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "菜单与模块"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "侧栏与顶栏"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "数据驾驶舱"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "六、视觉交接"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "案例样本"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "入口与内容分层"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "先分运营型与分析型，再按价值排指标；只放后端能返回或用户点名的指标，长期为 0 的合并为一行状态",
         "图表借 Ant Design Charts、ECharts、TDesign 图表的悬停与图例行为；每张图有即时的自定义悬停提示与十字线或高亮",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
-        "原型从 `references/templates.txt` 的 interactive-prototype.html 起步；模板只是骨架"
+        "原型的产出与发布见规则卡 `prototype`，`references/templates.txt` 的 interactive-prototype.html 骨架仅供旧会话沿用"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <页面.html> --allow interface` 零 ERROR",
-        "浏览器 1440×900 与 390 宽截图核对：驾驶舱是第一个菜单、指标按价值排序、图表悬停可用",
-        "外观设置：默认跟随系统，“外观”跟随系统 / 浅色 / 深色三选一可用并记住选择；浅色与深色两套主题各验一遍（取值由 Luz-Design 规则卡 `interface-components` 规定）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`）与浅色下各零问题"
+        "浏览器 1440×900 与 390 宽截图核对：已确认的看板入口可达、指标按价值排序、图表悬停可用",
+        "外观与主题按已确认需求和来源能力确定，不默认要求双主题或外观三选一。验证所有实际支持的主题；仅在已确认需求要求时检查主题切换和选择记忆，要求浅色与深色时分别验收两套。取值由 Luz-Design 规则卡 `interface-components` 规定；需要深色审计时运行 `py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`），浅色按实际支持情况验收。显式 source-locked 保留来源能力，不为通过通用规则新增主题或控件。"
       ]
     },
     "admin-form": {
       "title": "后台表单、详情与浮层",
-      "summary": "新增、编辑、详情、确认：居中浮层、行内操作、内容维护闭环",
-      "keywords": ["表单", "详情", "浮层", "弹窗", "抽屉", "确认", "开关", "头像", "配置", "维护", "反馈", "加载", "禁用"],
+      "summary": "新增、编辑、详情、确认的入口与反馈，业务详情默认页内承载",
+      "keywords": [
+        "表单",
+        "详情",
+        "浮层",
+        "弹窗",
+        "抽屉",
+        "确认",
+        "开关",
+        "头像",
+        "配置",
+        "维护",
+        "反馈",
+        "加载",
+        "禁用"
+      ],
       "sections": [
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "内容来源与维护闭环"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "按钮"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "表单与输入"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "浮层与反馈"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "操作反馈"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "头像"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "常用控件做法"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "七、文案"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "二、功能架构", "内容维护闭环"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "二、功能架构", "操作成本"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "二、功能架构", "营业状态"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "二、功能架构", "版本信息"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "二、功能架构", "权限与角色"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "四、页面内容与优先级"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "五、组件", "表单与输入"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "五、组件", "按钮与浮层"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "六、视觉交接"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "七、文案"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["质量门禁"]}
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "内容来源与维护闭环"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "按钮"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "表单与输入"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "浮层与反馈"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "操作反馈"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "头像"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "常用控件做法"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "七、文案"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "内容维护闭环"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "操作成本"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "营业状态"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "版本信息"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "权限与角色"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "表单与输入"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "按钮与浮层"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "六、视觉交接"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "七、文案"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "入口与内容分层"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "动手前用 Luz-Crawl 查参考组件库（Ant Design、TDesign、Arco、Element Plus 的 Form、Modal、Switch、Upload、DatePicker）的默认值与状态，写明跟随哪一家",
         "小程序里展示的每项运营内容都在后台有增删改排序；数据只存一份",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
-        "原型从 `references/templates.txt` 的 interactive-prototype.html 起步；模板只是骨架"
+        "原型的产出与发布见规则卡 `prototype`，`references/templates.txt` 的 interactive-prototype.html 骨架仅供旧会话沿用"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <页面.html> --allow interface` 零 ERROR",
         "浏览器逐个打开新增、编辑、详情、确认：居中浮层、无输入框下的说明文字、只有重要修改才确认、390 宽可操作",
         "视觉层的验收（聚焦框、字体与图标、对比度、点击区域、组件库的真实组件）按上面所读 Luz-Design 规则卡里的检查执行，本卡不重复",
-        "外观设置：默认跟随系统，“外观”跟随系统 / 浅色 / 深色三选一可用并记住选择；浅色与深色两套主题各验一遍（取值由 Luz-Design 规则卡 `interface-components` 规定）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`）与浅色下各零问题"
+        "外观与主题按已确认需求和来源能力确定，不默认要求双主题或外观三选一。验证所有实际支持的主题；仅在已确认需求要求时检查主题切换和选择记忆，要求浅色与深色时分别验收两套。取值由 Luz-Design 规则卡 `interface-components` 规定；需要深色审计时运行 `py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`），浅色按实际支持情况验收。显式 source-locked 保留来源能力，不为通过通用规则新增主题或控件。"
       ]
     },
     "miniprogram": {
       "title": "小程序界面",
       "summary": "首页、标签栏、页面栈、可配置模块、列表加载",
-      "keywords": ["小程序", "首页", "标签栏", "页面栈", "返回", "配置", "头像", "营销"],
+      "keywords": [
+        "小程序",
+        "首页",
+        "标签栏",
+        "页面栈",
+        "返回",
+        "配置",
+        "头像",
+        "营销"
+      ],
       "sections": [
-        {"page": "miniprogram-design.html", "title": "小程序设计规范", "path": ["工作流程"]},
-        {"page": "miniprogram-design.html", "title": "小程序设计规范", "path": ["核心规则"]},
-        {"page": "miniprogram-design.html", "title": "小程序设计规范", "path": ["案例样本"]},
-        {"page": "miniprogram-design.html", "title": "小程序设计规范", "path": ["输出契约"]},
-        {"page": "miniprogram-design.html", "title": "小程序设计规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "入口与内容分层"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "内容来源与维护闭环"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "信息架构"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "个人信息与隐私"]}
+        {
+          "page": "miniprogram-design.html",
+          "title": "小程序设计规范",
+          "path": [
+            "工作流程"
+          ]
+        },
+        {
+          "page": "miniprogram-design.html",
+          "title": "小程序设计规范",
+          "path": [
+            "核心规则"
+          ]
+        },
+        {
+          "page": "miniprogram-design.html",
+          "title": "小程序设计规范",
+          "path": [
+            "案例样本"
+          ]
+        },
+        {
+          "page": "miniprogram-design.html",
+          "title": "小程序设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "miniprogram-design.html",
+          "title": "小程序设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "入口与内容分层"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "内容来源与维护闭环"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "信息架构"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "个人信息与隐私"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "动手前用 Luz-Crawl 查微信小程序设计指南与 Vant、NutUI、TDesign 小程序组件的默认值与状态，写明跟随哪一家",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
-        "原型里手机框与后台共用一套演示数据；从 `references/templates.txt` 的 interactive-prototype.html 起步，模板只是骨架",
+        "原型里手机框与后台共用一套演示数据；产出与发布见规则卡 `prototype`，`references/templates.txt` 的 interactive-prototype.html 骨架仅供旧会话沿用",
         "点单、电商、会员、营销活动、弹窗与公告另读 `py -X utf8 scripts/context.py commerce`",
         "金刚区的何时用、入口数与运营配置见本卡的“金刚区（宫格入口）”，列数与排布取值读 Luz-Design 规则卡 `interface-layout`；分类与多级目录读 `nav-levels`；切换、列表变更与卡片交互读 `interaction-patterns`；图标图形与图标和卡片的协同读 Luz-Design 规则卡 `interface-icons`",
         "头像、列表分页与加载更多、导航与返回的通用规则不在本卡，需要时读 ui-standards.html 同名小节（规则卡 `admin-form`、`admin-list`、`system-design` 各含其一）",
         "界面的丰富度：哪些对象要有图、成熟组件怎么选读 ui-standards.html 四、页面内容与优先级 › 界面的丰富度；配图的来源、风格与成熟组件的视觉要点读 Luz-Design 规则卡 `interface-pattern`、`interface-icons`"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <页面.html> --allow interface` 零 ERROR",
         "浏览器在 390 宽逐个标签与二级页走一遍：只有标签栏切换标签、各标签保留自己的页面栈、二级页返回打开它的页面",
         "视觉层的验收（聚焦框、字体与图标、对比度、点击区域、组件库的真实组件）按上面所读 Luz-Design 规则卡里的检查执行，本卡不重复",
-        "外观设置：默认跟随系统，“外观”跟随系统 / 浅色 / 深色三选一可用并记住选择；浅色与深色两套主题各验一遍（取值由 Luz-Design 规则卡 `interface-components` 规定）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`）与浅色下各零问题"
+        "外观与主题按已确认需求和来源能力确定，不默认要求双主题或外观三选一。验证所有实际支持的主题；仅在已确认需求要求时检查主题切换和选择记忆，要求浅色与深色时分别验收两套。取值由 Luz-Design 规则卡 `interface-components` 规定；需要深色审计时运行 `py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`），浅色按实际支持情况验收。显式 source-locked 保留来源能力，不为通过通用规则新增主题或控件。",
+        "完整可配置模板库逐页记录：来源/版本/许可/平台、入口目标、动作与具体结果、关闭返回、原生参数、依赖和未覆盖范围；新增模板显示于对应端的真实配置与预览。不能只测首页或用成功提示代替保存。",
+        "验证输入校验、数据保存后再进入、取消/失败恢复、所有菜单目的地与草稿、完整JSON往返和刷新。新完整来源只核对原生能力，缺口继续取源。移动Web、本地交互、原生小程序和生产服务分别报告。"
       ]
     },
     "commerce": {
       "title": "交易与营销界面（点单、电商、会员、活动、弹窗与公告）",
       "summary": "价格与划线价、促销标签、优惠券、点单菜单、规格选择、购物车与结算、订单与取餐、会员资产、弹窗与公告、门店、营销区与功能区的划分、合规底线",
-      "keywords": ["点单", "电商", "商城", "价格", "划线价", "折扣", "优惠券", "满减", "活动", "购物车", "结算", "订单", "会员", "积分", "弹窗", "公告", "门店"],
+      "keywords": [
+        "点单",
+        "电商",
+        "商城",
+        "价格",
+        "划线价",
+        "折扣",
+        "优惠券",
+        "满减",
+        "活动",
+        "购物车",
+        "结算",
+        "订单",
+        "会员",
+        "积分",
+        "弹窗",
+        "公告",
+        "门店"
+      ],
       "sections": [
-        {"page": "commerce-design.html", "title": "交易与营销界面规范", "path": ["工作流程"]},
-        {"page": "commerce-design.html", "title": "交易与营销界面规范", "path": ["核心规则"]},
-        {"page": "commerce-design.html", "title": "交易与营销界面规范", "path": ["案例样本"]},
-        {"page": "commerce-design.html", "title": "交易与营销界面规范", "path": ["输出契约"]},
-        {"page": "commerce-design.html", "title": "交易与营销界面规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "浮层与反馈"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "个人信息与隐私"]}
+        {
+          "page": "commerce-design.html",
+          "title": "交易与营销界面规范",
+          "path": [
+            "工作流程"
+          ]
+        },
+        {
+          "page": "commerce-design.html",
+          "title": "交易与营销界面规范",
+          "path": [
+            "核心规则"
+          ]
+        },
+        {
+          "page": "commerce-design.html",
+          "title": "交易与营销界面规范",
+          "path": [
+            "案例样本"
+          ]
+        },
+        {
+          "page": "commerce-design.html",
+          "title": "交易与营销界面规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "commerce-design.html",
+          "title": "交易与营销界面规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "浮层与反馈"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "个人信息与隐私"
+          ]
+        }
       ],
       "tools": [
-        "效果怎么画（划线价、角标、券面缺口、一大两小、出框元素、分类联动的样式、悬浮栏避开安全区）读 Luz-Design 的规则卡 `interface-recipes`：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py interface-recipes`；示例 `D:\\Codes\\Luz-Design\\references\\ui-kit\\commerce-kit\\`；这些效果何时触发（分类联动、预估到手价展开构成、倒计时依据、强公告与遮罩、加购飞入）由本页规则决定，Luz-Design 只画不改",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "效果怎么画（划线价、角标、券面缺口、一大两小、出框元素、分类联动的样式、悬浮栏避开安全区）读 Luz-Design 的规则卡 `interface-recipes`：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py interface-recipes`；这些效果何时触发（分类联动、预估到手价展开构成、倒计时依据、强公告与遮罩、加购飞入）由本页规则决定，Luz-Design 只画不改",
         "价格色、强调色与营业状态的颜色见 Luz-Design 视觉设计规范“价格色与营业状态”，营销区的不规则排版见“营销区的不规则排版”；本卡只规定价格怎么算、怎么显示哪几项",
         "商品图、入口图标、活动主视觉与弹窗主视觉的风格和生成由 Luz-Design 决定（规则卡 `image-assets`：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py image-assets`）；本卡只规定哪些对象要有图、缺图时怎么办",
-        "组件骨架：Luz-Design 的 `D:\\Codes\\Luz-Design\\references\\templates.txt` 里的 commerce-kit.html（菜单页门店栏、公告条、券条、分类栏与商品行、悬浮购物车栏、规格弹层、券面、结算明细、领券弹窗、强公告、取餐号），已通过 check_document 与会话字号检查；换成会话主题色后按需取用，商品图换成实拍或生成的抠图",
+        "组件从 Luz-Design 模板库按编号取：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\template_registry.py list --kind app --query 商品`（商品卡、优惠券、悬浮购物车条、结算栏、订单摘要卡等），`show <编号>` 给出组件代码；换成会话主题色后按需取用，商品图换成实拍或生成的抠图",
         "原型的模拟数据要像真的：售价、划线价与说明、规格加价、售罄、限购、费用与优惠明细；用 `data-state-kind` 或 `data-scenario` 演示每种异常",
         "调研前先查经验库：`py -X utf8 scripts/experience.py search 点单`（已采的调研来源记在经验 commerce-config-research-sources）",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`、`interface-recipes`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 与 `check_interaction.py` 零 ERROR",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <页面.html> --allow interface` 零 ERROR",
         "浏览器里完整下一单：多规格加价、售罄、未达起送、券不可用、价格变化、支付失败都能看到对应界面，金额前后一致",
-        "外观设置：默认跟随系统，“外观”跟随系统 / 浅色 / 深色三选一可用并记住选择；浅色与深色两套主题各验一遍（取值由 Luz-Design 规则卡 `interface-components` 规定）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`）与浅色下各零问题"
+        "外观与主题按已确认需求和来源能力确定，不默认要求双主题或外观三选一。验证所有实际支持的主题；仅在已确认需求要求时检查主题切换和选择记忆，要求浅色与深色时分别验收两套。取值由 Luz-Design 规则卡 `interface-components` 规定；需要深色审计时运行 `py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`），浅色按实际支持情况验收。显式 source-locked 保留来源能力，不为通过通用规则新增主题或控件。"
       ]
     },
     "remote-config": {
       "title": "远程配置与热更新（参数、开关、最低版本、配置文件、代码更新）",
       "summary": "会变的数字、开关与名单写进配置文件、服务端热加载、不在后台展示：清单字段、前后端共用一份、加载校验与回滚、客户端拉取与兜底、小程序与 App 代码更新边界",
-      "keywords": ["配置", "远程配置", "热更新", "热加载", "配置文件", "开关", "灰度", "回滚", "超时", "上传", "最低版本", "更新", "写死"],
+      "keywords": [
+        "配置",
+        "远程配置",
+        "热更新",
+        "热加载",
+        "配置文件",
+        "开关",
+        "灰度",
+        "回滚",
+        "超时",
+        "上传",
+        "最低版本",
+        "更新",
+        "写死"
+      ],
       "sections": [
-        {"page": "config-design.html", "title": "远程配置规范", "path": ["工作流程"]},
-        {"page": "config-design.html", "title": "远程配置规范", "path": ["核心规则"]},
-        {"page": "config-design.html", "title": "远程配置规范", "path": ["平台矩阵"]},
-        {"page": "config-design.html", "title": "远程配置规范", "path": ["案例样本"]},
-        {"page": "config-design.html", "title": "远程配置规范", "path": ["输出契约"]},
-        {"page": "config-design.html", "title": "远程配置规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "内容来源与维护闭环"]}
+        {
+          "page": "config-design.html",
+          "title": "远程配置规范",
+          "path": [
+            "工作流程"
+          ]
+        },
+        {
+          "page": "config-design.html",
+          "title": "远程配置规范",
+          "path": [
+            "核心规则"
+          ]
+        },
+        {
+          "page": "config-design.html",
+          "title": "远程配置规范",
+          "path": [
+            "平台矩阵"
+          ]
+        },
+        {
+          "page": "config-design.html",
+          "title": "远程配置规范",
+          "path": [
+            "案例样本"
+          ]
+        },
+        {
+          "page": "config-design.html",
+          "title": "远程配置规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "config-design.html",
+          "title": "远程配置规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "内容来源与维护闭环"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "架构里写配置清单表；服务端实现交给 Luz-Dev（模块详设 config 与规则 OPS-005、REL-003）",
         "调研前先查经验库：`py -X utf8 scripts/experience.py search 远程配置`（已采的调研来源记在经验 commerce-config-research-sources）"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR",
         "原型里改一项配置后，前端显示与后台执行都跟着变；断网或拉取失败时用默认值照常使用"
       ]
@@ -335,73 +1457,403 @@
     "agent-ui": {
       "title": "智能体界面",
       "summary": "能力清单、追问、步骤卡与审批、七种运行状态、耗时分段、引用与记忆、错误呈现",
-      "keywords": ["智能体", "agent", "对话", "工具", "审批", "流式", "消息", "能力清单", "追问", "记忆", "引用", "耗时"],
+      "keywords": [
+        "智能体",
+        "agent",
+        "对话",
+        "工具",
+        "审批",
+        "流式",
+        "消息",
+        "能力清单",
+        "追问",
+        "记忆",
+        "引用",
+        "耗时"
+      ],
       "sections": [
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["工作流程"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "一、设计架构", "设计理念"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "一、设计架构", "形态与页面"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "任务定义"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "能力清单"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "意图识别与追问"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "记忆"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "运行状态"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "三、信息架构与导航"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "四、页面内容与优先级"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "消息与输入"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "工具调用过程"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "审批"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "耗时与进度"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "引用与没有找到"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "错误、降级与恢复的呈现"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "六、视觉交接"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "七、文案"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["平台矩阵"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["案例样本"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["输出契约"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "一、设计架构", "设计原则"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "状态体系"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "按钮"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "浮层与反馈"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "七、文案", "界面文案"]}
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "工作流程"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "一、设计架构",
+            "设计理念"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "一、设计架构",
+            "形态与页面"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "任务定义"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "能力清单"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "意图识别与追问"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "记忆"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "运行状态"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "消息与输入"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "工具调用过程"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "审批"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "耗时与进度"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "引用与没有找到"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "错误、降级与恢复的呈现"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "六、视觉交接"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "七、文案"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "平台矩阵"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "案例样本"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "一、设计架构",
+            "设计原则"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "状态体系"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "按钮"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "浮层与反馈"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "七、文案",
+            "界面文案"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "先列任务目标、能力清单（会做、不会做、要审批）、工具清单（按影响分级）与停止条件，再画界面；不可撤销、动钱或对外发送的动作用审批卡片",
         "智能体会话同时读规则卡 agent-runtime-ui（服务器推送事件、事件类型、排队、重试熔断、断点续跑、上限）；visual 阶段用 `--card agent-ui --card agent-runtime-ui` 存进会话",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
         "动手前用 Luz-Crawl 查主流智能体产品与组件库（Ant Design X、TDesign Chat 等）的消息、思维链、工具调用与审批组件；组件库没有耗时属性的，按本卡“耗时与进度”补",
-        "原型从 `references/templates.txt` 的 interactive-prototype.html 起步；带智能体规则卡的会话由 add_mode.py 自动插入 agent-run-states.html（七种运行状态各一块，`data-state` 标记），按本卡改写内容",
+        "智能体原型的产出与发布见规则卡 `prototype`，`references/templates.txt` 的 interactive-prototype.html 骨架仅供旧会话沿用；旧会话带智能体规则卡时 add_mode.py 自动插入 agent-run-states.html（七种运行状态各一块，`data-state` 标记），七种状态的内容按本卡",
         "输入区状态机（发送、停止、语音合用一个主按钮）、输入法、待发送队列、对话区滚动与追加另读 `py -X utf8 scripts/context.py agent-composer`"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR，且没有 agent run states 警告与输入区警告",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <页面.html> --allow interface` 零 ERROR",
         "浏览器走一遍：1 秒内有首个反馈、流式输出可停止、步骤卡逐条计时、审批卡阻断且单独计时、失败保留已完成部分并给请求编号、界面不出现模型名与内部推理",
         "视觉层的验收（聚焦框、字体与图标、对比度、点击区域、组件库的真实组件）按上面所读 Luz-Design 规则卡里的检查执行，本卡不重复",
-        "外观设置：默认跟随系统，“外观”跟随系统 / 浅色 / 深色三选一可用并记住选择；浅色与深色两套主题各验一遍（取值由 Luz-Design 规则卡 `interface-components` 规定）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`）与浅色下各零问题"
+        "外观与主题按已确认需求和来源能力确定，不默认要求双主题或外观三选一。验证所有实际支持的主题；仅在已确认需求要求时检查主题切换和选择记忆，要求浅色与深色时分别验收两套。取值由 Luz-Design 规则卡 `interface-components` 规定；需要深色审计时运行 `py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`），浅色按实际支持情况验收。显式 source-locked 保留来源能力，不为通过通用规则新增主题或控件。"
       ]
     },
     "website": {
       "title": "网站与落地页",
       "summary": "官网、落地页：每页一个主行动、首屏、导航、窄屏保留的功能、搜索标题",
-      "keywords": ["网站", "官网", "落地页", "首屏", "导航", "图标", "品牌"],
+      "keywords": [
+        "网站",
+        "官网",
+        "落地页",
+        "首屏",
+        "导航",
+        "图标",
+        "品牌"
+      ],
       "sections": [
-        {"page": "website-design.html", "title": "网站设计规范", "path": ["工作流程"]},
-        {"page": "website-design.html", "title": "网站设计规范", "path": ["核心规则"]},
-        {"page": "website-design.html", "title": "网站设计规范", "path": ["案例样本"]},
-        {"page": "website-design.html", "title": "网站设计规范", "path": ["输出契约"]},
-        {"page": "website-design.html", "title": "网站设计规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "信息架构"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "页头与品牌标识"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "结构由内容形状决定"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "界面的丰富度"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "图片与元素密度"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "响应与适配"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "七、文案", "界面文案"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "无障碍底线"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "个人信息与隐私"]}
+        {
+          "page": "website-design.html",
+          "title": "网站设计规范",
+          "path": [
+            "工作流程"
+          ]
+        },
+        {
+          "page": "website-design.html",
+          "title": "网站设计规范",
+          "path": [
+            "核心规则"
+          ]
+        },
+        {
+          "page": "website-design.html",
+          "title": "网站设计规范",
+          "path": [
+            "案例样本"
+          ]
+        },
+        {
+          "page": "website-design.html",
+          "title": "网站设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "website-design.html",
+          "title": "网站设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "信息架构"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "页头与品牌标识"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "结构由内容形状决定"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "界面的丰富度"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "图片与元素密度"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "响应与适配"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "七、文案",
+            "界面文案"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "无障碍底线"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "个人信息与隐私"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "标签页图标与页头品牌标识：`py -X utf8 scripts/new_session.py icon \"<系统名>\"` 打印两者，模板的 `{{TAB_ICON}}`、`{{BRAND_MARK}}` 自动填好",
         "首屏图片的来源、风格与生成要求由 Luz-Design 决定（规则卡 `image-assets`、`interface-pattern`）；本卡只规定首屏要不要图、缺图时怎么办，且不用自动轮播",
         "页面文字来自用户或 Luz-Writing；本技能只负责结构、导航与界面",
@@ -409,108 +1861,363 @@
         "多级导航读 `py -X utf8 scripts/context.py nav-levels`；价格切换、卡片与滚动出现动效的行为读 `interaction-patterns`；排布取值读 Luz-Design 规则卡 `interface-layout`"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <页面.html> --allow interface` 零 ERROR",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR",
         "浏览器在各断点宽度（取值见 Luz-Design 规则卡 `interface-layout`）与 390 宽各看一遍：一个主行动、首屏说清是谁做什么下一步、5–7 项导航",
         "视觉层的验收（聚焦框、字体与图标、对比度、点击区域、组件库的真实组件）按上面所读 Luz-Design 规则卡里的检查执行，本卡不重复",
-        "外观设置：默认跟随系统，“外观”跟随系统 / 浅色 / 深色三选一可用并记住选择；浅色与深色两套主题各验一遍（取值由 Luz-Design 规则卡 `interface-components` 规定）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`）与浅色下各零问题"
+        "外观与主题按已确认需求和来源能力确定，不默认要求双主题或外观三选一。验证所有实际支持的主题；仅在已确认需求要求时检查主题切换和选择记忆，要求浅色与深色时分别验收两套。取值由 Luz-Design 规则卡 `interface-components` 规定；需要深色审计时运行 `py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`），浅色按实际支持情况验收。显式 source-locked 保留来源能力，不为通过通用规则新增主题或控件。"
       ]
     },
     "prototype": {
-      "title": "可交互原型（组装与浏览器验收）",
-      "summary": "把已批准的页面与动作做成可操作的 HTML，含集成系统设计页，并在真实浏览器里验收",
-      "keywords": ["原型", "配置面板", "浏览器", "验收", "截图", "图标", "头像", "集成", "check_document"],
+      "title": "可交互原型（功能匹配与成熟完整来源交接）",
+      "summary": "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+      "keywords": [
+        "原型",
+        "配置面板",
+        "浏览器",
+        "验收",
+        "截图",
+        "图标",
+        "头像",
+        "集成",
+        "check_document"
+      ],
       "sections": [
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "不可绕过的网页文件门禁"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "原型配置面板"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "手机上可操作"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "页头与品牌标识"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "同类元素一致"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "响应与适配"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "问题的同类判断"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["输出契约"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["质量门禁"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "四、页面内容与优先级", "宽度与溢出"]}
+        {
+          "page": "../../Luz-Design/references/prototype-reference.html",
+          "title": "原型参考实现与组件模板库",
+          "path": [
+            "核心规则"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "入口与内容分层"
+          ]
+        }
       ],
       "tools": [
-        "视觉稿批准后：`py -X utf8 scripts/add_mode.py <会话目录> prototype`，生成 `raw/03-prototype/interactive-prototype.html` 骨架与本卡；页面与按钮只用架构里已批准的页面编号与动作编号",
-        "每个端另读对应规则卡（admin-list、admin-dashboard、admin-form、miniprogram、agent-ui、website），用 `--card` 存进会话；视觉层按下面所列的 Luz-Design 规则卡",
-        "要一页同时放功能列表、小程序与后台时按 SKILL.md“集成系统设计页”：恰好三部分，共用一套演示数据；三部分的外观取同一套 Luz-Design 视觉规范",
-        "浏览器验收用 Playwright 或 Claude in Chrome：无脚本错误，保存验收截图到 `raw/99-delivery/`，原型与截图两个哈希一起由人批准",
-        "发布：`py -X utf8 scripts/publish.py <会话目录> prototype`（未用 add_mode.py 声明原型模式、模块范围／架构／系统设计／视觉稿任一项未经人批准或批准后文件被改、没有规则卡、规则卡过期、BRIEF“采用的规则”或“本次沉淀”为空，都会被拒绝；被拒绝时停下来请人确认，不要绕过）",
-        "原型的前端交互按需另读：`interaction-patterns`（切换、列表变更、卡片交互与问题族）、`nav-levels`；列表的列宽、冻结与滚动行为在 `admin-list`；智能体输入区读 `agent-composer`；端到端网页验收（触发 → 反馈 → 结果 → 返回）在 `interaction` 卡，add_mode.py 会一并存进会话",
-        "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 Luz-Design 的 design-path 与 prototype-reference（`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py design-path prototype-reference`）；页面与组件从它的 `templates/app`、`templates/web` 按编号取（`template_registry.py list|show`），可运行前端用 `frontend.py init|seal|review|check`，完整包用 `ui_package.py check|export` 检查与导出。`add_mode.py` 只登记阶段并存规则卡，它写入的骨架仅供旧会话；System 不用骨架或内部库组装新页面。",
+        "用户明确要求严格沿用已有界面（source-locked）时保留原件，只改允许的文字，不改结构、样式、脚本和资产；功能不匹配就另选来源或记缺口。细则见 Luz-Design `references/ui-ownership.md`。",
+        "需求、来源功能对应和原状态支持/缺口写入 BRIEF，独立或项目审批继续各自已有合同；不新增审批要求。"
       ],
       "checks": [
-        "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR，原型的 WARN 逐条处理（含输入区、动效、宽表格、两态控件的前端行为警告）；交付前加 `--strict-production`",
-        "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <原型.html> --allow interface` 零 ERROR",
-        "浏览器在 1280、1366、1440、1920 宽检查右侧无截断，390 宽可操作；加载、空、错误、成功、禁用五种状态都能演示",
-        "视觉层的验收（聚焦框、字体与图标、对比度、点击区域、组件库的真实组件）按上面所读 Luz-Design 规则卡里的检查执行，本卡不重复",
-        "外观设置：默认跟随系统，“外观”跟随系统 / 浅色 / 深色三选一可用并记住选择；浅色与深色两套主题各验一遍（取值由 Luz-Design 规则卡 `interface-components` 规定）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`）与浅色下各零问题"
+        "成功来源有本次真实抓取正文、成熟完整布局、原件、依赖资产、版本许可及浏览器证据，只有网址或原子库可运行不算成功。",
+        "完整包只含明确允许的文字差异；原几何、样式、代码、状态与资产未改，文字溢出用缩短文案或另选来源解决。",
+        "Luz-Design 的 `ui_package.py check` 验证当前完整包的字节、组件来源、审阅与证据；`publish.py` 发布时重新核验，并按包的真实类型绑定模板（`ui-component-output` 或 `frontend-*`）。不把旧内部库或历史维护报告当成熟来源准入。",
+        "只验证来源已有视口、浅深外观、交互和状态，缺少任务必需能力继续找来源或记缺口，不新增配置面板/主题。",
+        "BRIEF 有采用的规则、本次沉淀、实际来源范围、未覆盖项与明确维护边界；候选或模型操作不写作用户批准。",
+        "具体质量指标见 Luz-Project/references/quality-rules.md；用 quality_rules.py list --owner luz-system --stage <本阶段> 读取范围、阈值、例外与证据，逐项评估，不自填三轴通过。"
       ]
     },
     "hardware": {
       "title": "现场硬件选型",
       "summary": "业务流程到设备、接口与协议、连接图、型号价格与渠道、现场要求",
-      "keywords": ["硬件", "设备", "协议", "选型", "价格", "供应商", "1688", "门禁", "摄像", "网关"],
+      "keywords": [
+        "硬件",
+        "设备",
+        "协议",
+        "选型",
+        "价格",
+        "供应商",
+        "1688",
+        "门禁",
+        "摄像",
+        "网关"
+      ],
       "sections": [
-        {"page": "hardware-design.html", "title": "硬件设计规范", "path": ["工作流程"]},
-        {"page": "hardware-design.html", "title": "硬件设计规范", "path": ["核心规则"]},
-        {"page": "hardware-design.html", "title": "硬件设计规范", "path": ["平台矩阵"]},
-        {"page": "hardware-design.html", "title": "硬件设计规范", "path": ["案例样本"]},
-        {"page": "hardware-design.html", "title": "硬件设计规范", "path": ["输出契约"]},
-        {"page": "hardware-design.html", "title": "硬件设计规范", "path": ["质量门禁"]},
-        {"page": "hardware/hardware-basics.md", "title": "硬件基础知识库", "path": ["选型范围"]},
-        {"page": "hardware/hardware-basics.md", "title": "硬件基础知识库", "path": ["6 网络（现场条件，只用于提需求）"]},
-        {"page": "hardware/hardware-basics.md", "title": "硬件基础知识库", "path": ["7 电源（现场条件，只用于提需求）"]},
-        {"page": "hardware/protocols.md", "title": "通信方式与协议", "path": ["3 设备连到后台的四种接入模式"]},
-        {"page": "hardware/protocols.md", "title": "通信方式与协议", "path": ["5 网络与安全规则"]},
-        {"page": "hardware/research-playbook.md", "title": "用 LuzCrawl 做硬件调研", "path": ["2 先查经验库"]},
-        {"page": "hardware/research-playbook.md", "title": "用 LuzCrawl 做硬件调研", "path": ["3 调研三层"]},
-        {"page": "hardware/research-playbook.md", "title": "用 LuzCrawl 做硬件调研", "path": ["7 记录到方案与经验库"]},
-        {"page": "hardware/plan-schema.md", "title": "plan.json 格式", "path": ["校验规则（hw_render_plan.py 与 hw_build.py 自动执行）"]}
+        {
+          "page": "hardware-design.html",
+          "title": "硬件设计规范",
+          "path": [
+            "工作流程"
+          ]
+        },
+        {
+          "page": "hardware-design.html",
+          "title": "硬件设计规范",
+          "path": [
+            "核心规则"
+          ]
+        },
+        {
+          "page": "hardware-design.html",
+          "title": "硬件设计规范",
+          "path": [
+            "平台矩阵"
+          ]
+        },
+        {
+          "page": "hardware-design.html",
+          "title": "硬件设计规范",
+          "path": [
+            "案例样本"
+          ]
+        },
+        {
+          "page": "hardware-design.html",
+          "title": "硬件设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "hardware-design.html",
+          "title": "硬件设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "hardware/hardware-basics.md",
+          "title": "硬件基础知识库",
+          "path": [
+            "选型范围"
+          ]
+        },
+        {
+          "page": "hardware/hardware-basics.md",
+          "title": "硬件基础知识库",
+          "path": [
+            "6 网络（现场条件，只用于提需求）"
+          ]
+        },
+        {
+          "page": "hardware/hardware-basics.md",
+          "title": "硬件基础知识库",
+          "path": [
+            "7 电源（现场条件，只用于提需求）"
+          ]
+        },
+        {
+          "page": "hardware/protocols.md",
+          "title": "通信方式与协议",
+          "path": [
+            "3 设备连到后台的四种接入模式"
+          ]
+        },
+        {
+          "page": "hardware/protocols.md",
+          "title": "通信方式与协议",
+          "path": [
+            "5 网络与安全规则"
+          ]
+        },
+        {
+          "page": "hardware/research-playbook.md",
+          "title": "用 LuzCrawl 做硬件调研",
+          "path": [
+            "2 先查经验库"
+          ]
+        },
+        {
+          "page": "hardware/research-playbook.md",
+          "title": "用 LuzCrawl 做硬件调研",
+          "path": [
+            "3 调研三层"
+          ]
+        },
+        {
+          "page": "hardware/research-playbook.md",
+          "title": "用 LuzCrawl 做硬件调研",
+          "path": [
+            "7 记录到方案与经验库"
+          ]
+        },
+        {
+          "page": "hardware/plan-schema.md",
+          "title": "plan.json 格式",
+          "path": [
+            "校验规则（hw_render_plan.py 与 hw_build.py 自动执行）"
+          ]
+        }
       ],
       "tools": [
-        "建会话：`py -X utf8 scripts/new_session.py --name \"<名称>硬件选型清单\" --modes hardware`（与软件一起时 `--modes system,hardware`）；先在 `raw/04-hardware/requirements.md` 写清规模、运营模式、已有设备、预算与现场条件",
+        "建会话：`py -X utf8 scripts/new_session.py --name \"<名称>硬件选型清单\" --modes hardware`（与软件一起时 `--modes system,hardware`）；先在 `raw/04-hardware/requirements.md` 写清规模、运营模式、已有设备、预算与现场条件（预算只作选型约束，默认不进客户清单）",
         "先查硬件经验：`py -X utf8 scripts/hw_experience.py stats`、`search \"<关键词>\"`、`compat \"<设备>\"`、`suppliers \"<品类>\"`、`queries \"<关键词>\"`；硬件教训读 `experience/hardware/lessons.md`",
         "设备品类与参数读 `references/hardware/hardware-basics.md`，协议读 `references/hardware/protocols.md`，场景读 `references/hardware/scenarios/<场景>.md`，plan.json 字段读 `references/hardware/plan-schema.md`；示例 `examples/unmanned-gym.plan.json`",
         "调研按 Luz-Crawl 的 SKILL.md 调用协议：`doctor` → `begin \"<主题>\" --new`（得到 folder）→ `experience --query` → 每条命令带 `--out <folder>`；`py -X utf8 scripts/hw_crawl_digest.py <folder>` 整理候选与来源；实物图 `py -X utf8 scripts/hw_fetch_images.py search <产品id> \"<品牌 型号>\"`",
-        "生成：`py -X utf8 scripts/hw_build.py <会话目录>` 校验 plan.json、生成 `raw/04-hardware/hardware-plan.html` 并跑 Luz-Design 文档检查；清单由人批准后（`raw/99-delivery/APPROVALS.json` 的 hardware 一项），先 `py -X utf8 scripts/hw_export.py <会话目录>` 导出客户的 Excel（独立任务放会话根，项目任务写进项目的 `docs\\01-需求对接`），再发布 `py -X utf8 scripts/publish.py <会话目录> hardware`，汇总页把 Excel 列进去"
+        "生成：`py -X utf8 scripts/hw_build.py <会话目录>` 校验 plan.json、生成 `raw/04-hardware/hardware-plan.html` 并跑 Luz-Design 文档检查；清单由人批准后（`raw/99-delivery/APPROVALS.json` 的 hardware 一项），先 `py -X utf8 scripts/hw_export.py <会话目录>` 导出客户的 Excel（独立任务放会话根，项目任务写进项目的 `docs\\01-需求对接`；默认不带单价、小计、合计，只有用户明确要求预算、plan.json 写了 `budget_requested`（requested_by、requested_at、request_note）才带“参考价”列，逐项有来源页面链接，无价设备写“待询价”且不进合计，表格标题下不加副标题或说明行，经验库的价格样本只是调研数据，不得当作报价），再发布 `py -X utf8 scripts/publish.py <会话目录> hardware`，汇总页把 Excel 列进去"
       ],
       "checks": [
         "`py -X utf8 scripts/hw_build.py <会话目录>` 返回 0（方案零错误、文档检查通过），缺实物图的 WARN 补齐",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR；`py -X utf8 scripts/hw_experience.py check` 通过",
-        "核对每台联网设备都有接入模式与协议、断网兜底写明、消防供电网络写成现场要求、价格有来源与日期"
+        "核对每台联网设备都有接入模式与协议、断网兜底写明、消防供电网络写成现场要求、每台采购设备有出处页面或联系渠道；客户清单默认没有任何价格列，带参考价时 `budget_requested` 证据齐全、逐项有来源链接、没有写成“报价”"
       ]
     },
     "agent-runtime-ui": {
       "title": "智能体运行方案与运行时（模型决策、程序控制）",
       "summary": "模型只做决策、程序控制运行：ReAct 循环与轮次上限、多轮对话、工具分级、权限控制、参数错误返回、MCP；必须用服务器推送事件：事件类型、断线续传与心跳、排队与并发、防重复提交、超时重试熔断降级、断点续跑与取消、上限、依据",
-      "keywords": ["智能体", "SSE", "流式", "事件", "排队", "重连", "重试", "熔断", "降级", "幂等", "超时", "耗时", "底座", "ReAct", "循环", "轮次", "死循环", "多轮", "工具", "工具分级", "权限", "MCP", "LangGraph", "参数错误"],
+      "keywords": [
+        "智能体",
+        "SSE",
+        "流式",
+        "事件",
+        "排队",
+        "重连",
+        "重试",
+        "熔断",
+        "降级",
+        "幂等",
+        "超时",
+        "耗时",
+        "底座",
+        "ReAct",
+        "循环",
+        "轮次",
+        "死循环",
+        "多轮",
+        "工具",
+        "工具分级",
+        "权限",
+        "MCP",
+        "LangGraph",
+        "参数错误"
+      ],
       "sections": [
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "运行方案：模型只做决策，程序控制运行"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "工具分级"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "权限控制"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "工具参数错误的返回"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "运行时与可靠性"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "一、设计架构", "底座链路与界面"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "运行状态"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "审批"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "耗时与进度"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "错误、降级与恢复的呈现"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "依据"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["输出契约"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["质量门禁"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["交接规则"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "系统架构清单"]}
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "运行方案：模型只做决策，程序控制运行"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "工具分级"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "权限控制"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "工具参数错误的返回"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "运行时与可靠性"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "一、设计架构",
+            "底座链路与界面"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "运行状态"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "审批"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "耗时与进度"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "错误、降级与恢复的呈现"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "依据"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "交接规则"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "系统架构清单"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "把运行事件表（每种运行状态由哪些事件进入与离开、各事件携带什么）和错误文案表写进系统设计；事件名与字段以本卡为准，不另起名字",
         "后端实现（事件日志与 `Last-Event-ID` 续传、心跳、队列与并发上限、幂等键、重试与熔断、检查点、取消与回滚、网关关闭缓冲）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md",
         "调研前先查经验库：`py -X utf8 scripts/experience.py search 智能体`（已采的调研来源记在经验 agent-research-sources）"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "原型七种运行状态齐全（`validate_session.py` 无 agent run states 警告），执行中有逐步计时与停止，失败有从失败处重试与请求编号",
         "系统设计里有运行事件表与错误文案表，结束只认 `run.completed`、`run.failed`、`run.cancelled`",
         "浏览器模拟断网：页内提示条显示重连，恢复后接着显示、不重复执行；刷新页面按运行编号恢复"
@@ -519,61 +2226,291 @@
     "interaction": {
       "title": "交互闭环（页面交互契约、一个动作一个按钮、功能闭环、操作反馈）",
       "summary": "每个操作入口 → 反馈 → 结果 → 返回；无重复按钮、无孤岛与死角页；对象、状态、流程闭环；四种异步结果与按钮状态",
-      "keywords": ["交互", "闭环", "按钮重复", "入口", "孤岛页", "死角页", "反馈", "状态", "生命周期", "确认", "撤销"],
+      "keywords": [
+        "交互",
+        "闭环",
+        "按钮重复",
+        "入口",
+        "孤岛页",
+        "死角页",
+        "反馈",
+        "状态",
+        "生命周期",
+        "确认",
+        "撤销"
+      ],
       "sections": [
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "一、设计架构", "设计原则"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "入口与内容分层"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "功能闭环"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "状态体系"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "导航与返回"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "页面交互契约"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "按钮"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "浮层与反馈"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "操作反馈"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "七、文案", "界面文案"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["案例样本", "端到端网页验收"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["质量门禁"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "架构的交互字段"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "无障碍底线"]}
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "一、设计架构",
+            "设计原则"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "入口与内容分层"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "功能闭环"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "状态体系"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "导航与返回"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "页面交互契约"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "按钮"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "浮层与反馈"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "操作反馈"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "七、文案",
+            "界面文案"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "案例样本",
+            "端到端网页验收"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "架构的交互字段"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "无障碍底线"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "对每个页面列出全部功能与按钮：先按“一个动作一个按钮”去重，再逐个写入口、反馈、结果、返回；对象写生命周期，状态写进出事件，流程写成功终点与失败恢复",
-        "架构用 `references/templates.txt` 的 system-architecture.html 示例写法；只读自查 `py -X utf8 scripts/check_interaction.py <会话目录>`（`validate_session.py` 也会调用）",
+        "架构的交互字段照 Luz-Design 架构模板（`templates/documents/reading/system-architecture.html`）里的示例写；只读自查 `py -X utf8 scripts/check_interaction.py <会话目录>`（`validate_session.py` 也会调用）",
         "原型验收逐个操作走一遍“触发 → 反馈 → 结果 → 返回”，记录在 `raw/99-delivery/`",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/check_interaction.py <会话目录>` 零 ERROR；WARN 逐条处理，或在架构里用“不适用（理由）”“不提供（理由）”写明",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR",
-        "浏览器逐个操作：每个按钮按下有反馈、有结果、能回到来源；加载、空、错误、成功、禁用五类状态都能演示"
+        "浏览器逐个操作：每个按钮按下有反馈、有结果、能回到来源；加载、空、错误、成功、禁用五类状态都能演示",
+        "完整可配置模板库逐页记录：来源/版本/许可/平台、入口目标、动作与具体结果、关闭返回、原生参数、依赖和未覆盖范围；新增模板显示于对应端的真实配置与预览。不能只测首页或用成功提示代替保存。",
+        "验证输入校验、数据保存后再进入、取消/失败恢复、所有菜单目的地与草稿、完整JSON往返和刷新。新完整来源只核对原生能力，缺口继续取源。移动Web、本地交互、原生小程序和生产服务分别报告。"
       ]
     },
     "platform-console": {
       "title": "智能体平台配置台（边界、对象、导航、两端降级）",
       "summary": "配置台与运行参数的边界、配置对象与生命周期、基础与可选能力、菜单与统一页签、后台窄屏与小程序的降级、权限与审计、交接",
-      "keywords": ["配置台", "平台", "智能体平台", "配置", "边界", "租户", "基础功能", "可选功能", "降级", "小程序", "权限", "审计", "版本", "灰度", "回滚"],
+      "keywords": [
+        "配置台",
+        "平台",
+        "智能体平台",
+        "配置",
+        "边界",
+        "租户",
+        "基础功能",
+        "可选功能",
+        "降级",
+        "小程序",
+        "权限",
+        "审计",
+        "版本",
+        "灰度",
+        "回滚"
+      ],
       "sections": [
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["适用范围"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["工作流程"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "一、设计架构"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "配置台自身的权限与审计"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "三、信息架构与导航"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "七、文案"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["平台矩阵"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["输出契约"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["质量门禁"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["交接规则"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "系统架构清单"]},
-        {"page": "system-design.html", "title": "系统设计规范", "path": ["核心规则", "平台配置台的架构清单"]},
-        {"page": "config-design.html", "title": "远程配置规范", "path": ["核心规则", "配置文件与热加载"]}
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "适用范围"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "工作流程"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "一、设计架构"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "配置台自身的权限与审计"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "七、文案"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "平台矩阵"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "交接规则"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "系统架构清单"
+          ]
+        },
+        {
+          "page": "system-design.html",
+          "title": "系统设计规范",
+          "path": [
+            "核心规则",
+            "平台配置台的架构清单"
+          ]
+        },
+        {
+          "page": "config-design.html",
+          "title": "远程配置规范",
+          "path": [
+            "核心规则",
+            "配置文件与热加载"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "先在系统架构里写“平台能力清单”（基础与可选、启用理由）和“配置边界表”（运行硬上限留在配置文件并只读显示，业务配置进配置台）；对象与状态表、事件与接口意图表按本卡和 `platform-console-design.html` 的“事件与契约”写，事件名与字段不另起名字",
         "每类能力再读它自己的卡：排队 `queue-capacity`、定时 `scheduler-ui`、预警回传 `alert-loop`、规则与核算 `rule-engine-ui`、协同 `multi-agent`、知识库 `kb-console`、业务流画布 `workflow-canvas`；对话与运行界面读 `agent-ui` 与 `agent-runtime-ui`",
         "后端实现交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md；handoff 里把新对象（workflow、rule_set、schedule、alert_policy、queue_policy、knowledge_base、agent_team）作为可选字段写入",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "系统架构里有平台能力清单、配置边界表、对象与状态表；运行硬上限没有出现编辑入口，业务配置都有版本、审批、回滚",
         "每个启用的能力在 1280 与 390 像素宽度都有页面或明确的降级；小程序里没有画布、规则编辑器、cron 编辑器、知识库构建",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR；Luz-Design 的 `check_document.py` 对界面文件通过"
@@ -582,33 +2519,195 @@
     "queue-capacity": {
       "title": "排队与容量（租户配额、优先级车道、公平调度、背压、看板与死信）",
       "summary": "多级并发与配额、加急普通批量车道、租户公平轮转与防饿死、429 与 Retry-After、预计等待算法、排队中取消与改优先级、看板与告警、降级、死信与重放",
-      "keywords": ["排队", "队列", "并发", "配额", "优先级", "车道", "公平", "饿死", "背压", "429", "Retry-After", "限流", "预计等待", "死信", "重放", "降级", "高并发", "租户"],
+      "keywords": [
+        "排队",
+        "队列",
+        "并发",
+        "配额",
+        "优先级",
+        "车道",
+        "公平",
+        "饿死",
+        "背压",
+        "429",
+        "Retry-After",
+        "限流",
+        "预计等待",
+        "死信",
+        "重放",
+        "降级",
+        "高并发",
+        "租户"
+      ],
       "sections": [
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "排队与容量"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "优先级车道"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "公平调度"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "背压与拒收"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "预计等待时间"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "排队中的操作"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "队列看板与告警"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "降级策略"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "死信与重放"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "四、页面内容与优先级", "队列与容量页"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "事件"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "队列与计划任务契约"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "运行时与可靠性", "排队与并发"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "运行时与可靠性", "防重复提交"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "运行时与可靠性", "超时、重试、熔断与降级"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "错误、降级与恢复的呈现"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["输出契约"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["质量门禁"]}
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "排队与容量"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "优先级车道"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "公平调度"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "背压与拒收"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "预计等待时间"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "排队中的操作"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "队列看板与告警"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "降级策略"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "死信与重放"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "队列与容量页"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "事件"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "队列与计划任务契约"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "运行时与可靠性",
+            "排队与并发"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "运行时与可靠性",
+            "防重复提交"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "运行时与可靠性",
+            "超时、重试、熔断与降级"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "错误、降级与恢复的呈现"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "系统架构的“智能体运行时与底座”之外再写“队列与容量”：四级限额表、车道与权重、拒收响应体、预计等待算法、看板指标与告警阈值、死信处理；全局硬上限只读显示，租户与用户配额进配置台",
         "后端实现（队列、车道、公平出队、429 响应体、死信）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（接入层与总表；租户级键与车道是本页新增，需要 Luz-Dev 补）",
         "预计等待用同一个公式在前台和运营页显示；样本不足不显示秒数"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "原型演示：排队（第 N 位、预计秒数）、超出预计、租户限额、每日用完、队列满 429 自动排入、取消排队、改优先级、死信重放",
         "大租户批量任务占满时，小租户的交互请求仍按轮转出队（用两个租户的演示数据验证）",
         "看板只放症状指标并有处理动作；全局上限只读、无编辑按钮"
@@ -617,30 +2716,172 @@
     "scheduler-ui": {
       "title": "定时任务（cron 可视化、错过触发、重叠、身份、历史与重放）",
       "summary": "计划任务配置项、cron 编辑与人话预览、时区与有效期、misfire 与 overlap 策略、run_as 与租户上下文、幂等触发、历史与重放、暂停恢复、依赖编排、错峰与堆积风险",
-      "keywords": ["定时", "计划任务", "cron", "时区", "夏令时", "misfire", "错过触发", "重叠", "overlap", "补跑", "重放", "run_as", "幂等", "依赖", "错峰", "堆积", "巡检", "调度", "Quartz", "Airflow", "Temporal", "XXL-JOB"],
+      "keywords": [
+        "定时",
+        "计划任务",
+        "cron",
+        "时区",
+        "夏令时",
+        "misfire",
+        "错过触发",
+        "重叠",
+        "overlap",
+        "补跑",
+        "重放",
+        "run_as",
+        "幂等",
+        "依赖",
+        "错峰",
+        "堆积",
+        "巡检",
+        "调度",
+        "Quartz",
+        "Airflow",
+        "Temporal",
+        "XXL-JOB"
+      ],
       "sections": [
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "定时任务"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "计划任务的身份"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "计划任务的配置项"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "定时任务的运行、幂等与历史"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "定时任务的风险"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "四、页面内容与优先级", "定时任务页"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "五、组件", "`cron` 编辑器"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "事件"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "状态机"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "队列与计划任务契约"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "运行时与可靠性", "防重复提交"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "运行时与可靠性", "超时、重试、熔断与降级"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "权限控制"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["输出契约"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["质量门禁"]}
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "定时任务"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "计划任务的身份"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "计划任务的配置项"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "定时任务的运行、幂等与历史"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "定时任务的风险"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "定时任务页"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "`cron` 编辑器"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "事件"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "状态机"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "队列与计划任务契约"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "运行时与可靠性",
+            "防重复提交"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "运行时与可靠性",
+            "超时、重试、熔断与降级"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "权限控制"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "架构里写计划任务表（触发、目标与版本策略、run_as、租户范围、misfire、overlap、并发、超时、重试、通知、依赖、defer_ok）和运行历史列；cron 编辑器按本卡“cron 编辑器”做常用与高级两种模式、人话预览和未来 5 次触发",
         "计划任务的运行是一次普通运行（trigger: schedule），默认进批量车道，走同样的排队、检查点、审批与审计；高风险写入仍须审批",
         "后端实现（触发器、fire_id 幂等、补跑、依赖、暂停）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "编辑页：人话预览与未来 5 次触发随输入变化；非法表达式就地指出；整点集中、夏令时、月末、日与星期同填都有提示",
         "原型演示：立即执行与重放是两个按钮；暂停后恢复显示将补跑几次；连续失败自动暂停并产生预警",
         "每个计划任务都有 run_as、tenant_id、负责人；没有 run_as 的任务不能保存"
@@ -649,30 +2890,163 @@
     "alert-loop": {
       "title": "风险预警与人在回路（预警中心、预警卡、结构化回传智能体）",
       "summary": "预警来源与策略、去重聚合分级升级静默、归属与 SLA、预警卡的证据影响建议与选项、确认驳回修改转交批量、恢复载荷与校验顺序、过期与重复提交、与审批卡的关系",
-      "keywords": ["预警", "告警", "风险", "人在回路", "回传", "恢复", "resume", "审批", "确认", "驳回", "转交", "升级", "静默", "去重", "聚合", "SLA", "过期", "重复提交", "幂等", "告警疲劳", "阻断"],
+      "keywords": [
+        "预警",
+        "告警",
+        "风险",
+        "人在回路",
+        "回传",
+        "恢复",
+        "resume",
+        "审批",
+        "确认",
+        "驳回",
+        "转交",
+        "升级",
+        "静默",
+        "去重",
+        "聚合",
+        "SLA",
+        "过期",
+        "重复提交",
+        "幂等",
+        "告警疲劳",
+        "阻断"
+      ],
       "sections": [
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "风险预警与人在回路"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "预警来源与预警策略"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "预警中心"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "预警卡与用户处理"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "预警与审批卡的关系"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "四、页面内容与优先级", "预警中心页"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "五、组件", "预警卡"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "事件"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "状态机"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "预警回传：恢复载荷与校验"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "审批"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "运行状态"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["输出契约"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["质量门禁"]}
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "风险预警与人在回路"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "预警来源与预警策略"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "预警中心"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "预警卡与用户处理"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "预警与审批卡的关系"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "预警中心页"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "预警卡"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "事件"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "状态机"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "预警回传：恢复载荷与校验"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "审批"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "运行状态"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "架构里写预警策略表（来源、条件、severity、指纹维度、升级链、静默、归属、SLA、expire_after、blocking、options、decision_schema、allowed_adjustments）和预警状态机（open、acked、escalated、handled、expired）",
         "恢复载荷、校验顺序与错误码以本卡“预警回传”为准，不另起字段；阻断式预警复用审批的暂停与恢复，不新增第八种运行状态",
         "后端实现（检查点恢复、乐观锁、幂等、审计）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（输出护栏与人工审批）",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "原型演示预警卡的全部状态：待处理、已确认、已升级、已处理、已过期，以及重复提交、版本已变、参数不合规、无权限",
         "同一指纹只出现一张卡并累加计数；error 及以上才主动打断；每张卡有归属人与剩余时限",
         "处理后回传的载荷含 alert_id、decision、operator、handled_at、params、note、version、request_id，过期卡不可提交并写固定文案"
@@ -681,33 +3055,202 @@
     "rule-engine-ui": {
       "title": "规则引擎、量化标准与配置驱动计算（绩效、单据核算）",
       "summary": "规则集与规则、命中策略与优先级、生效区间与灰度、变量口径与舍入、评分卡与阶梯、试算回测与黄金样例、冲突检测、变更审批与回滚；智能体读取生效配置、确定性计算、复核差异、缓存失效与在途任务",
-      "keywords": ["规则", "规则引擎", "规则集", "评分卡", "量化", "阶梯", "提成", "绩效", "核算", "单据", "公式", "舍入", "精度", "币种", "试算", "回测", "黄金样例", "冲突", "生效", "灰度", "复核", "复算", "口径", "DMN", "Drools"],
+      "keywords": [
+        "规则",
+        "规则引擎",
+        "规则集",
+        "评分卡",
+        "量化",
+        "阶梯",
+        "提成",
+        "绩效",
+        "核算",
+        "单据",
+        "公式",
+        "舍入",
+        "精度",
+        "币种",
+        "试算",
+        "回测",
+        "黄金样例",
+        "冲突",
+        "生效",
+        "灰度",
+        "复核",
+        "复算",
+        "口径",
+        "DMN",
+        "Drools"
+      ],
       "sections": [
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "规则引擎与量化标准"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "命中策略与优先级"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "公式、变量与精度"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "量化标准与阶梯"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "试算、回归与冲突检测"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "规则变更、审批与回滚"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "配置驱动计算"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "配置读取与计算工具的契约"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "缓存、失效与在途任务"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "复核与复算"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "四、页面内容与优先级", "规则与试算页"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "五、组件", "规则编辑与试算组件"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "状态机"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "规则集与计算契约"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "工具分级"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "权限控制"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["输出契约"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["质量门禁"]}
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "规则引擎与量化标准"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "命中策略与优先级"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "公式、变量与精度"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "量化标准与阶梯"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "试算、回归与冲突检测"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "规则变更、审批与回滚"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "配置驱动计算"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "配置读取与计算工具的契约"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "缓存、失效与在途任务"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "复核与复算"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "规则与试算页"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "规则编辑与试算组件"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "状态机"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "规则集与计算契约"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "工具分级"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "权限控制"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "架构里写规则集表（业务域、命中策略、变量目录、适用范围、生效区间、灰度）、配置读取与计算工具表（分级、输入输出、脱敏、缓存失效）和复核视图；金额一律定点或最小货币单位，阶梯显式选“分档累计”或“整体计价”",
         "数字由计算服务算，模型只取数、解释、复核；回答里的金额必须逐字出现在工具结果里；应用结果（发放、入账、改单）不做成工具",
         "后端实现（规则引擎、计算服务、配置发布事件、计算记录）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（工具层、输出护栏）与模块详设"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "原型演示：试算（逐步轨迹）、批量回测、版本差异、冲突提示、黄金样例不通过时禁止发布、复核表（预期值、实算值、差额、依据规则）",
         "规则改版后：在途运行按固定版本算完并标注；长时间等待后续跑先重算并显示新旧差异",
         "无权字段显示“无权查看”，不显示空白或零；复算结果与记录一致"
@@ -716,30 +3259,167 @@
     "multi-agent": {
       "title": "智能体协同（何时拆分、协同模式、交接、权限隔离、展示）",
       "summary": "单智能体优先与拆分判断、编排者执行者/路由/交接/并行汇总/评审者生成者五种模式、共享状态与权限隔离、循环与成本上限、调用链、分角色轨道与交接卡汇总卡",
-      "keywords": ["多智能体", "协同", "编排者", "执行者", "路由", "交接", "handoff", "并行", "汇总", "评审", "子智能体", "团队", "调用链", "循环", "supervisor", "swarm", "AutoGen"],
+      "keywords": [
+        "多智能体",
+        "协同",
+        "编排者",
+        "执行者",
+        "路由",
+        "交接",
+        "handoff",
+        "并行",
+        "汇总",
+        "评审",
+        "子智能体",
+        "团队",
+        "调用链",
+        "循环",
+        "supervisor",
+        "swarm",
+        "AutoGen"
+      ],
       "sections": [
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "智能体协同"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "协同模式"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "共享状态、上下文与权限"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "冲突、循环与成本上限"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "可观测与展示"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "四、页面内容与优先级", "团队页"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "五、组件", "多智能体展示组件"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "事件"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "知识库与团队契约"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "运行方案：模型只做决策，程序控制运行"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "工具分级"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "权限控制"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "耗时与进度"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["输出契约"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["质量门禁"]}
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "智能体协同"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "协同模式"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "共享状态、上下文与权限"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "冲突、循环与成本上限"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "可观测与展示"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "团队页"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "多智能体展示组件"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "事件"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "知识库与团队契约"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "运行方案：模型只做决策，程序控制运行"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "工具分级"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "权限控制"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "耗时与进度"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "架构里先写“是否需要多智能体”的判断表（工具与知识、权限边界、并行、上下文、独立评审、成本），通过才写团队：成员与工具白名单、交接路线（有向边）、模式、上限与预算",
         "交接载荷与事件以本卡为准；权限只继承不放大；交接的授权在程序里按解析后的参数检查",
         "后端实现（编排、交接、预算、追踪）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（意图识别与路由、编排）"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "原型演示：分角色轨道、交接卡（含被拦截）、汇总卡（含冲突）、评审卡（含达到迭代上限转人工）",
         "团队配置有交接次数、委派深度、迭代次数、团队预算上限，且不超过平台上限；未声明的交接路线被拒绝",
         "界面不显示模型名；同一时长只写一次，对话里只有一个停止"
@@ -748,27 +3428,144 @@
     "kb-console": {
       "title": "知识库搭建（接入、分块、向量化、索引、命中测试、权限、评测、运营）",
       "summary": "建库七个阶段、分块与嵌入模型锁定、库级文档级字段级权限与检索时预过滤、增量更新与有效期与下线、评测集与引用校验、无答案处理、未命中回流与人工纠错入库",
-      "keywords": ["知识库", "RAG", "检索", "分块", "切片", "向量", "嵌入", "索引", "命中测试", "召回", "评测", "引用", "无答案", "权限", "未命中", "纠错", "重排", "元数据", "Dify", "RAGFlow", "FastGPT"],
+      "keywords": [
+        "知识库",
+        "RAG",
+        "检索",
+        "分块",
+        "切片",
+        "向量",
+        "嵌入",
+        "索引",
+        "命中测试",
+        "召回",
+        "评测",
+        "引用",
+        "无答案",
+        "权限",
+        "未命中",
+        "纠错",
+        "重排",
+        "元数据",
+        "Dify",
+        "RAGFlow",
+        "FastGPT"
+      ],
       "sections": [
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "知识库搭建"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "知识库权限"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "版本、更新与质量"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "知识库运营"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "四、页面内容与优先级", "知识库页"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "五、组件", "命中测试面板"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "事件"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "知识库与团队契约"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "引用与没有找到"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "记忆"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["输出契约"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["质量门禁"]}
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "知识库搭建"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "知识库权限"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "版本、更新与质量"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "知识库运营"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "知识库页"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "命中测试面板"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "事件"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "知识库与团队契约"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "引用与没有找到"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "记忆"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "架构里写知识库流程表（七个阶段）、权限表（库级、文档级、字段级、检索时预过滤）、评测集与引用校验；分块与嵌入的默认值与单位以架构登记为准，并与 Luz-Dev 智能体底座一致",
         "命中测试里的参数改动只对本次测试有效；要生效必须保存并产生新的索引版本",
         "后端实现（解析、分块、索引、检索、权限过滤、评测）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（知识库）"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "原型演示：添加文档向导（解析预览、分块预览）、命中测试（分数、来源、章节路径）、评测结果、权限过滤（两个角色看到不同结果）、未命中回流、纠错队列",
         "回答带引用编号且能核对；检索不到写“知识库里没有找到……”并给下一步；文档下线后引用显示“已下线”并链接新版本",
         "检索权限在查询里预过滤，不是检索后再筛"
@@ -777,28 +3574,193 @@
     "workflow-canvas": {
       "title": "可视化业务流编排（画布、节点、变量、试运行、版本、评测）",
       "summary": "画布与快捷键、十六类节点与通用配置、变量作用域、草稿测试发布回滚与版本策略、单步调试与整体试运行、评测优化闭环、权限、流程图 JSON 与校验规则；可配置不等于写进提示词",
-      "keywords": ["画布", "工作流", "业务流", "编排", "节点", "连线", "变量", "试运行", "单步调试", "版本", "发布", "回滚", "Coze", "扣子", "Dify", "n8n", "LangGraph", "Flowise", "评测", "循环", "并行", "子流程"],
+      "keywords": [
+        "画布",
+        "工作流",
+        "业务流",
+        "编排",
+        "节点",
+        "连线",
+        "变量",
+        "试运行",
+        "单步调试",
+        "版本",
+        "发布",
+        "回滚",
+        "Coze",
+        "扣子",
+        "Dify",
+        "n8n",
+        "LangGraph",
+        "Flowise",
+        "评测",
+        "循环",
+        "并行",
+        "子流程"
+      ],
       "sections": [
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "可视化业务流编排"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "画布与节点"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "节点的通用配置"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "变量作用域与引用"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "草稿、测试、发布与回滚"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "试运行与单步调试"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "评测与优化闭环"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "二、功能架构", "业务流的权限"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "四、页面内容与优先级", "画布页"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "五、组件", "画布组件"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "五、组件", "节点配置面板与试运行面板"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "状态机"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["核心规则", "事件与契约", "流程图存储契约"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "运行方案：模型只做决策，程序控制运行"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "工具分级"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "审批"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["输出契约"]},
-        {"page": "platform-console-design.html", "title": "智能体平台配置台设计规范", "path": ["质量门禁"]}
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "可视化业务流编排"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "画布与节点"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "节点的通用配置"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "变量作用域与引用"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "草稿、测试、发布与回滚"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "试运行与单步调试"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "评测与优化闭环"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "业务流的权限"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "画布页"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "画布组件"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "节点配置面板与试运行面板"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "状态机"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "核心规则",
+            "事件与契约",
+            "流程图存储契约"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "运行方案：模型只做决策，程序控制运行"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "工具分级"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "审批"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "platform-console-design.html",
+          "title": "智能体平台配置台设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "架构里写节点类型表、变量作用域表、流程图存储契约（nodes、edges、variables、settings、版本）和校验规则（阻断与警告）；权限、上限、审批、运行身份由程序控制，业务流只能收紧",
         "高风险写入工具之前必须有人工审批节点，程序在发布与运行时双重检查；循环必须有最大次数并不超过平台上限",
         "后端实现（流程执行器、校验器、版本存储、灰度）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（编排：工作流优先）",
@@ -806,6 +3768,7 @@
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "原型演示：拖入节点、连线、类型不兼容报错、校验面板定位、撤销重做、自动布局、小地图、整体试运行与单步重跑、失败节点定位、发布与回滚",
         "校验规则逐条可触发：孤立节点、无上限循环、缺否则分支、缺超时去向、高风险写入前无审批",
         "1280 像素下三栏加底部运行面板不遮挡；390 像素下只读大纲可看、可查看运行结果"
@@ -814,27 +3777,126 @@
     "agent-composer": {
       "title": "智能体输入区与对话区交互（发送与停止合一、输入法、待发送队列、滚动与追加）",
       "summary": "输入区主按钮的六种状态、键位与输入法、待发送队列、停止并发送、对话区贴底与跳到最新、移动端键盘避让",
-      "keywords": ["输入区", "composer", "发送", "停止", "语音", "输入法", "回车", "待发送队列", "排队", "滚动", "跳到最新", "键盘", "附件", "上传"],
+      "keywords": [
+        "输入区",
+        "composer",
+        "发送",
+        "停止",
+        "语音",
+        "输入法",
+        "回车",
+        "待发送队列",
+        "排队",
+        "滚动",
+        "跳到最新",
+        "键盘",
+        "附件",
+        "上传"
+      ],
       "sections": [
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "消息与输入"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "输入区状态机"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "五、组件", "对话区滚动与追加"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "二、功能架构", "运行状态"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "输入区与交互的依据"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["平台矩阵"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["输出契约"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["质量门禁"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "切换类控件"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "列表变更与动画"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "无障碍底线"]}
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "消息与输入"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "输入区状态机"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "对话区滚动与追加"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "运行状态"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "输入区与交互的依据"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "平台矩阵"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "输出契约"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "质量门禁"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "切换类控件"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "列表变更与动画"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "无障碍底线"
+          ]
+        }
       ],
       "tools": [
-        "原型的输入区标 `data-composer`，主按钮标 `data-composer-primary` 并写 `data-composer-action`（`send`、`queue`、`stop`、`voice`），状态写 `data-composer-state`（`idle`、`draft`、`running`、`running-draft`、`uploading`、`composing`）；`references/templates.txt` 的 agent-run-states.html 已带一个按状态切换的输入区和输入法安全的回车处理，按本卡改写",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "原型的输入区标 `data-composer`，主按钮标 `data-composer-primary` 并写 `data-composer-action`（`send`、`queue`、`stop`、`voice`），状态写 `data-composer-state`（`idle`、`draft`、`running`、`running-draft`、`uploading`、`composing`）；旧会话骨架 `references/templates.txt` 的 agent-run-states.html 带一个按状态切换的输入区和输入法安全的回车处理，可作行为参照",
         "只读自查：`py -X utf8 scripts/check_interaction.py <会话目录>`（`validate_session.py` 也会调用）核对主按钮唯一、名称与动作一致、有状态播报区、回车处理考虑输入法组合、按钮切换不超过 150 毫秒、原型展示了不止一种状态",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
         "后端要配合：可恢复流开启时前端 `stop()` 只关闭连接，不会取消后端生成，须另设停止接口并保存部分回复（Luz-Dev 智能体底座）"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/check_interaction.py <会话目录>` 输入区项零警告",
         "浏览器逐个状态走一遍：空闲、有内容、运行中、运行中输入新内容、附件上传中、输入法组合中；中文输入法选字时按回车不发送，选完再按才发送",
         "发送后输入框清空、桌面焦点留在输入框；发送失败（断网）后原文与附件恢复并给“重试”；停止后已生成内容保留",
@@ -845,22 +3907,142 @@
     "interaction-patterns": {
       "title": "交互模式（切换类控件、列表变更的行为、卡片交互、问题族排查）",
       "summary": "开关、分段、标签页与二态按钮的选型与标签写法；新增删除重排加载更多与流式追加的行为（何时播放、撤销时限、周围内容不跳位）；卡片整卡可点、触屏替代、拖拽与键盘排序；三个问题族的举一反三排查",
-      "keywords": ["切换", "开关", "分段控件", "标签页", "二态按钮", "收藏", "乐观更新", "回滚", "列表", "动画", "新增", "删除", "重排", "加载更多", "骨架", "卡片", "悬停", "按压", "拖拽", "reduced-motion", "问题族", "举一反三"],
+      "keywords": [
+        "切换",
+        "开关",
+        "分段控件",
+        "标签页",
+        "二态按钮",
+        "收藏",
+        "乐观更新",
+        "回滚",
+        "列表",
+        "动画",
+        "新增",
+        "删除",
+        "重排",
+        "加载更多",
+        "骨架",
+        "卡片",
+        "悬停",
+        "按压",
+        "拖拽",
+        "reduced-motion",
+        "问题族",
+        "举一反三"
+      ],
       "sections": [
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "切换类控件"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "列表变更与动画"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "卡片"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "卡片内容层级与点击区域"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "四、页面内容与优先级", "同类元素一致"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "卡片交互动画"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "五、组件", "操作反馈"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "问题的同类判断", "交互与排布的问题族"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "交互与排布的依据"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "五、组件", "行内切换与列表变更"]},
-        {"page": "miniprogram-design.html", "title": "小程序设计规范", "path": ["核心规则", "五、组件", "切换与反馈"]},
-        {"page": "website-design.html", "title": "网站设计规范", "path": ["核心规则", "五、组件", "切换与卡片动效"]}
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "切换类控件"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "列表变更与动画"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "卡片"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "卡片内容层级与点击区域"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "四、页面内容与优先级",
+            "同类元素一致"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "卡片交互动画"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "操作反馈"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "问题的同类判断",
+            "交互与排布的问题族"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "交互与排布的依据"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "行内切换与列表变更"
+          ]
+        },
+        {
+          "page": "miniprogram-design.html",
+          "title": "小程序设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "切换与反馈"
+          ]
+        },
+        {
+          "page": "website-design.html",
+          "title": "网站设计规范",
+          "path": [
+            "核心规则",
+            "五、组件",
+            "切换与卡片动效"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
         "先列出页面全部“两态”控件和全部会变更的列表，按“交互与排布的问题族”逐族排查，再画；原型的过渡写成 CSS 令牌，并带 `prefers-reduced-motion` 分支",
         "整卡可点时在标题处放链接并用伪元素铺满整卡，卡内次要动作用独立按钮，层级高于铺满的链接",
@@ -868,6 +4050,7 @@
         "智能体输入区的发送与停止合一另读 `py -X utf8 scripts/context.py agent-composer`"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/check_interaction.py <会话目录>` 动效、切换项零警告",
         "每个“两态”控件：槽位同位、尺寸不变、标签写法属于三种之一、禁用写原因、失败回滚、连点只提交一次",
         "新增、删除、重排、加载更多、实时新增各录一段屏：周围内容不跳位、滚动位置不丢；开启系统“减少动态效果”复测",
@@ -878,26 +4061,122 @@
     "nav-levels": {
       "title": "多级目录与导航层级（侧栏、顶栏、面包屑、抽屉、树选择器、小程序分类）",
       "summary": "层级上限与超过三级的出路、当前位置与祖先高亮、展开与图标规则、顶部加侧栏、面包屑与搜索直达、移动端抽屉、树形选择器、小程序左右联动分类",
-      "keywords": ["多级菜单", "侧栏", "导航", "层级", "面包屑", "抽屉", "树形选择", "分类", "左右联动", "二级标签", "折叠", "展开", "高亮", "命令面板", "搜索直达"],
+      "keywords": [
+        "多级菜单",
+        "侧栏",
+        "导航",
+        "层级",
+        "面包屑",
+        "抽屉",
+        "树形选择",
+        "分类",
+        "左右联动",
+        "二级标签",
+        "折叠",
+        "展开",
+        "高亮",
+        "命令面板",
+        "搜索直达"
+      ],
       "sections": [
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "二、功能架构", "入口与内容分层"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "信息架构"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "导航与返回"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "多级目录与导航层级"]},
-        {"page": "ui-standards.html", "title": "界面通用规范", "path": ["核心规则", "三、信息架构与导航", "标题不重复导航"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "三、信息架构与导航", "侧栏与顶栏"]},
-        {"page": "admin-design.html", "title": "网页管理后台设计规范", "path": ["核心规则", "三、信息架构与导航", "多级菜单"]},
-        {"page": "miniprogram-design.html", "title": "小程序设计规范", "path": ["核心规则", "三、信息架构与导航"]},
-        {"page": "website-design.html", "title": "网站设计规范", "path": ["核心规则", "三、信息架构与导航"]},
-        {"page": "agent-design.html", "title": "智能体设计规范", "path": ["核心规则", "三、信息架构与导航"]}
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "二、功能架构",
+            "入口与内容分层"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "信息架构"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "导航与返回"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "多级目录与导航层级"
+          ]
+        },
+        {
+          "page": "ui-standards.html",
+          "title": "界面通用规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "标题不重复导航"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "侧栏与顶栏"
+          ]
+        },
+        {
+          "page": "admin-design.html",
+          "title": "网页管理后台设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航",
+            "多级菜单"
+          ]
+        },
+        {
+          "page": "miniprogram-design.html",
+          "title": "小程序设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航"
+          ]
+        },
+        {
+          "page": "website-design.html",
+          "title": "网站设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航"
+          ]
+        },
+        {
+          "page": "agent-design.html",
+          "title": "智能体设计规范",
+          "path": [
+            "核心规则",
+            "三、信息架构与导航"
+          ]
+        }
       ],
       "tools": [
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
+        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
         "先画导航树并数层级、列出每个层级的条目数，按“多级目录与导航层级”的方案表选方案；超过三级的需求先走重构信息架构，不加第 4 级",
         "哪个功能放在哪个入口先按“入口与内容分层”里“功能类型的默认入口位置”定；图标只给一级项",
         "架构文件的导航树和页面交互契约沿用 `py -X utf8 scripts/context.py interaction`",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
       ],
       "checks": [
+        "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "导航树不超过三级；展开最长分支量高度不超过一屏；二、三级项没有图标，一级项都有图标",
         "逐个叶子页用深链接打开：当前项与祖先都高亮、面包屑与菜单同名、刷新后自动展开当前分支",
         "只用键盘走完整棵树（上下左右方向键、回车、起止键）；图标栏状态逐项悬停核对；抽屉可由遮罩、退出键与系统返回关闭",

@@ -1,0 +1,153 @@
+{
+  "description": "System 的入口表。每行对应一个功能的主入口，Design 按此组织界面。",
+  "file": "entrances.json：{\"entrances\": [...], \"tabbar\": [...]}；tabbar 可省略，省略时由 entry 为 tab 的行推出。",
+  "fields": {
+    "fn": "功能编号，对应功能清单的 id，如 FN-006（必填）",
+    "name": "界面上的入口名称（必填）",
+    "type": "功能类型，九类之一：context、search、task、status、account、order、marketing、content、tool（必填）",
+    "category": "System 的类别：core 核心、info 信息、marketing 营销、aux 辅助（必填）",
+    "entry": "主入口归属，以 enums.entry 为准。见界面通用规范“入口与内容分层”。",
+    "destination": "目的地：页面编号或路由加参数，如 P03 或 /pages/order/index?type=unpay（必填）",
+    "freq": "使用频次：high、mid、low（必填）",
+    "image": "可选，true 表示有主视觉图（营销用）",
+    "limited": "可选，true 表示有时间、库存或人群限制（营销用）",
+    "summary": "可选。true 表示已归属的账户类功能可提供首页非交互摘要。"
+  },
+  "tabbar_item": {
+    "name": "标签名称",
+    "destination": "目的地，与入口表的 destination 同一写法；首页标签写 home"
+  },
+  "enums": {
+    "type": [
+      "context",
+      "search",
+      "task",
+      "status",
+      "account",
+      "order",
+      "marketing",
+      "content",
+      "tool"
+    ],
+    "category": [
+      "core",
+      "info",
+      "marketing",
+      "aux"
+    ],
+    "entry": [
+      "tab",
+      "sidebar",
+      "home",
+      "mine",
+      "context",
+      "in-page"
+    ],
+    "freq": [
+      "high",
+      "mid",
+      "low"
+    ]
+  },
+  "example": {
+    "entrances": [
+      {
+        "fn": "FN-020",
+        "name": "选择门店",
+        "type": "context",
+        "category": "info",
+        "entry": "context",
+        "destination": "P20",
+        "freq": "high"
+      },
+      {
+        "fn": "FN-021",
+        "name": "搜索商品",
+        "type": "search",
+        "category": "core",
+        "entry": "home",
+        "destination": "P21",
+        "freq": "high"
+      },
+      {
+        "fn": "FN-006",
+        "name": "去点单",
+        "type": "task",
+        "category": "core",
+        "entry": "tab",
+        "destination": "P03",
+        "freq": "high"
+      },
+      {
+        "fn": "FN-030",
+        "name": "我的订单",
+        "type": "order",
+        "category": "core",
+        "entry": "tab",
+        "destination": "P04",
+        "freq": "high"
+      },
+      {
+        "fn": "FN-031",
+        "name": "进行中订单",
+        "type": "status",
+        "category": "info",
+        "entry": "home",
+        "destination": "P05",
+        "freq": "high"
+      },
+      {
+        "fn": "FN-040",
+        "name": "新人礼券",
+        "type": "marketing",
+        "category": "marketing",
+        "entry": "home",
+        "destination": "P40",
+        "freq": "mid",
+        "image": true,
+        "limited": true
+      },
+      {
+        "fn": "FN-050",
+        "name": "我的会员",
+        "type": "account",
+        "category": "info",
+        "entry": "mine",
+        "destination": "P50",
+        "freq": "mid"
+      },
+      {
+        "fn": "FN-041",
+        "name": "我的优惠券",
+        "type": "account",
+        "category": "aux",
+        "entry": "mine",
+        "destination": "P41",
+        "freq": "mid"
+      }
+    ],
+    "tabbar": [
+      {
+        "name": "首页",
+        "destination": "home"
+      },
+      {
+        "name": "点单",
+        "destination": "P03"
+      },
+      {
+        "name": "订单",
+        "destination": "P04"
+      },
+      {
+        "name": "我的",
+        "destination": "P10"
+      }
+    ]
+  },
+  "home_exclusions": {
+    "account": "账户类功能保留个人归属。首页 summary 只表明可显示只读摘要。",
+    "order": "订单列表及管理保留在订单模块。首页继续办理用明确的 status 类行指向该笔业务。",
+    "tool": "工具与条款按任务归到设置、我的或所属页内。"
+  }
+}

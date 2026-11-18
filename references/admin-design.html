@@ -20,7 +20,7 @@
 <section id="workflow" data-rule-id="admin-workflow" aria-labelledby="workflow-heading">
 <h2 id="workflow-heading" class="section-heading"><svg class="icon-linear section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h5a3 3 0 0 1 3 3v1M16 18h-5a3 3 0 0 1-3-3v-1"/><path d="m13 8 3 2 3-2M11 16l-3-2-3 2"/></svg><span>工作流程</span></h2>
 <ol class="steps">
-<li>从批准的模块列出菜单，按业务域分组，第一个菜单固定为数据驾驶舱。</li>
+<li>从批准的模块列出菜单，按业务域分组，按实际任务保留驾驶舱及必要入口。</li>
 <li>每个菜单页确定页面类型，一个页面一个主任务；为前台的每处运营内容找到维护页面。</li>
 <li>为列表定义默认视图（默认状态、时间范围、排序与理由）、列、筛选、批量操作与导出；为表单定义字段、校验、保存结果；为危险操作定义确认等级；写明每个主要组件参考了哪一家组件库的哪个组件。</li>
 <li>外观交给视觉技能，按<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“各端视觉参数”出图，再做可交互原型。</li>
@@ -44,15 +44,15 @@
 <div class="table-wrap"><table><thead><tr><th>类型</th><th>主任务</th><th>构成</th></tr></thead><tbody>
 <tr><td>数据驾驶舱</td><td>运营型：处理待办、异常与超时；分析型：看趋势、转化与对比</td><td>指标卡（计算后的变化与比率）→ 趋势与占比 → 分布与结果 → 排行与动态</td></tr>
 <tr><td>列表页</td><td>查找、筛选、批量处理</td><td>操作与筛选区（不放与侧栏同名的标题）→ 状态标签带数量 → 表格 → 分页；打开即是默认视图</td></tr>
-<tr><td>详情</td><td>查看一个对象的全部信息与记录</td><td>居中悬浮面板或独立页，分组展示，底部操作</td></tr>
-<tr><td>表单</td><td>新建或编辑</td><td>居中悬浮面板，单列字段，底部取消与保存</td></tr>
+<tr><td>详情</td><td>查看一个对象的全部信息与记录</td><td>页内详情或独立页，分组展示，底部操作</td></tr>
+<tr><td>表单</td><td>新建或编辑</td><td>独立填写页或任务要求的原位表单，完成后返回并保留状态</td></tr>
 <tr><td>设置与内容维护</td><td>维护前台展示的运营内容</td><td>分组卡片，列表增删改排序，即时生效的项不放保存按钮</td></tr>
 </tbody></table></div>
 <h3 class="layer">二、功能架构</h3>
 <h4>菜单与模块</h4>
 <ul>
-<li>从批准的模块列出菜单，按业务域分组（例如概览、会员与交易、营销、门店），第一个菜单固定为数据驾驶舱。</li>
-<li>一级菜单 5–9 项，超出时分组；每个菜单页确定页面类型，一个页面一个主任务。</li>
+<li>从批准的模块列出菜单，按业务域分组（例如概览、会员与交易、营销、门店），按实际任务保留驾驶舱及必要入口。</li>
+<li>菜单数量由实际任务决定，不设最低数量；没有独立目的地就不增加入口；每个菜单页确定页面类型，一个页面一个主任务。</li>
 </ul>
 <h4>内容维护闭环</h4>
 <ul>
@@ -108,7 +108,7 @@
 <tr><td>图标</td><td>只有一级项带线性图标；“侧栏与顶栏”所说的“菜单项带图标”指一级项，有二、三级时子项不放图标；一级项缺图标仍算缺</td></tr>
 <tr><td>展开</td><td>手风琴：同一时刻只展开一个一级分支；打开页面自动展开当前页所在分支并滚到可见；有子项的一级项只负责展开收起，需要概览页时把“概览”放在子项第一位</td></tr>
 <tr><td>高亮</td><td>当前页高亮；祖先项以较弱的方式高亮；图标栏状态下祖先一级图标保持高亮；样式见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“导航与多级目录的数值”</td></tr>
-<tr><td>三种宽度状态</td><td>展开；图标栏（中等宽度默认，或用户手动折叠），只显示一级图标，悬停与聚焦显示名称，二级以悬浮菜单显示；窄屏收进抽屉；各状态的宽度与断点见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“导航与多级目录的数值”</td></tr>
+<tr><td>三种宽度状态</td><td>展开；图标栏（中等宽度默认，或用户手动折叠），只显示一级图标，悬停与聚焦显示名称，二级在页内展开；窄屏采用页内导航；各状态的宽度与断点见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“导航与多级目录的数值”</td></tr>
 <tr><td>滚动</td><td>侧栏独立滚动，底部的版本信息与账号区固定；当前项滚动到可见位置</td></tr>
 <tr><td>顶栏加侧栏</td><td>一级业务域超过 9 个时，业务域放顶栏（5–7 项），侧栏只显示当前域的二、三级；切换业务域回到该域上次停留的页面</td></tr>
 <tr><td>面包屑</td><td>二级及更深的页面与全部详情页显示，位于内容区顶部左侧；中间项可点，最后一项是当前页；超过 4 项中间折叠为“…”</td></tr>
@@ -138,7 +138,7 @@
 <div class="table-wrap"><table><thead><tr><th>区域</th><th>标准</th></tr></thead><tbody>
 <tr><td>页面顶部区</td><td>侧栏已高亮的一级页不放同名标题：左侧常用筛选，右侧最多 1 个主按钮 + 2 个次按钮；详情与子页用面包屑加对象名作标题；不放解释段</td></tr>
 <tr><td>列表页</td><td>筛选与操作区 → 状态标签带数量 → 批量栏（勾选后出现）→ 表格 → 分页</td></tr>
-<tr><td>详情与表单</td><td>居中悬浮面板（内容超出时只在面板内部滚动）或独立页；不用贴右边的侧滑抽屉；表单单列</td></tr>
+<tr><td>详情与表单</td><td>页内详情或独立页面；表单按视觉技能的硬规则使用独立填写页</td></tr>
 </tbody></table></div>
 <ul>
 <li>内容区的底色、卡片、边距、栅格，以及浮层的宽度、圆角与标题，见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“各端视觉参数”“界面组件的外观”。</li>
@@ -147,7 +147,7 @@
 <ul>
 <li>在 1280、1366、1440、1920 像素宽度下逐页检查：任何元素的右边缘不超过内容区右边界，指标卡、图表卡、筛选区都不被遮挡。</li>
 <li>栅格与排布的写法见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“前端排布的推导”。</li>
-<li>窄屏时侧栏收进菜单按钮打开的抽屉，表格转卡片，仍能完整操作；断点与指标卡、图表的列数见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“各端排布参数”。</li>
+<li>窄屏按任务采用页内导航或独立页面，表格转卡片，仍能完整操作；断点与指标卡、图表的列数见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“各端排布参数”。</li>
 </ul>
 <h4>信息密度</h4>
 <p>字号、行高、字重、间距、表格行高、首屏行数与统计卡高度见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“界面密度与表格对齐”“七级字体角色”。</p>
@@ -158,7 +158,7 @@
 <h4>数据驾驶舱</h4>
 <ul>
 <li>先定类型：运营型驾驶舱第一屏放要处理的事（待办数、异常、超时、预警），每项可点击直达已筛选好的列表；分析型驾驶舱第一屏放计算后的结论（环比与同比变化、转化率、达成率、人均与单均、排名）。门店后台通常两者兼有：运营型在上，分析型在下。</li>
-<li>每个后台必备，作为第一个菜单。从上到下：指标卡 → 主趋势图与占比环图 → 分布图与排行 → 风险与异常 → 实时动态；单屏 5–9 个模块，一张卡片一个主题。</li>
+<li>需要总览时设置驾驶舱，只展示有真实数据和决策意义的指标、图表与比较，不强制环图、风险、动态或固定模块数量。</li>
 <li>按价值排序：指标卡从左到右、模块从上到下，先放经营结果（营收、订单、成交额），再放增长（新增会员、新客、复购），再放活跃与使用（入场人次、访问、在线人数），最后放效率、风险与负向数据（退款、核验失败、投诉、取消、库存预警）。最重要、最需要老板看到的指标放左上。</li>
 <li>同一类里，变化大、需要采取行动的排在前面；长期稳定、变化很小的（例如长期在 96%–98% 之间的通过率）排在该组最后，或收进二级页。占比、排行、列表内部按数值从大到小排。</li>
 <li>负向数据不占首行首位，但不隐藏：放在靠后的“风险与异常”位置，用警示标签标数值；超过阈值（例如退款率比上期高 50%）时，在指标卡区上方加一条可关闭的预警，写出对象和数值，点击直达对应明细。</li>
@@ -216,7 +216,7 @@
 <tr><td>地址参数</td><td>页码与每页条数写进地址参数 <code>page</code>、<code>page_size</code>，刷新和从详情返回都不丢失</td></tr>
 <tr><td>翻页反馈</td><td>翻页后表格滚回顶部，表头固定；加载中保留上一页内容并显示加载状态，不闪白</td></tr>
 <tr><td>导出</td><td>导出当前筛选的全部数据，不只导出当前页；按钮写清“导出筛选结果（共 <code>N</code> 条）”</td></tr>
-<tr><td>原型</td><td>原型里的分页能真实切换页码与每页条数，默认 20；模板 <code>interactive-prototype.html</code> 内置了可用的分页组件，照它接到每个列表</td></tr>
+<tr><td>原型</td><td>原型里的分页能真实切换页码与每页条数，默认 20，每个列表都接上分页组件；旧会话的骨架 <code>interactive-prototype.html</code> 内置了一个可用的</td></tr>
 </tbody></table></div>
 <p>分页条的样子见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“分页”。原型检查脚本：列表表格（10 行以上，或类名含 <code>list</code>、<code>table</code>）旁没有分页控件，或分页默认不是 20 条，给出警告。</p>
 <h4>筛选</h4>
@@ -239,12 +239,12 @@
 <li>完整表单包含：必填标记、前后缀、字数计数、默认值、单选组、开关、下拉、图片选择、标签增删、预览、底部取消与保存。</li>
 <li>区间类参数（中奖概率、比例、折扣、阈值）用可拖动的滑块并实时显示数值；有总和约束时由一项自动补齐，不让用户手算。</li>
 <li>保存中按钮显示进行状态；成功关闭面板、轻提示并让对应行闪一次；失败保留输入并在顶部说明原因。</li>
-<li>确认按后果分级：开启、恢复、上架等可撤回的操作一键生效并轻提示；下架、停用、冻结、改价、退款、删除等影响用户或金额的修改弹出居中确认框，标题写对象，正文写后果，确认按钮写动作，危险操作的确认按钮用危险样式。</li>
+<li>确认按后果分级：开启、恢复、上架等可撤回的操作一键生效并轻提示；下架、停用、冻结、改价、退款、删除等影响用户或金额的修改在原位展示确认内容，标题写对象，正文写后果，确认按钮写动作，危险操作的确认按钮用危险样式。</li>
 </ul>
 <h4>按钮与浮层</h4>
 <ul>
 <li>页面与卡片上的功能按钮前置线性图标。</li>
-<li>所有浮层（详情、表单、确认）在内容区居中，遮罩覆盖整个后台框；高度超出时只滚动面板内容，标题和底部按钮固定；不从右侧滑入。</li>
+<li>详情、表单、确认采用页内结构或独立页面，具体交互服从视觉技能的成品硬规则；不默认生成遮罩浮层。</li>
 <li><kbd>Esc</kbd> 与取消也能关闭浮层；详情浮层点遮罩可关，表单与确认浮层点遮罩不关闭，以免丢失已填内容（界面通用规范“浮层与反馈”）。手机宽度下侧栏菜单可以用左侧抽屉，这是导航，不承载详情。</li>
 <li>按钮与浮层的尺寸、留白、关闭按钮位置和打开动画见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“界面组件的外观”“各端视觉参数”“动效细则”。</li>
 </ul>
@@ -252,7 +252,7 @@
 <h4>配色</h4>
 <ul>
 <li>本层不决定任何视觉值：配色（主色、主题、页面底色、品牌主卡、图表色板、状态标签）、图标与图形、字体与字号都交给视觉技能，取值见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“各端视觉参数”。</li>
-<li>外观设置：浅色与深色两套主题，默认跟随系统，账号菜单里“外观”三选一。</li>
+<li>外观设置：需要提供主题切换时，在「设置 → 外观」办理。头像入口导航到设置。</li>
 </ul>
 <h4>图标与图形</h4>
 <ul>
@@ -278,7 +278,7 @@
 <div class="table-wrap"><table><thead><tr><th>宽度</th><th>布局</th><th>表格</th></tr></thead><tbody>
 <tr><td>宽屏</td><td>侧栏 + 内容区</td><td>完整列，宽度不够时容器内横向滚动</td></tr>
 <tr><td>中等宽度</td><td>侧栏可折叠为图标栏</td><td>容器内横向滚动</td></tr>
-<tr><td>手机</td><td>侧栏收进抽屉</td><td>每行转为卡片</td></tr>
+<tr><td>手机</td><td>导航改页内结构</td><td>每行转为卡片</td></tr>
 </tbody></table></div>
 <p>各档宽度的取值与指标卡的列数见<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“各端排布参数”。</p>
 </section>
@@ -316,9 +316,9 @@
 <h2 id="output-contract-heading" class="section-heading"><svg class="icon-linear section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 12h6M9 16h6"/></svg><span>输出契约</span></h2>
 <div class="table-wrap"><table><thead><tr><th>位置</th><th>职责</th><th>通过条件</th></tr></thead><tbody>
 <tr><td>交付网页的后台原型</td><td>可操作的后台与配置面板</td><td>各宽度无右侧遮挡；驾驶舱、表格、表单、权限场景齐全</td></tr>
-<tr><td>原型自动测试</td><td>宽度、图标、浮层位置、标题与导航、空列、分页</td><td>1280–1920 每页无溢出；菜单项与页面级功能按钮都有图标；详情面板居中；页面标题不重复侧栏高亮项、分组不与唯一子项同名、没有整列为空的列（检查脚本报错），同值列、列表缺分页、分页默认不是 20 条、顶栏缺品牌标识给出警告；发布的网页缺标签页图标报错；字体、对齐、字号、内边距等外观项按<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“检查脚本的认定”核对</td></tr>
+<tr><td>原型自动测试</td><td>宽度、图标、浮层位置、标题与导航、空列、分页</td><td>1280–1920 每页无溢出；菜单项与页面级功能按钮都有图标；详情返回保持上下文；页面标题不重复侧栏高亮项、分组不与唯一子项同名、没有整列为空的列（检查脚本报错），同值列、列表缺分页、分页默认不是 20 条、顶栏缺品牌标识给出警告；发布的网页缺标签页图标报错；字体、对齐、字号、内边距等外观项按<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/visual-design.html">视觉设计规范</a>“检查脚本的认定”核对</td></tr>
 <tr><td>列表定义</td><td>每个列表的默认视图、列与对齐、筛选、导出</td><td>默认视图按“列表的默认视图”表填写并有理由；外露筛选不超过 4 个；导出字段有中文表头与清洗规则</td></tr>
-<tr><td>截图验收</td><td>桌面与 390 像素宽度</td><td>菜单抽屉、表格卡片可操作</td></tr>
+<tr><td>截图验收</td><td>桌面与 390 像素宽度</td><td>页内导航、表格卡片可操作</td></tr>
 </tbody></table></div>
 </section>
 <!-- SECTION:output-contract:END -->
@@ -328,7 +328,7 @@
 <h2 id="quality-gates-heading" class="section-heading"><svg class="icon-linear section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h5M15 7h5M9 7a3 3 0 1 0 6 0 3 3 0 0 0-6 0ZM4 17h10M18 17h2M14 14a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg><span>质量门禁</span></h2>
 <ul>
 <li>任一页面在 1280–1920 像素宽度有内容超出右边界或被遮挡：失败。</li>
-<li>详情、表单用贴右边的侧滑抽屉，或打开后面板偏离中间：失败。</li>
+<li>默认详情、表单出现遮罩浮层或侧滑抽屉：退回按视觉技能的硬规则复核。</li>
 <li>前台展示的任一运营内容在后台找不到维护入口，或只能改一部分：失败。原型测试在后台修改后到前台对应位置核对。</li>
 <li>状态字段需要进入编辑页才能修改、搜索需要再点查询、枚举列不能点表头筛选、重要修改没有二次确认或开启类操作也要确认：退回修改。</li>
 <li>侧边菜单项或页面级功能按钮缺少图标：退回修改。</li>

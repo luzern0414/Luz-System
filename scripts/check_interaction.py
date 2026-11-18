@@ -16,7 +16,7 @@ architecture is treated as written to the interaction contract and every page mu
   page   data-entry  data-goal  data-primary-action  data-secondary-actions  data-exit  data-states
   action data-target-page-id  data-navigation-id  data-feedback  data-confirm  data-undo
   nav    data-from
-  state  data-values  data-initial  data-terminal  data-transitions  data-page-ids
+  state  data-values  data-initial  data-terminal  data-transitions  data-page-ids  data-ordered  data-configurable
   entity data-lifecycle
   flow   data-success (data-exception is required by validate_session)
   component data-display
@@ -31,7 +31,6 @@ from pathlib import Path
 
 ID_RE = re.compile(r"(?<![A-Z0-9-])(?:FL|P|A|N|C|S|D|F)-\d{3,}(?![0-9])")
 PAGE_ID_RE = re.compile(r"^P-\d{3,}$")
-LIST_SPLIT_RE = re.compile(r"[,，、;；\s]+")
 LIST_DELIM_RE = re.compile(r"[,，、;；]")
 
 
@@ -45,10 +44,7 @@ PAIR_SPLIT_RE = re.compile(r"[:：]")
 PAREN_RE = re.compile(r"[（(][^）)]*[）)]")
 SPACE_RE = re.compile(r"\s+")
 
-# Entry and exit keywords that are not page IDs: global navigation, external links, the tab bar itself.
-ENTRY_KEYWORDS = ("标签栏", "底部标签", "侧栏", "菜单", "顶部导航", "导航栏", "登录", "外部", "分享", "深链接", "链接", "通知",
-                  "全局", "启动", "搜索", "扫码", "消息")
-EXIT_KEYWORDS = ("来源", "上一页", "返回", "标签栏", "底部标签", "侧栏", "菜单", "外部", "关闭", "终点", "登录", "首页", "原位", "停留")
+# Entry sources that are not page IDs: global navigation, external links, the tab bar itself.
 ROOT_SOURCE_RE = re.compile(r"标签栏|底部标签|侧栏|菜单|顶部导航|tab", re.I)
 EXTERNAL_SOURCE_RE = re.compile(r"外部|分享|深链接|通知|扫码|全局")
 LOGIN_RE = re.compile(r"login|signin|登录")
@@ -71,7 +67,6 @@ CREATE_VERB_RE = re.compile(r"新建|新增|添加|创建|上传|导入|录入|�
 VIEW_VERB_RE = re.compile(r"打开|查看|预览|详情|展开|下载")
 EDIT_VERB_RE = re.compile(r"编辑|修改|修订|保存|调整|重命名|改名|更新")
 DELETE_VERB_RE = re.compile(r"删除|移除|归档|作废|撤销|撤下|停用|下架|注销|清空")
-STATUS_VERB_RE = re.compile(r"发布|撤下|上架|下架|启用|停用|开关|批准|拒绝|切换状态|暂停|继续|结束|撤销")
 DESTRUCTIVE_RE = re.compile(r"删除|撤销|撤下|停用|作废|清空|移除|注销|退款|重置|下架|冻结|解绑|取消订单")
 WRITE_RE = re.compile(r"保存|提交|发送|新建|新增|添加|创建|上传|导入|生成|导出|发布|批准|拒绝|修改|编辑|修订|重试|登录|"
                       r"退出|复制|开始|结束|暂停|继续|润色|调整|转为|初始化|录入|下载|勾选|反馈|有用|重新")
@@ -547,10 +542,42 @@ def _parse_values(node) -> list[str]:
     return [v.strip() for v in re.split(r"[、，,;；/]", _strip_ids(text)) if v.strip()]
 
 
+ORDERED_YES_RE = re.compile(r"^(?:是|有序|true|yes|1|y)$", re.I)
+CONFIGURABLE_RE = re.compile(r"^(?:是|否|可|不可|true|false|yes|no|管理员[^;；]*|固定)$", re.I)
+
+
+def _ordered_findings(node, sid: str, errors: list[str], warnings: list[str]) -> None:
+    """A state set with a progress order (stage of a deal, rounds, steps of an order): ``data-ordered`` says the order of ``data-values`` is the order of progress,
+    ``data-terminal`` lists the end states (they come last), ``data-configurable`` says whether an administrator may add, stop or reorder values.
+    Which colour tells them apart is Luz-Design's (visual-design.html 有序进度状态的色阶); this only checks the function side is written down."""
+    if not ORDERED_YES_RE.match(node.get("data-ordered").strip()):
+        return
+    values = _parse_values(node)
+    if len(values) < 2:
+        errors.append(f"architecture state {sid} is ordered (data-ordered) but lists {len(values)} value(s): an ordered set has at least two, in the order of progress")
+        return
+    terminal = split_list(node.get("data-terminal"))
+    unknown = [t for t in terminal if t not in values]
+    if unknown:
+        errors.append(f"architecture state {sid} data-terminal names values that are not in data-values: {'、'.join(unknown)}")
+    in_order = [v for v in values if v in terminal]
+    first_terminal = min((values.index(v) for v in in_order), default=len(values))
+    stray = [v for v in values[first_terminal:] if v not in terminal]
+    if stray:
+        warnings.append(f"architecture state {sid} is ordered but end states are not last in data-values (after the first end state come: {'、'.join(stray)}): "
+                        "list the values in the order of progress with the end states at the end")
+    configurable = node.get("data-configurable").strip()
+    if not configurable:
+        warnings.append(f"architecture state {sid} is ordered but does not say whether an administrator may add, stop or reorder its values (data-configurable 是 / 否)")
+    elif not CONFIGURABLE_RE.match(configurable):
+        warnings.append(f"architecture state {sid} data-configurable is not 是 / 否 / 管理员可…: {configurable}")
+
+
 def _state_findings(model: Model, errors: list[str], warnings: list[str]) -> None:
     undeclared = []
     for node in model.states:
         sid = node.get("data-state-id").strip()
+        _ordered_findings(node, sid, errors, warnings)
         raw = node.get("data-transitions").strip()
         if not raw:
             undeclared.append(sid)
@@ -765,7 +792,6 @@ AGENT_STATE_ALIASES = {
     "已停止": "已停止", "已取消": "已停止", "cancelled": "已停止",
     "完成": "完成", "已完成": "完成", "completed": "完成",
 }
-AGENT_MARK_ATTRS = ("data-surface", "data-agent-run")
 ELAPSED_RE = re.compile(r"(?:^|[-_\s])elapsed(?:$|[-_\s])", re.I)
 
 

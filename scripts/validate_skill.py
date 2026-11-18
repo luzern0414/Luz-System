@@ -25,7 +25,7 @@ from validate_session import (
 
 ROOT = Path(__file__).resolve().parents[1]
 # Reading pages share one Markdown type block (Luz-Design references/md-type.css; this skill's references/md-type.css is a copy).
-# The rule stylesheet and the reading-page templates carry the same text between these markers; hw_render_plan.py reads the copy at run time.
+# The rule stylesheet and the reading-page templates carry the same text between these markers; hw_render_plan.py reads the Luz-Design master at run time.
 MD_START = "/* luz-md-type:start"
 MD_END = "/* luz-md-type:end */"
 MD_MASTER = ROOT.parent / "Luz-Design" / "references" / "md-type.css"
@@ -48,6 +48,8 @@ REQUIRED = [
     "scripts/validate_session.py",
     "scripts/validate_skill.py",
     "scripts/publish.py",
+    "scripts/crawl_gate.py",
+    "scripts/test_crawl_gate.py",
     "scripts/experience.py",
     "scripts/test_session_flow.py",
     "scripts/test_experience.py",
@@ -112,7 +114,6 @@ TEMPLATE_NAMES = ("brief.md", "research.md", "module-intake.html", "system-archi
 REFERENCE_SUBDIRS = {"hardware"}
 # The skill keeps five folders (agents, references, scripts, experience, examples); sessions are outputs and live in OUTPUT_ROOT.
 ALLOWED_TOP_LEVEL = {".git", ".gitignore", "LICENSE", "NOTICE", "README.md", "SKILL.md", "WORKFLOW.md", "agents", "references", "scripts", "experience", "examples"}
-RULE_TITLES = {f: t for f, _, t in RULE_PAGES}
 TITLE_SEPARATOR_RE = re.compile(r"[,，:：;；|｜/／·・、\\\-–—]")
 RULE_SECTIONS = [
     "scope",

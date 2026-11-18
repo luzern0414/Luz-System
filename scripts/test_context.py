@@ -34,40 +34,55 @@ class RuleCardTests(unittest.TestCase):
                 self.assertIn(heading, text, f"{kind}: {heading}")
             self.assertRegex(digest, r"^[0-9a-f]{12}$")
             rules = rule_text(kind)
-            self.assertGreater(len(rules), 800, f"{kind}: rule text too short")
+            self.assertIn('### ', rules, f'{kind}: missing resolved rule sections')
+            self.assertTrue(any(len(line.strip()) >= 30 for line in rules.splitlines() if not line.startswith('#')),
+                            f'{kind}: missing actionable source text')
             # Markup is flattened; only code samples quoted by the rules may contain tags.
             self.assertNotRegex(rules, r"<(p|td|th|tr|li|ul|div|section|h[1-6])[\s>]", f"{kind}: HTML left in the card")
             # Saved cards live under raw/ where Markdown links are checked; rule text carries none.
             self.assertNotIn("](", text, f"{kind}: Markdown link in the card")
 
     def test_rule_text_stays_readable_in_one_sitting(self) -> None:
-        # Roughly 8–35 KB of rule text per card: long enough to carry the rules, short enough to be read in full.
+        # Completeness is checked by real sections and invariants, never a minimum byte quota.
         for kind in context.card_kinds():
             size = len(rule_text(kind).encode("utf-8"))
             self.assertLessEqual(size, 35 * 1024, f"{kind}: {size} bytes of rule text; split the card or set max_chars")
-            if VISUAL_DESIGN.is_file():
-                self.assertGreaterEqual(size, 8 * 1024, f"{kind}: {size} bytes of rule text is too thin")
 
     def test_preferences_are_always_on_the_card(self) -> None:
         notes = context.load_json(context.NOTES_FILE, {"notes": []})["notes"]
-        moved = set(context.load_json(context.CARDS_FILE, {}).get("moved_preferences", []))
-        prefs = [n["key"] for n in notes if n["kind"] == "preference" and n["key"] not in moved]
+        prefs = [n["key"] for n in notes if n["kind"] == "preference" and context.note_listed(n)]
         self.assertTrue(prefs)
         for kind in ("admin-list", "hardware"):
             text, _ = context.make_card(kind, [])
             for key in prefs:
                 self.assertIn(f"（{key}）", text, f"{kind}: {key}")
 
-    def test_preferences_about_how_things_look_moved_to_luz_design(self) -> None:
-        """Visual preferences stay in the store, so older sessions that cite them still validate, but no card prints them."""
-        moved = context.load_json(context.CARDS_FILE, {}).get("moved_preferences", [])
-        keys = {n["key"] for n in context.load_json(context.NOTES_FILE, {"notes": []})["notes"]}
-        self.assertTrue(moved)
-        self.assertTrue(set(moved) <= keys, sorted(set(moved) - keys))
+    def test_notes_of_one_project_of_skill_upkeep_or_stated_by_a_rule_page_stay_off_the_cards(self) -> None:
+        """They stay in the store, so older sessions that cite them still validate, but no card prints them: how things look
+        is Luz-Design's (codified there), a project's requirement is that project's, upkeep notes are for maintaining the skill."""
+        notes = context.load_json(context.NOTES_FILE, {"notes": []})["notes"]
+        archived = [n for n in notes if not context.note_listed(n)]
+        self.assertTrue({"卡片等高", "扁平线性风格", "居中悬浮面板"} <= {n["key"] for n in archived if n.get("codified")})
+        self.assertTrue(any(n.get("scope") == "project" for n in archived))
+        self.assertNotIn("moved_preferences", context.load_json(context.CARDS_FILE, {}))
         for kind in ("admin-list", "miniprogram", "commerce", "prototype"):
             text, _ = context.make_card(kind, [])
-            for key in moved:
-                self.assertNotIn(f"（{key}）", text, f"{kind}: {key}")
+            for note in archived:
+                self.assertNotIn(f"（{note['key']}）", text, f"{kind}: {note['key']}")
+
+    def test_several_kinds_print_as_one_card_and_a_shared_section_or_preference_prints_once(self) -> None:
+        one, _ = context.make_card("admin-list", [])
+        other, _ = context.make_card("admin-dashboard", [])
+        merged, digest = context.make_cards(["admin-list", "admin-dashboard", "admin-list"], [])
+        self.assertLess(len(merged), len(one) + len(other))
+        self.assertEqual(merged.count("## 1 用户偏好（必须遵守）"), 1)
+        for text in (one, other):
+            for label in re.findall(r"(?m)^### (.+)$", text):
+                self.assertEqual(merged.count(f"### {label}\n"), 1, label)
+        for key in re.findall(r"（([\w一-鿿-]+)）$", one.split("## 2 ")[0], re.M):
+            self.assertEqual(merged.split("## 2 ")[0].count(f"（{key}）"), 1, key)
+        self.assertRegex(digest, r"^[0-9a-f]{12}$")
+        self.assertNotEqual(digest, context.make_card("admin-list", [])[1])
 
     def test_admin_list_card_carries_the_list_rules(self) -> None:
         text, _ = context.make_card("admin-list", [])
@@ -134,7 +149,7 @@ class RuleCardTests(unittest.TestCase):
         # Luz-Project reads `function-list` for the client function list and business logic; the architecture atlas and the
         # proposal content come from `client-docs`. Both must say what the client files are and how the data is checked.
         function_list = rule_text("function-list")
-        for phrase in ("客户功能清单", "业务逻辑的写法", "项目专属问题", "工时估算", "features.json", "intake-extra.json", "没有序号列"):
+        for phrase in ("客户功能清单", "业务逻辑的写法", "项目专属问题", "人日与报价（可选，默认不写）", "features.json", "intake-extra.json", "没有序号列"):
             self.assertIn(phrase, function_list, f"function-list: {phrase}")
         text, _ = context.make_card("function-list", [])
         self.assertIn("features_check.py", text)
@@ -143,6 +158,15 @@ class RuleCardTests(unittest.TestCase):
                        "先分析客户的需求，再给出解决方案", "每条线是单向的关系"):
             self.assertIn(phrase, client_docs, f"client-docs: {phrase}")
         self.assertIn("client-docs", [kind for kind in context.card_kinds()])
+
+    def test_estimate_policy_reaches_the_cards_and_no_default_price_is_built_in(self) -> None:
+        # User, 2026-11-05: no budget unless asked for; workdays and quote are two switches; a quote comes from a human, never from the agent.
+        for kind in ("function-list", "client-docs"):
+            text = rule_text(kind)
+            for phrase in ("estimate.workdays", "estimate.quote", "requested_by", "provided_by", "evidence", "等待人工报价", "hours_basis"):
+                self.assertIn(phrase, text, f"{kind}: {phrase}")
+            self.assertNotRegex(text, r"\d+\s*元\s*(?:每|/)\s*人[天日]", f"{kind}: a built-in unit price")
+            self.assertNotIn("元每人天", text, f"{kind}: unit prices are the human quote sheet's, not a rule's")
 
     def test_privacy_and_accessibility_rules_are_on_the_cards_that_design_screens(self) -> None:
         ui_cards = {"system-design": "个人信息与隐私", "client-docs": "个人信息与隐私", "miniprogram": "隐私保护指引", "hardware": "单独同意"}
@@ -156,6 +180,11 @@ class RuleCardTests(unittest.TestCase):
                    "agent-composer", "website", "prototype", "interaction", "interaction-patterns", "nav-levels", "platform-console",
                    "workflow-canvas", "alert-loop")
         for kind in pointed:
+            if kind == "prototype":
+                self.assertTrue(any("Luz-Design design-path / prototype-reference" in tool for tool in cards[kind]["tools"]))
+                self.assertTrue(any("frontend.py" in tool and "ui_package.py" in tool for tool in cards[kind]["tools"]))
+                self.assertTrue(any("source-locked" in tool and "ui-ownership.md" in tool for tool in cards[kind]["tools"]))
+                continue
             lines = [t for t in cards[kind]["tools"] if t.startswith("视觉读 Luz-Design 的规则卡 `interface-visual`")]
             self.assertEqual(len(lines), 1, kind)
             for name in ("interface-components", "interface-layout", "interface-pattern", "interface-motion", "interface-icons",
@@ -166,6 +195,21 @@ class RuleCardTests(unittest.TestCase):
             text, _ = context.make_card(kind, [])
             self.assertNotIn("### 视觉设计规范（Luz-Design）", text, kind)
             self.assertNotIn("### 文件设计规范（Luz-Design）", text, kind)
+
+    def test_cards_and_entry_documents_name_only_luz_design_entries_that_exist(self) -> None:
+        """Luz-Design was reorganised: its source_ui builder, the 016 library builders, references/ui-kit, references/component-library
+        and the template ui-source-output are gone. A pointer to one of them sends the reader nowhere."""
+        gone = ("source_ui.py", "build_configurable_library.py", "build_full_library.py", "audit_full_library.py", "ui-kit",
+                "commerce-kit", "component-library", "ui-source-output")
+        design = context.SKILL_ROOT.parent / "Luz-Design"
+        for rel in ("SKILL.md", "WORKFLOW.md", "README.md", "agents/openai.yaml", "references/cards.json", "references/templates.txt"):
+            text = (context.SKILL_ROOT / rel).read_text(encoding="utf-8")
+            self.assertEqual([name for name in gone if name in text], [], rel)
+            if not design.is_dir():
+                continue
+            # cards.json is JSON, so its Windows paths are written with doubled backslashes.
+            for path in re.findall(r"D:[\\/]+Codes[\\/]+Luz-Design[\\/]+([\w\\/.-]+)", text):
+                self.assertTrue((design / path.replace("\\", "/").rstrip(".")).exists(), f"{rel}: Luz-Design {path}")
 
     def test_cards_moved_to_luz_design_are_retired_everywhere(self) -> None:
         retired = ("layout-grid", "icon-card-title", "table-layout", "ui-recipes")

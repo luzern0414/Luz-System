@@ -14,7 +14,7 @@
 <h2 id="scope-heading" class="section-heading"><svg class="icon-linear section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="3"/></svg><span>适用范围</span></h2>
 <p>适用于交付网页里的“系统功能列表”和系统架构文件中的功能表。功能列表是一个系统全部功能的唯一索引：每个功能出现一次，读者从这一张表就能知道系统有哪些功能、在哪个端、在哪个页面、怎样操作、会出现哪些状态。</p>
 <p>本页规定这张表的结构和写法；字体、配色、列宽与对齐等页面自己的版式见视觉技能的<a href="https://github.com/luzern0414/Luz-Design/blob/master/references/file-design.html">文件设计规范</a>“网页文件”。</p>
-<p>同一批功能还有交给客户的形态：功能清单（含报价）和业务逻辑确认表。客户拿到的文件只有表格文件和便携式文档，网页功能列表只给评审与开发；两者出自同一份数据文件 <code>data/client/features.json</code>，从“客户功能清单”起的小节规定这份数据怎么写。</p>
+<p>网页功能列表和客户清单都由 <code>data/client/features.json</code> 派生。本页规定功能内容。交付文件、估算开关与生成路径见<a href="../../Luz-Project/references/client-documents.md">项目客户文档</a>。</p>
 </section>
 <!-- SECTION:scope:END -->
 
@@ -28,7 +28,7 @@
 <li>套用本页的列结构和合并单元格规则生成表格，版式按视觉技能的文件设计规范“网页文件”。</li>
 <li>用“重复检查”核对：没有两个编号描述同一能力，没有一行复述另一行，模块和界面状态在每组只出现一次。</li>
 <li>在 1280 像素和 390 像素宽度截图检查：表格不撑破页面，文字不被截断，表头与内容对齐。</li>
-<li>要交给客户的功能清单，把同一批功能写成 <code>data/client/features.json</code>（模块、功能、使用端、角色、基础或可选、业务逻辑、工时），运行 <code>py -X utf8 scripts/features_check.py</code> 到零错误，再交 <code>Luz-Project</code> 生成客户的表格文件。</li>
+<li>要交给客户的功能清单，把同一批功能写成 <code>data/client/features.json</code>（模块、功能、使用端、角色、基础或可选、业务逻辑），运行 <code>py -X utf8 scripts/features_check.py</code> 到零错误，再交 <code>Luz-Project</code> 生成客户的表格文件；人日和报价默认不写，只有项目开启了对应开关才写（见“人日与报价（可选，默认不写）”）。</li>
 <li>业务逻辑逐条写成客户能确认的决定；只有客户才有的信息和项目专属的待决规则写进 <code>intake-extra.json</code>。</li>
 </ol>
 </section>
@@ -86,8 +86,8 @@
 </tbody></table></div>
 <h3>客户功能清单</h3>
 <ul>
-<li>唯一来源是 <code>data/client/features.json</code>：模块 <code>modules</code>（编号、名称、一句话说明）和功能 <code>features</code>（编号、所属模块、名称、使用端、角色、类型、功能说明、业务逻辑、工时、标签、依赖、验收）。每个功能有状态：在范围内、范围外、已移除。报价的单价写在 <code>quote.json</code>，单位是元每人天。成品由 <code>Luz-Project</code> 经 <code>Luz-Design</code> 的表格脚本生成，不手改成品。</li>
-<li>成品表格文件有两张工作表。功能清单：使用端、使用角色、功能模块三级分组，由大到小，纵向合并，列为功能、功能说明、类型；报价清单：同一份清单加上工时（人天）和报价（元），表下方依次是基础功能小计、可选功能小计、报价合计。没有序号列，没有功能编号，也没有业务规则列。</li>
+<li>唯一来源是 <code>data/client/features.json</code>：模块 <code>modules</code>（编号、名称、一句话说明）和功能 <code>features</code>（编号、所属模块、名称、使用端、角色、类型、功能说明、业务逻辑、标签、依赖、验收）。每个功能有状态：在范围内、范围外、已移除。人日的 <code>hours</code>、<code>hours_basis</code> 只在开启人日时才写，单价与报价只在开启报价时才有，且只来自人工提供的报价单 <code>quote.json</code>（见“人日与报价（可选，默认不写）”）。成品由 <code>Luz-Project</code> 经 <code>Luz-Design</code> 的表格脚本生成，不手改成品。</li>
+<li>成品表格文件默认只有一张工作表“功能清单”：使用端、使用角色、功能模块三级分组，由大到小，纵向合并，列为功能、功能说明、类型。开启人日时在类型之后加“工时（人天）”列；开启报价时才有第二张“报价清单”，在同一份清单上加报价（元），表下方依次是基础功能小计、可选功能小计、报价合计。没有序号列，没有功能编号，也没有业务规则列。</li>
 <li>功能的稳定编号 <code>FN-001</code> 一类只在数据文件、变更台账和验收清单里使用，客户看的清单不出现编号。编号发布后永不复用；删除功能不删数据，把状态改为已移除。页面里的功能列表在完整项目中沿用这套编号，独立会话沿用架构里的编号。</li>
 <li>使用端只取固定的七个值：<code>miniprogram</code>、<code>web-admin</code>、<code>agent</code>、<code>website</code>、<code>mobile-app</code>、<code>api</code>、<code>hardware</code>，成品显示为中文端名。一个功能只属于一个端；同一能力在两个端都有时按端分别写，因为页面和交互不同。</li>
 <li>角色用客户的叫法（企业员工、核销员、平台管理员）；“全部角色”只用于确实对所有角色开放的功能。</li>
@@ -97,9 +97,9 @@
 <h3>功能的粒度与基础、可选</h3>
 <ul>
 <li>一个功能是用户能完成的一件事，能单独说明、单独验收（“取消报餐”“导出员工名单”）。功能说明里出现“并且”“以及”，多半是两个功能；两个功能的说明、页面、操作和结果都相同，就是同一个能力，合并。</li>
-<li>基础功能：不做，系统的主流程就不成立（登录与绑定、下单、核销、数据隔离、备份）。可选功能：客户不选，其余功能照常运转，选用后另计（导出、统计看板、通知）。基础功能不能依赖可选功能；有依赖时，把被依赖的功能改为基础，或把依赖拆开。</li>
+<li>基础功能：不做，系统的主流程就不成立（登录与绑定、下单、核销、数据隔离、备份）。可选功能：客户不选，其余功能照常运转，选用后才纳入范围（导出、统计看板、通知）。基础与可选只是功能分级，不是价格。基础功能不能依赖可选功能；有依赖时，把被依赖的功能改为基础，或把依赖拆开。</li>
 <li>客户没有提出、只是行业里常见的功能，放进可选，并在业务逻辑确认里让客户决定；“原文未列”“建议做”这类内部用语不进客户看的文字。</li>
-<li>第三方费用、云服务费用、短信流量不是功能，不进清单，在方案说明书里以约定写明。</li>
+<li>第三方费用、云服务费用、短信流量不是功能，不进清单，在方案说明书里写明由谁承担；不写金额，除非有人工提供的数字。</li>
 <li>需求怎么写成功能，以及每个功能的依据与验收，按系统设计规范“需求的写法”。</li>
 </ul>
 <h3>业务逻辑的写法</h3>
@@ -119,9 +119,15 @@
 <li>平台规则（小程序备案、类目资质、支付商户开通材料）只作为向客户确认的问题，具体要求以平台官方最新说明为准，先由前置检索核对再写。</li>
 <li>客户选“需修改”并写出新逻辑，会自动登记为待确认的变更；写了“需修改”却没写新逻辑算未回答。</li>
 </ul>
-<h3>工时估算</h3>
+<h3>人日与报价（可选，默认不写）</h3>
 <ul>
-<li>工时以人天为单位，最小 0.5；每个在范围内的功能都要有工时，报价才能生成。工时是估算，必须请用户确认后才进报价；功能拆分、合并或移除后同步调整，合计由表格公式重算。</li>
+<li>默认只给功能清单：模块、功能、功能说明、使用角色、基础或可选、业务逻辑；没有人日、工时、预算、单价、金额、合计和报价清单工作表。有些项目根本不需要预算，不能因为“一般都有”就加上。</li>
+<li>两个互相独立的开关写在项目状态根的 <code>config/documents.json</code>：<code>estimate.workdays</code>（是否写人日，默认 <code>false</code>）和 <code>estimate.quote</code>（是否写单价与报价，默认 <code>false</code>；为 <code>true</code> 时 <code>workdays</code> 必须同时为 <code>true</code>，因为报价基于人日）。打开任何一个都要同时记下 <code>estimate.requested_by</code>、<code>requested_at</code>、<code>request_note</code>（谁在什么时候、用什么原话要求的），缺任何一项都不能打开。独立运行、读不到这个配置时按两个都关。旧配置里的 <code>amounts: false</code> 等价于两个都关。</li>
+<li>人日（<code>estimate.workdays</code> 开启后）：每个在范围内的功能写 <code>hours</code>（人天，最小 0.5）和 <code>hours_basis</code>（估算依据：功能复杂度、涉及的页面与接口数、参照的同类功能，不能只有数字）。人日是估算，用户批准该文件之前一律标“拟定”；功能拆分、合并或移除后同步调整，合计由表格公式重算。</li>
+<li>报价（<code>estimate.quote</code> 开启后）：单价、折扣、金额、总价只能来自人工提供的报价单，不得自拟，不得套用示例值，不得“暂估”。<code>quote.json</code> 必须带 <code>provided_by</code>（具体的人，姓名或角色，不得是智能体、技能、工具）、<code>provided_at</code>、<code>request_note</code>（要求报价的原话）、<code>evidence</code>（提供数字的原话或来源文件路径）和 <code>unit_price</code>。缺这些字段，或 <code>provided_by</code> 是智能体、系统、示例、暂估一类，检查直接拒绝。用户还没给数字时，把“等待人工报价”列为用户待办并停下，不生成报价页。</li>
+<li>本技能的规则、模板和示例里不放任何默认单价或示例金额；评审页、汇总页、台账和说明文件也不出现未经人工提供的金额。</li>
+<li>客户文字（功能名、说明、业务逻辑、验收）里不出现人日、工时、预算、报价这些词，这些内容只在各自的列和工作表里；业务本身就有的概念（例如询价单、预算管理功能）确需写进功能时，在该功能上用 <code>allow_terms</code> 写明放行的词，检查才不报错。</li>
+<li>从“不写”改成“写”（或反过来）是变更，走变更台账，受影响的文件作废重审。</li>
 </ul>
 </section>
 <!-- SECTION:rules:END -->
@@ -150,7 +156,7 @@
 <!-- SECTION:output-contract:START id=output-contract data-rule-id=flist-output-contract -->
 <section id="output-contract" data-rule-id="flist-output-contract" aria-labelledby="output-contract-heading">
 <h2 id="output-contract-heading" class="section-heading"><svg class="icon-linear section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 12h6M9 16h6"/></svg><span>输出契约</span></h2>
-<div class="table-wrap"><table><thead><tr><th>位置</th><th>职责</th><th>通过条件</th></tr></thead><tbody><tr><td>交付网页中的系统功能列表</td><td>全部功能的唯一索引</td><td>列结构与合并单元格符合本页，版式符合视觉技能的文件设计规范“网页文件”；行数与架构功能数一致</td></tr><tr><td>系统架构文件中的功能表</td><td>功能与需求、模块的追溯</td><td>编号与交付网页一致</td></tr><tr><td>原型自动测试</td><td>核对字体、对齐与重复</td><td>单一字体族、无斜体、短列居中、无重复功能</td></tr><tr><td>功能数据文件 <code>features.json</code> 与 <code>intake-extra.json</code></td><td>客户功能清单、报价清单与业务逻辑确认表的唯一来源</td><td><code>features_check.py</code> 零错误；工时经用户确认</td></tr><tr><td>客户的表格文件</td><td>由 <code>Luz-Project</code> 经 <code>Luz-Design</code> 生成</td><td>没有序号列和功能编号；分组列在前、纵向合并；文件检查零错误</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>位置</th><th>职责</th><th>通过条件</th></tr></thead><tbody><tr><td>交付网页中的系统功能列表</td><td>全部功能的唯一索引</td><td>列结构与合并单元格符合本页，版式符合视觉技能的文件设计规范“网页文件”；行数与架构功能数一致</td></tr><tr><td>系统架构文件中的功能表</td><td>功能与需求、模块的追溯</td><td>编号与交付网页一致</td></tr><tr><td>原型自动测试</td><td>核对字体、对齐与重复</td><td>单一字体族、无斜体、短列居中、无重复功能</td></tr><tr><td>功能数据文件 <code>features.json</code> 与 <code>intake-extra.json</code></td><td>客户功能清单与业务逻辑确认表的唯一来源（开启人日或报价时，人日与报价清单也出自它和 <code>quote.json</code>）</td><td><code>features_check.py</code> 零错误；默认状态下没有任何人日、预算、金额；开启人日时每项有 <code>hours</code> 与 <code>hours_basis</code> 并经用户确认；开启报价时 <code>quote.json</code> 的人工证据齐全</td></tr><tr><td>客户的表格文件</td><td>由 <code>Luz-Project</code> 经 <code>Luz-Design</code> 生成</td><td>没有序号列和功能编号；分组列在前、纵向合并；文件检查零错误</td></tr></tbody></table></div>
 </section>
 <!-- SECTION:output-contract:END -->
 
@@ -163,8 +169,9 @@
 <li>关键交互写了原型中不存在的动作，或界面状态与状态机名称不一致：退回修改。</li>
 <li>表格撑破页面、文字被截断或手机上出现页面级横向滚动：失败。</li>
 <li>功能名以“支持”“提供”“实现”开头，业务逻辑写“灵活配置”或没有数字也没有边界，客户看的文字里出现技术词、内部编号或其他文件的名称：退回修改。</li>
-<li>基础功能依赖可选功能、没有任何基础功能、同一能力重复出现、有报价却缺工时：退回设计。</li>
+<li>基础功能依赖可选功能、没有任何基础功能、同一能力重复出现：退回设计。</li>
 <li>项目专属问题里问了每个项目都一样的通用信息、要客户直接填写密钥或密码、待决的规则写成开放提问、缺说明与理由：退回修改。</li>
+<li>没有明确要求却出现人日、工时、预算、单价、金额或报价清单；开启人日却缺 <code>hours</code> 或 <code>hours_basis</code>；开启报价却没有人工提供的证据，或单价、金额由智能体自拟、套用示例值、“暂估”：退回，并把“等待人工报价”列为用户待办。</li>
 </ul>
 </section>
 <!-- SECTION:quality-gates:END -->

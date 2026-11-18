@@ -13,3 +13,7 @@ __pycache__/
 experience/hardware/contacts.local.json
 # Third-party product photos stay local (copyright); rendering still uses them on this machine
 experience/hardware/images/
+
+# Generated single-file prototype previews
+/examples/base-prototype/admin.html
+/examples/base-prototype/mini.html

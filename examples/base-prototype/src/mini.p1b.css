@@ -1,0 +1,126 @@
+/* 第一批页面的样式（二）：点单、购物车一行、商品详情、购物车页、门店（m1- 开头）。 */
+
+/* ---------- 点单 ---------- */
+.m1-menu { position: relative; height: 100%; display: flex; flex-direction: column; background: var(--bg); }
+.m1-mtop { display: grid; gap: var(--s-2); padding: var(--s-3) var(--m-gutter) var(--s-2); flex: none; }
+.m1-mshop { display: flex; align-items: center; gap: var(--s-2); }
+.m1-mshop-name { font-size: var(--t-lead); font-weight: 600; }
+.m1-sentry { display: flex; align-items: center; gap: var(--s-2); min-height: 44px; padding: 0 var(--s-3); border-radius: var(--r-full); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); color: var(--text-3); text-align: left; }
+.m1-couponbar { display: flex; align-items: center; gap: var(--s-2); min-height: 40px; padding: 0 var(--s-3); border-radius: var(--r-sm); background: var(--m-price-tint); color: var(--m-price); text-align: left; }
+.m1-couponbar .grow { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m1-mbody { flex: 1; min-height: 0; display: grid; grid-template-columns: 88px minmax(0, 1fr); background: var(--surface); border-radius: var(--r-lg) var(--r-lg) 0 0; overflow: hidden; box-shadow: 0 -1px 0 var(--line); }
+.m1-rail { position: relative; overflow-y: auto; background: var(--surface-3); scrollbar-width: none; overscroll-behavior: contain; padding-bottom: 96px; }
+.m1-rail-item { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; padding: 0 var(--s-2); color: var(--text-2); text-align: center; transition: background-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard); }
+.m1-rail-item[aria-current="true"] { background: var(--surface); color: var(--brand-ink); font-weight: 600; box-shadow: inset 2px 0 0 var(--brand); }
+.m1-rail-item .mini-badge { top: 6px; right: 6px; }
+.m1-mlist { position: relative; overflow-y: auto; padding: 0 var(--s-3) 96px; overscroll-behavior: contain; }
+.m1-msec-h { position: sticky; top: 0; z-index: 2; display: flex; align-items: baseline; gap: var(--s-2); padding: var(--s-3) 0 var(--s-1); background: var(--surface); font-size: var(--t-lead); font-weight: 600; }
+.m1-msec-h .muted { font-weight: 400; }
+.m1-mend { text-align: center; color: var(--text-3); padding: var(--s-4); }
+.m1-cartbar { position: absolute; left: var(--s-3); right: var(--s-3); bottom: var(--s-2); z-index: 5; display: flex; align-items: center; gap: var(--s-2); min-height: 56px; padding: 0 var(--s-2) 0 var(--s-1); border-radius: 28px; background: var(--text-1); color: #fff; box-shadow: var(--e3); }
+.m1-cartmain { flex: 1; min-width: 0; display: flex; align-items: center; gap: var(--s-2); min-height: 56px; padding: 0 var(--s-2); border-radius: 28px; color: #fff; text-align: left; }
+.m1-cartico { position: relative; display: grid; place-items: center; width: 40px; height: 40px; }
+.m1-cartico .icon { width: 26px; height: 26px; }
+.m1-cartico.empty { color: oklch(0.8 0.01 255); }
+.m1-cart-total { font-size: 18px; font-weight: 600; line-height: 1.3; }
+.m1-cart-total .mini-price { color: #fff; }
+.m1-cart-sub { color: oklch(0.88 0.01 255); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m1-cartbar .btn { flex: none; min-width: 96px; border-radius: 22px; }
+
+/* ---------- 购物车的一行（购物车页、点单页的弹层共用） ---------- */
+.m1-line { display: flex; align-items: flex-start; gap: var(--s-3); padding: var(--s-3) 0; box-shadow: 0 1px 0 var(--line); }
+.m1-line:last-child { box-shadow: none; }
+.m1-line .mini-check { align-self: center; margin-left: calc(var(--s-3) * -1); margin-right: calc(var(--s-3) * -1); }
+.m1-line-img { width: 72px; height: 72px; border-radius: var(--r-sm); overflow: hidden; background: var(--surface-3); flex: none; }
+.m1-line-img img { width: 100%; height: 100%; object-fit: cover; }
+.m1-line.compact .m1-line-img { width: 56px; height: 56px; }
+.m1-line-main { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.m1-line-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s-2); }
+.m1-trash { flex: none; width: 40px; height: 40px; margin: calc(var(--s-2) * -1) calc(var(--s-2) * -1) calc(var(--s-2) * -1) 0; display: grid; place-items: center; color: var(--text-3); border-radius: 50%; }
+.m1-line-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); margin-block: 2px -6px; }
+.m1-warn { color: var(--warn-ink); }
+.m1-warn .m1-text { margin-left: var(--s-2); }
+.m1-line.is-off .m1-line-img img { filter: grayscale(1); opacity: 0.6; }
+.m1-line.is-off .m1-name { color: var(--text-3); }
+.m1-csheet { display: grid; gap: var(--s-1); }
+
+/* ---------- 底部固定栏的页面外壳（商品详情、购物车） ---------- */
+.m1-pwrap { display: flex; flex-direction: column; min-height: 100%; }
+.m1-pwrap > .mini-page { flex: 1; align-content: start; }
+.m1-pbar, .m1-cbar { position: sticky; bottom: 0; z-index: 5; display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--m-gutter) calc(var(--s-2) + var(--m-safe)); background: var(--surface); box-shadow: 0 -1px 0 var(--line); }
+.m1-pbar .btn { flex: 1; min-width: 0; }
+
+/* ---------- 购物车页 ---------- */
+.m1-cart { gap: 0; }
+.m1-cbands { display: grid; gap: var(--s-4); }
+.m1-cbands .m1-band + .m1-band { padding-top: var(--s-4); }
+.m1-lines { background: var(--surface); border-radius: var(--r-md); box-shadow: var(--e1); padding: 0 var(--s-3); }
+.m1-allwrap { width: auto; gap: var(--s-1); padding-right: var(--s-2); cursor: pointer; }
+.m1-csum { flex: 1; min-width: 0; display: grid; justify-items: end; }
+.m1-ctotal { font-size: 18px; font-weight: 600; color: var(--m-price); }
+.m1-csub { color: var(--text-2); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m1-cgo { flex: none; min-width: 112px; }
+
+/* ---------- 商品详情 ---------- */
+.m1-product { padding: 0; gap: 0; }
+.m1-galwrap { position: relative; }
+.m1-gal { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.m1-gal img { flex: 0 0 100%; width: 100%; aspect-ratio: 1; object-fit: cover; scroll-snap-align: start; background: var(--surface-3); }
+.m1-gdots { position: absolute; left: 0; right: 0; bottom: 32px; display: flex; justify-content: center; gap: var(--s-1); pointer-events: none; }
+.m1-gdots i { width: 6px; height: 6px; border-radius: 50%; background: color-mix(in oklch, #fff, transparent 40%); box-shadow: 0 0 0 1px oklch(0.2 0.02 255 / 0.12); }
+.m1-gdots i.on { background: #fff; }
+.m1-gcount { position: absolute; right: var(--m-gutter); bottom: 28px; height: 24px; padding: 0 var(--s-2); border-radius: var(--r-full); background: oklch(0.2 0.02 255 / 0.7); color: #fff; font-variant-numeric: tabular-nums; line-height: 24px; pointer-events: none; }
+.m1-pbody { position: relative; margin-top: -16px; padding: var(--s-3) var(--m-gutter) var(--s-5); display: grid; gap: var(--s-3); border-radius: var(--r-lg) var(--r-lg) 0 0; background: var(--bg); align-content: start; }
+.m1-pcard { display: grid; gap: 6px; }
+.m1-prow { display: flex; align-items: baseline; gap: var(--s-2); flex-wrap: wrap; }
+.m1-ptype { color: var(--text-3); }
+.m1-sold { margin-left: auto; }
+.m1-pname { font-size: 18px; font-weight: 600; }
+.m1-rowbtn { display: flex; align-items: center; gap: var(--s-3); width: 100%; min-height: 52px; padding: 0 var(--s-4); text-align: left; }
+.m1-rowbtn b { font-weight: 600; }
+.m1-rowbtn .grow { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m1-intro { line-height: 1.7; color: var(--text-2); }
+.m1-intro.clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.m1-desc-card { display: grid; gap: var(--s-2); }
+.m1-rv { display: grid; gap: var(--s-2); }
+.m1-rvi { padding: var(--s-2) 0; box-shadow: 0 1px 0 var(--line); display: grid; gap: 2px; }
+.m1-rvi:last-child { box-shadow: none; }
+.m1-pcart { position: relative; display: grid; justify-items: center; align-content: center; width: 56px; min-height: 48px; color: var(--text-2); flex: none; }
+.m1-pcart span { font-size: 14px; line-height: 18px; }
+.m1-pcart .mini-badge { top: 0; right: 4px; }
+
+/* ---------- 门店 ---------- */
+.m1-stores { position: relative; height: 100%; overflow: hidden; background: var(--surface-3); }
+.m1-map { position: absolute; inset: 0; width: 100%; height: 100%; display: block; max-width: none; }
+.m1-pin { cursor: pointer; outline: none; }
+.m1-pinshape { fill: var(--surface); stroke: var(--brand); stroke-width: 2.5; transition: fill var(--dur-fast) var(--ease-standard); }
+.m1-pinicon { fill: none; stroke: var(--brand); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.m1-pinbody { transform-box: fill-box; transform-origin: 50% 100%; transition: transform var(--dur-fast) var(--ease-standard); }
+.m1-pin.on .m1-pinbody { transform: scale(1.3); }
+.m1-pin.on .m1-pinshape { fill: var(--brand); }
+.m1-pin.on .m1-pinicon { stroke: #fff; }
+.m1-pin:focus-visible .m1-pinshape { stroke-width: 5; stroke: var(--brand-strong); }
+.m1-plabel { pointer-events: none; }
+.m1-plabel rect { fill: var(--surface); stroke: var(--line-strong); }
+.m1-plabel text { fill: var(--text-1); font-size: 14px; font-weight: 600; }
+.m1-spanel { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 72%; display: flex; flex-direction: column; background: var(--surface); border-radius: var(--r-lg) var(--r-lg) 0 0; box-shadow: var(--e3); translate: 0 calc(100% - 292px); transition: translate var(--dur-slow) var(--ease-standard); padding-bottom: var(--m-safe); }
+.is-open .m1-spanel { translate: 0 0; }
+.m1-handle { display: grid; place-items: center; width: 100%; min-height: 44px; flex: none; cursor: grab; touch-action: none; }
+.m1-handle i { width: 36px; height: 4px; border-radius: 2px; background: var(--line-strong); }
+.m1-phead { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-2); padding: 0 var(--m-gutter) var(--s-2); flex: none; }
+.m1-phead h2 { font-size: var(--t-lead); font-weight: 600; }
+.m1-locwarn { margin: 0 var(--m-gutter) var(--s-2); align-items: center; flex: none; }
+.m1-locwarn .btn { flex: none; }
+.m1-cardrow { display: flex; gap: var(--s-3); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--m-gutter); padding: var(--s-1) var(--m-gutter) var(--s-3); scrollbar-width: none; flex: none; overscroll-behavior-x: contain; }
+.is-open .m1-cardrow { flex: 1; min-height: 0; flex-direction: column; overflow-x: hidden; overflow-y: auto; scroll-snap-type: none; }
+.m1-scard { position: relative; flex: 0 0 300px; scroll-snap-align: start; display: grid; gap: var(--s-1); align-content: start; padding: var(--s-3); border-radius: var(--r-md); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); transition: background-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard); }
+.is-open .m1-scard { flex: none; }
+.m1-scard.on { background: var(--brand-soft); box-shadow: inset 0 0 0 2px var(--brand); }
+.m1-scard-top { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); }
+.m1-scard-top h3 { font-size: var(--t-lead); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m1-smeta { color: var(--text-2); }
+.m1-saddr { display: flex; align-items: center; gap: 6px; color: var(--text-2); min-width: 0; }
+.m1-saddr span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m1-sacts { position: relative; z-index: 1; display: flex; gap: var(--s-2); margin-top: var(--s-1); }
+.m1-sacts .btn { flex: 1; padding: 0 var(--s-2); }
+.m1-sacts .m1-pick { flex: 1.4; }

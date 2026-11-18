@@ -17,7 +17,7 @@ import os
 import re
 from pathlib import Path
 
-PROJECT_OUTPUT_ROOT = Path(os.environ.get("LUZ_PROJECT_OUTPUT") or r"D:\Codes\skill输出\Luz-Project")
+PROJECT_OUTPUT_ROOT = Path(os.environ.get("LUZ_PROJECT_OUTPUT") or r"E:\Skill输出\Luz-Project")
 ENV_VAR = "LUZ_PROJECT_ROOT"
 DOC_AREAS = {"requirements": "01-需求对接", "development": "02-产品开发", "acceptance": "03-验收交付"}
 NUMBERED = re.compile(r"^(\d{2})-(.+)$")
@@ -68,11 +68,6 @@ def doc_target(info: dict, area: str, stem: str, suffix: str) -> Path:
             if match.group(2) == stem and item.suffix.lower() == suffix.lower():
                 return item
     return folder / f"{max(numbers, default=0) + 1:02d}-{stem}{suffix}"
-
-
-def relative_to_project(info: dict, path: Path) -> str:
-    """The location written in the summary page: a path inside the project directory, with backslashes."""
-    return str(Path(path).resolve().relative_to(Path(info["deliver_root"]).resolve())).replace("/", "\\")
 
 
 def main(argv: list[str] | None = None) -> int:

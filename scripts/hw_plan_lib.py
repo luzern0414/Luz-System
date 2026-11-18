@@ -8,6 +8,8 @@ import json
 from collections import defaultdict, deque
 from pathlib import Path
 
+import estimate_terms as et  # the policy's words, one copy for every Luz skill (master in Luz-Design, copied by its sync_estimate_terms.py)
+
 TIERS = ("field", "edge", "cloud", "client")
 TIER_NAMES = {"field": "现场设备", "edge": "门店网络与边缘", "cloud": "云端后台", "client": "使用端"}
 LEVELS = ("必选", "推荐", "可选")
@@ -21,6 +23,9 @@ ACCESS_MODES = {
 }
 # 只能承载卡号/开关量的接口，不能直接到云
 LOCAL_ONLY_PROTOCOLS = ("韦根", "Wiegand", "干接点", "继电器", "NO/NC", "红外遥控")
+# 预算政策（用户 2026-11-05）：硬件选型清单默认不带价格（单价、小计、合计都没有）。只有用户明确要求预算，方案里写了
+# budget_requested（谁、何时、用什么原话）才带“参考价”：逐项有来源页面链接，不是报价。
+BUDGET_EVIDENCE = ("requested_by", "requested_at", "request_note")
 
 
 def load(path: str | Path) -> dict:
@@ -52,6 +57,26 @@ def load(path: str | Path) -> dict:
 
 def device_map(plan: dict) -> dict:
     return {d["id"]: d for d in plan["devices"]}
+
+
+def budget_evidence_errors(plan: dict) -> list[str]:
+    """plan['budget_requested'] absent = nobody asked for a budget = no prices. Written, it must say who asked, when, and in what words."""
+    req = plan.get("budget_requested")
+    if req in (None, False, {}, ""):
+        return []
+    if not isinstance(req, dict):
+        return ["budget_requested 须是对象 {requested_by, requested_at, request_note}：谁、何时、用什么原话要求预算；缺证据不放行，价格不显示"]
+    missing = [k for k in BUDGET_EVIDENCE if not str(req.get(k) or "").strip()]
+    if missing:
+        return ["budget_requested 缺 " + "、".join(missing) + "：谁、何时、用什么原话要求预算，缺任何一项都不放行，价格不显示"]
+    if et.not_a_person(str(req["requested_by"])):
+        return [f"budget_requested.requested_by“{req['requested_by']}”不是具体的人：写要求预算的用户或客户的姓名或角色，不能是智能体、技能、工具、系统"]
+    return []
+
+
+def show_prices(plan: dict) -> bool:
+    """Reference prices (unit, subtotal, total) appear only when a budget was asked for and the evidence is complete."""
+    return bool(plan.get("budget_requested")) and not budget_evidence_errors(plan)
 
 
 def subtotal(d: dict) -> float | None:
@@ -116,6 +141,7 @@ def ups_load(plan: dict) -> float:
 def validate(plan: dict) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
+    errors += budget_evidence_errors(plan)
     devs = {}
     for d in plan["devices"]:
         did = d.get("id")
@@ -143,9 +169,9 @@ def validate(plan: dict) -> tuple[list[str], list[str]]:
             contact = d.get("contact") or {}
             has_contact = any(contact.get(k) for k in ("phone", "website", "qr", "wechat", "email"))
             if d.get("unit_price") is not None and not d.get("url"):
-                errors.append(f"{did} 有单价但没有价格出处链接（url）")
-            if d.get("unit_price") is None and not has_contact:
-                errors.append(f"{did}（{d.get('name')}）既无价格也无联系方式：必须给出 contact 的电话、网站、二维码之一，让用户能找到渠道咨询购买")
+                errors.append(f"{did} 有单价但没有价格出处链接（url）：参考价必须逐项有来源页面，不得自拟")
+            if not d.get("url") and not has_contact:
+                errors.append(f"{did}（{d.get('name')}）没有采购渠道：必须给出出处页面链接 url，或 contact 的电话、网站、二维码之一，让用户能找到渠道咨询购买")
         if d.get("zone") and plan["zones"] and d["zone"] not in {z["id"] for z in plan["zones"]}:
             errors.append(f"{did} 的 zone {d['zone']} 未在 zones 中定义")
 
@@ -238,6 +264,11 @@ def validate(plan: dict) -> tuple[list[str], list[str]]:
             errors.append(f"{item['name']} PoE 负载 {item['load_w']} W 超过预算 {item['budget_w']} W 的 80%")
         if item.get("ports") and item["ports_used"] > item["ports"]:
             errors.append(f"{item['name']} PoE 端口不足：需要 {item['ports_used']}，只有 {item['ports']}")
+    if not plan.get("budget_requested"):
+        priced = [did for did, d in devs.items() if d.get("unit_price") is not None and d.get("purchase", True)]
+        if priced:
+            warnings.append(f"{len(priced)} 台设备带单价（{'、'.join(priced[:6])}{'等' if len(priced) > 6 else ''}），但方案没有 budget_requested："
+                            "客户清单和评审页默认不显示价格、小计、合计，单价只留作调研记录；用户明确要求预算时再写 budget_requested（谁、何时、原话）")
     return errors, warnings
 
 

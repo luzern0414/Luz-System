@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import re
 import sys
@@ -42,6 +43,14 @@ def write_json(path: Path, data: dict) -> None:
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def select_design(session: Path, stage: str, identifier: str, target: Path, *, root: Path | None = None) -> None:
+    file = ROOT.parent / "Luz-Design" / "scripts" / "template_library.py"
+    definition = importlib.util.spec_from_file_location("_system_fixture_design", file)
+    library = importlib.util.module_from_spec(definition)
+    definition.loader.exec_module(library)
+    library.select(root or session, "luz-system", stage, identifier, str(target))
 
 def now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -89,6 +98,8 @@ def write_research(session: Path, *, omit_tasks: bool = False) -> None:
     sys.path.insert(0, str(ROOT.parent / "Luz-Crawl" / "scripts"))
     from test_crawl_preflight import complete_fixture
     complete_fixture(session, "luz-system")
+    for stage in ("architecture", "system-design", "visual", "prototype"):
+        complete_fixture(session, "luz-system", stage)
     snaps = session / "raw" / "01-system" / "crawl-snapshots"
     snaps.mkdir(parents=True, exist_ok=True)
     categories = ["页面结构", "页面结构", "页面结构", "交互流程", "交互流程", "交互流程", "组件状态", "组件状态"]
@@ -132,6 +143,8 @@ def write_architecture(session: Path) -> None:
     states = ''.join(f'<div class="node" data-state-id="S-{index:03d}" data-module="{module}" data-state-subject="{module}">{module}状态</div>' for index, module in enumerate(MODULES[1:], 2))
     text = text.replace('</div></div></section>\n<section id="data">', '</div>' + states + '</div></section>\n<section id="data">', 1)
     (session / "raw" / "01-system" / "03-system-architecture.html").write_text(text, encoding="utf-8")
+    select_design(session, "architecture", "system-architecture", session / "raw" / "01-system" / "03-system-architecture.html")
+    select_design(session, "architecture", "system-architecture", session / f"{session.name}.html")
 
 def write_system_design(session: Path) -> None:
     icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><path d="M4 12h16M12 4v16"/></svg>'
@@ -145,6 +158,8 @@ def write_system_design(session: Path) -> None:
     body = fill_icon_slots(template, SYSTEM_NAME).replace("{{SYSTEM_NAME}}", SYSTEM_NAME).replace("{{MODULE_SECTIONS}}", "\n".join(sections))
     body = body.replace("<main>", '<main data-artifact="system-design">', 1)
     (session / "raw" / "01-system" / "04-system-design.html").write_text(body, encoding="utf-8")
+    select_design(session, "system-design", "system-design", session / "raw" / "01-system" / "04-system-design.html")
+    select_design(session, "system-design", "system-design", session / f"{session.name}.html")
 
 def prepare_approved_system(root: Path, *, live: bool = True) -> Path:
     session = make_system(root)
@@ -225,7 +240,7 @@ class SessionFlowTests(unittest.TestCase):
             approve_artifact(session, "visual", "02-visual/visual-board.html")
             add_mode(root, session, "prototype", skill_root=ROOT, allow_live_crawl_offline=True)
             adopt_rules(session)
-            final = publish(session, "prototype")
+            final = publish(session, "architecture")
             self.assertEqual(final.name, session.name + ".html")
             self.assertEqual(sorted(p.name for p in session.iterdir()), sorted(["raw", final.name]))
             self.assertFalse(any("final" in e or "output layout" in e for e in validate(session, allow_live_crawl_offline=True)))
@@ -317,7 +332,8 @@ class SessionFlowTests(unittest.TestCase):
                 publish(session, "prototype")
             self.assertIn("visual artifact hash differs", str(caught.exception))
             board.write_text(original, encoding="utf-8")
-            self.assertTrue(publish(session, "prototype").is_file())
+            with self.assertRaisesRegex(ValueError, "UI 来源须提供"):
+                publish(session, "prototype")
 
     def test_publish_needs_rule_card_adopted_rules_and_sediment(self) -> None:
         from publish import publish
@@ -345,8 +361,10 @@ class SessionFlowTests(unittest.TestCase):
                 publish(session, "prototype")
             self.assertIn("out of date", str(caught.exception))
             card.write_text(original, encoding="utf-8")
-            final = publish(session, "prototype")
-            self.assertTrue(final.is_file())
+            with self.assertRaisesRegex(ValueError, "UI 来源须提供"):
+                publish(session, "prototype")
+            self.assertFalse((session / f"{session.name}.html").exists())
+            self.assertTrue(publish(session, "architecture").is_file())
             errors = validate(session, allow_live_crawl_offline=True)
             self.assertFalse(any("00-rules" in e or "采用的规则" in e or "本次沉淀" in e for e in errors), errors)
             # A published session that loses its notes or cards is reported by validation.
@@ -568,7 +586,11 @@ class AuthorizationTests(unittest.TestCase):
             record_under(session, "visual", "02-visual/visual-board.html")
             add_mode(root, session, "prototype", skill_root=ROOT, allow_live_crawl_offline=True)
             adopt_rules(session)
-            self.assertTrue(publish(session, "prototype").is_file())
+            # Authorization carries approval gates, not provenance. A legacy
+            # skeleton cannot become a published UI without Design's source.
+            with self.assertRaisesRegex(ValueError, "UI 来源须提供"):
+                publish(session, "prototype")
+            self.assertTrue(publish(session, "architecture").is_file())
 
     def module_errors(self, *, per_stage: bool = False, sign: dict | None = None, record: dict | None = None,
                       after=None) -> list[str]:

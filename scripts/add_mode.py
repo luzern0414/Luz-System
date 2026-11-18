@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import sys
 import time
 from pathlib import Path
@@ -91,9 +90,10 @@ def add_mode(root: Path, session: Path, mode: str, *, standalone_poster: bool = 
     elif mode == "prototype":
         from validate_session import validate
         visual_approved = approvals.get("visual", {}).get("status") == "approved"
-        visual = work / "02-visual" / "visual-board.html"
+        visual_publication = manifest.get("source_ui_publications", {}).get("visual") or {}
+        visual = work / str(visual_publication.get("path") or "02-visual/visual-board.html")
         if not visual_approved or not visual.is_file():
-            raise PermissionError("prototype mode requires an approved 02-visual/visual-board.html")
+            raise PermissionError("prototype mode requires an approved visual artifact (complete source ZIP for source-locked UI)")
         errors = validate(
             session,
             live_sources=True,

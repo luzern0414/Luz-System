@@ -1,0 +1,167 @@
+/* 第二组页面（会员、会员卡、储值、优惠券、门店、排班）的样式。类名都以 p2- 开头，颜色、间距、圆角、阴影只用令牌。
+   构建时被包进 @layer project，所以能覆盖 ui.css 的组件。 */
+
+/* ui.css 的 reset 把所有元素的 margin 清零，原生 dialog 因此失去居中、停在左上角；这里补回（公共问题，见报告） */
+dialog.dlg:not(.sheet) { margin: auto; }
+
+/* ---------- 筛选区、批量条、数字条 ---------- */
+.p2-filterbox { container-type: inline-size; container-name: p2f; display: grid; gap: var(--s-3); padding: var(--s-4); background: var(--surface); border-radius: var(--r-md); box-shadow: var(--e1); }
+.p2-fgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--s-3) var(--s-4); }
+.p2-f { display: grid; gap: var(--s-1); align-content: start; min-width: 0; }
+.p2-f-label { color: var(--text-2); }
+.p2-range { display: flex; align-items: center; gap: var(--s-2); }
+.p2-range .input { min-width: 0; flex: 1; }
+.p2-range input[type=date] { padding-inline: var(--s-2); }
+.p2-f-act { align-self: end; }
+@container p2f (min-width: 640px) { .p2-f:has(.p2-range) { grid-column: span 2; } }
+.p2-batch { display: flex; align-items: center; flex-wrap: wrap; gap: var(--s-3); padding: var(--s-2) var(--s-4); background: var(--brand-soft); color: var(--brand-ink); border-radius: var(--r-sm); }
+.p2-seg-n { color: var(--text-3); margin-inline-start: var(--s-1); }
+.p2-lvseg { flex-wrap: wrap; }
+
+.p2-statstrip, .p2-sumstrip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--s-4) 0; padding: var(--s-4) 0; border-block: 1px solid var(--line); }
+.p2-statstrip > *, .p2-sumstrip > * { padding-inline: var(--s-5); border-inline-start: 1px solid var(--line); }
+.p2-statstrip > :first-child, .p2-sumstrip > :first-child { padding-inline-start: 0; border-inline-start: 0; }
+@container page (max-width: 640px) { .p2-statstrip > *, .p2-sumstrip > * { padding-inline: var(--s-4); } .p2-statstrip > :nth-child(odd), .p2-sumstrip > :nth-child(odd) { padding-inline-start: 0; border-inline-start: 0; } }
+
+/* ---------- 会员：趋势与等级 ---------- */
+.p2-trend { display: grid; grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr); gap: var(--s-6); align-items: center; }
+@container page (max-width: 860px) { .p2-trend { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); } }
+.p2-chart-line { min-height: 200px; }
+.p2-chart-note { margin-top: var(--s-2); }
+.p2-donut { display: grid; justify-items: center; gap: var(--s-3); }
+.p2-legend { list-style: none; padding: 0; display: grid; gap: var(--s-2); width: 100%; max-width: 280px; }
+.p2-legend li { display: grid; grid-template-columns: 12px 1fr auto 48px; gap: var(--s-2); align-items: center; }
+.p2-legend li i { width: 10px; height: 10px; border-radius: 3px; }
+.p2-legend li > :last-child { text-align: right; }
+
+/* ---------- 详情与对话框里的小件 ---------- */
+.p2-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--s-3) var(--s-4); padding: var(--s-3) var(--s-4); background: var(--surface-2); border-radius: var(--r-md); }
+.p2-kpis > div { display: grid; gap: var(--s-1); align-content: start; justify-items: start; min-width: 0; }
+.p2-kpis b { font-size: 20px; font-weight: 600; line-height: 1.4; }
+.p2-mini-empty { padding: var(--s-5) 0; text-align: center; color: var(--text-3); }
+.p2-more { padding: var(--s-2) var(--s-4); }
+.p2-faillist { list-style: none; padding: 0; display: grid; gap: var(--s-2); }
+.p2-faillist li { display: grid; gap: var(--s-1); padding: var(--s-2) var(--s-3); background: var(--bad-soft); color: var(--bad-ink); border-radius: var(--r-sm); }
+.p2-preview { padding: var(--s-2) var(--s-3); background: var(--brand-soft); color: var(--brand-ink); border-radius: var(--r-sm); }
+.p2-form2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3) var(--s-4); align-items: start; }
+.p2-form2 > .field:has(textarea) { grid-column: 1 / -1; }
+@media (max-width: 640px) { .p2-form2 { grid-template-columns: minmax(0, 1fr); } }
+.p2-pos { color: var(--ok-ink); }
+.p2-neg { color: var(--bad-ink); }
+.p2-hr { border: 0; border-top: 1px solid var(--line); margin: var(--s-2) 0; }
+.p2-warnbox { display: grid; gap: var(--s-1); padding: var(--s-3) var(--s-4); background: var(--bad-soft); color: var(--bad-ink); border-radius: var(--r-md); }
+.p2-warnbox span { color: var(--bad-ink); }
+
+/* ---------- 会员卡：右侧窄栏 ---------- */
+.p2-soon > li { padding: 0; }
+.p2-soon-row { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); width: 100%; min-height: 56px; padding: var(--s-2) var(--s-2); border-radius: var(--r-sm); text-align: left; transition: background-color var(--dur-instant) var(--ease-standard); }
+.p2-soon-row:hover { background: var(--surface-3); }
+.p2-soon-who { display: grid; min-width: 0; }
+.p2-soon-who .muted { white-space: nowrap; }
+.p2-hbars { list-style: none; padding: 0; display: grid; gap: var(--s-3); }
+.p2-hbars li { display: grid; gap: var(--s-1); }
+.p2-rail-n { font-size: 24px; font-weight: 600; }
+.p2-remain { display: grid; gap: var(--s-1); min-width: 120px; }
+
+/* ---------- 储值：对账 ---------- */
+.p2-recon-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--s-3); padding: var(--s-3) var(--s-4); background: var(--ok-soft); border-radius: var(--r-md); }
+.p2-recon-bad { background: var(--bad-soft); }
+.table tbody tr.p2-selrow { background: var(--brand-soft); }
+
+/* ---------- 优惠券：看板 ---------- */
+.p2-board .kcard { position: relative; }
+.p2-board .kcard > .btn--icon { position: absolute; top: var(--s-2); right: var(--s-2); width: 32px; min-height: 32px; }
+.p2-ccard { display: grid; gap: var(--s-2); }
+.p2-rule { font-size: var(--t-lead); font-weight: 600; color: var(--text-1); }
+.p2-meter { display: grid; gap: var(--s-1); }
+.p2-cmeta { color: var(--text-3); }
+.p2-colhint { padding-inline: var(--s-2); color: var(--text-3); }
+.p2-board .kcol > .stack:empty::after { content: "这一列没有券"; display: grid; place-items: center; min-height: 96px; border: 1px dashed var(--line-strong); border-radius: var(--r-sm); color: var(--text-3); }
+
+/* ---------- 门店：示意地图与浮动面板 ---------- */
+.p2-mapwrap { position: absolute; inset: 0; }
+.p2-map { width: 100%; height: 100%; }
+.p2-land { fill: var(--surface-3); }
+.p2-blocks rect { fill: var(--line); }
+.p2-park { fill: color-mix(in oklab, var(--ok) 16%, var(--surface-3)); }
+.p2-water { fill: color-mix(in oklab, var(--info) 22%, var(--surface-3)); stroke: color-mix(in oklab, var(--info) 22%, var(--surface-3)); }
+.p2-river-in { stroke: color-mix(in oklab, var(--info) 12%, var(--surface)); }
+.p2-road-casing { stroke: var(--line-strong); stroke-linecap: round; stroke-linejoin: round; }
+.p2-road { stroke: var(--surface); stroke-linecap: round; stroke-linejoin: round; }
+.p2-district { fill: var(--text-3); font-size: 16px; font-weight: 600; letter-spacing: 0.2em; }
+.p2-compass circle { fill: var(--surface); stroke: var(--line-strong); }
+.p2-compass path { fill: var(--text-2); }
+.p2-compass text { fill: var(--text-2); font-size: 14px; font-weight: 600; }
+.p2-pin { cursor: pointer; }
+.p2-pin:focus-visible { outline: none; }
+.p2-pin-body { transform-box: fill-box; transform-origin: 50% 100%; transition: transform var(--dur-fast) var(--ease-enter); }
+.p2-pin-body path { fill: var(--text-3); stroke: var(--surface); stroke-width: 2; }
+.p2-pin.p2-ok .p2-pin-body path { fill: var(--brand); }
+.p2-pin.p2-warn .p2-pin-body path { fill: var(--warn); }
+.p2-pin-dot { fill: var(--surface); }
+.p2-pin-shadow { fill: var(--text-1); opacity: 0.18; }
+.p2-pin:hover .p2-pin-body, .p2-pin.on .p2-pin-body { transform: scale(1.22); }
+.p2-pin:focus-visible .p2-pin-body path { stroke: var(--text-1); stroke-width: 3; }
+.p2-pin.dim { opacity: 0.3; }
+.p2-pin-name { fill: var(--text-1); font-size: 14px; font-weight: 600; paint-order: stroke; stroke: var(--surface); stroke-width: 4; stroke-linejoin: round; }
+.p2-callout { cursor: pointer; }
+.p2-callout rect { fill: var(--surface); stroke: var(--line-strong); }
+.p2-callout:focus-visible rect { stroke: var(--brand); stroke-width: 3; }
+.p2-callout .t1 { fill: var(--text-1); font-size: 14px; font-weight: 600; }
+.p2-callout .t2 { fill: var(--text-2); font-size: 14px; }
+.p2-callout .t3 { fill: var(--brand-ink); font-size: 14px; font-weight: 600; }
+.p2-maperr { height: 100%; align-content: center; background: var(--surface-3); }
+@container page (min-width: 901px) { .p2-page .l-canvas .float.tl { width: min(360px, calc(100% - var(--s-5) * 2)); } }
+.p2-fl { display: grid; gap: var(--s-3); align-content: start; }
+.p2-chips { display: flex; flex-wrap: wrap; }
+.p2-sum { display: grid; gap: 0; }
+.p2-sum-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); margin-top: var(--s-3); padding-top: var(--s-3); border-top: 1px solid var(--line); }
+.p2-strip { display: flex; gap: var(--s-3); overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: var(--s-1); scrollbar-width: thin; }
+.p2-scard { flex: none; width: 272px; display: grid; gap: var(--s-1); text-align: left; padding: var(--s-3) var(--s-4); border-radius: var(--r-md); background: var(--surface-2); box-shadow: 0 0 0 1px var(--line); scroll-snap-align: start; transition: box-shadow var(--dur-fast) var(--ease-enter), translate var(--dur-fast) var(--ease-enter); }
+.p2-scard:hover { box-shadow: var(--e2); translate: 0 -2px; }
+.p2-scard.on { background: var(--brand-soft); box-shadow: 0 0 0 2px var(--brand); }
+.p2-scard-n { display: block; }
+.p2-ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.p2-strip-empty { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3) var(--s-4); color: var(--text-2); }
+.p2-impact { display: grid; gap: var(--s-2); padding: var(--s-3) var(--s-4); background: var(--warn-soft); color: var(--warn-ink); border-radius: var(--r-md); }
+.p2-impact ul { list-style: none; padding: 0; display: grid; gap: var(--s-2); }
+.p2-impact li { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: var(--s-3); align-items: baseline; }
+.p2-phone { display: grid; gap: var(--s-3); max-width: 340px; padding: var(--s-4); border-radius: var(--r-lg); background: var(--surface-3); box-shadow: var(--e1); }
+.p2-phone-bar { display: flex; justify-content: space-between; align-items: center; gap: var(--s-2); }
+.p2-phone-hours { color: var(--text-2); }
+.p2-phone-note { display: flex; gap: var(--s-2); align-items: flex-start; padding: var(--s-2) var(--s-3); background: var(--warn-soft); color: var(--warn-ink); border-radius: var(--r-sm); }
+.p2-week { display: grid; gap: var(--s-2); }
+.p2-week-row { display: grid; grid-template-columns: 48px 96px 140px 24px 140px; justify-content: start; gap: var(--s-3); align-items: center; }
+@media (max-width: 640px) { .p2-week-row { grid-template-columns: 48px 1fr 1fr; } .p2-week-row > .muted { display: none; } }
+.p2-addrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s-2); align-items: center; }
+
+/* ---------- 排班 ---------- */
+.p2-av { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--brand-soft); color: var(--brand-ink); font-weight: 600; flex: none; }
+.p2-picklist { display: grid; gap: var(--s-2); }
+.p2-pick { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-2) var(--s-3); border-radius: var(--r-sm); box-shadow: 0 0 0 1px var(--line); cursor: pointer; }
+.p2-pick input { width: 18px; height: 18px; }
+
+/* ---------- 窄屏：触控目标不小于 40 ---------- */
+@media (max-width: 700px) {
+  .p2-page .btn--sm, .p2-dlg .btn--sm, dialog .btn--sm { min-height: 40px; }
+  .p2-page .btn--sm.btn--icon, .p2-dlg .btn--sm.btn--icon { width: 40px; }
+  .p2-page .seg > button, .p2-dlg .seg > button { min-height: 40px; }
+  .p2-board .kcard > .btn--icon { width: 40px; min-height: 40px; }
+}
+
+/* 会员卡主区较窄：单元格不换行，左右内边距收到 12，放不下时表格自己横向滚动 */
+.p2-cards .table th, .p2-cards .table td { padding-inline: var(--s-3); white-space: nowrap; }
+.p2-cards .l-rail { grid-template-columns: minmax(0, 1fr) minmax(256px, 272px); }
+@container page (max-width: 860px) { .p2-cards .l-rail { grid-template-columns: minmax(0, 1fr); } }
+.p2-remain .badge { justify-self: start; }
+
+/* 门店画布：容器不到 900 就把浮动面板放到地图下面堆叠（ui.css 的断点是 720，两块面板在 720 到 900 之间会互相挤） */
+@container page (max-width: 900px) {
+  .p2-page .l-canvas { display: grid; grid-template-rows: minmax(300px, 52dvh) auto; overflow: visible; background: none; box-shadow: none; gap: var(--s-3); min-height: 0; }
+  .p2-page .l-canvas > .canvas { position: relative; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--e1); }
+  .p2-page .l-canvas > .float { position: static; width: auto; max-height: none; }
+}
+
+/* 外壳在 390 宽时内容区比窗口宽 2 像素（顶栏内容撑开了网格列），页面出现横向滚动；这里把列收住（公共问题，见报告） */
+.app-main { grid-template-columns: minmax(0, 1fr); }
+.app-top { min-width: 0; }

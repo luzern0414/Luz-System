@@ -24,10 +24,10 @@ import session_output  # noqa: E402
 import validate_session  # noqa: E402
 import validate_skill  # noqa: E402
 from new_session import create_session  # noqa: E402
-from publish import publish  # noqa: E402
+from publish import ProjectModeError, main as publish_main, publish  # noqa: E402
 from test_session_flow import (  # noqa: E402
     adopt_rules, approve_artifact, approve_module, make_system, read_json, tool_root, write_architecture, write_json,
-    write_requirements, write_research, write_system_design,
+    write_requirements, write_research, write_system_design, select_design,
 )
 from validate_session import OUTPUT_LAYOUT, validate  # noqa: E402
 
@@ -46,6 +46,7 @@ def fake_project(tmp: str, *, old: bool = False) -> tuple[Path, Path, Path]:
         state = output / "014-示例项目" / "raw"
         state.mkdir(parents=True)
         data = {"deliver_root": str(deliver), "crawl": {"evidence_index": "00-crawl"}}
+    data["stages"] = [{"id": "architecture", "owner": "luz-system", "status": "pending"}]
     (state / "project.json").write_text(json.dumps(data), encoding="utf-8")
     return output, deliver, state
 
@@ -69,9 +70,19 @@ def approved_hardware(root: Path, project: dict | None = None) -> Path:
     session = create_session(root, "无人健身房硬件选型清单", ["hardware"], skill_root=ROOT, project=project)
     sys.path.insert(0, str(ROOT.parent / "Luz-Crawl" / "scripts"))
     from test_crawl_preflight import complete_fixture
-    complete_fixture(session, "luz-system")
+    if project:
+        complete_fixture(Path(project["state_root"]), "luz-system", "architecture")
+    else:
+        complete_fixture(session, "luz-system", "hardware")
     page = session / "raw" / "04-hardware" / "hardware-plan.html"
+    (page.parent / "plan.json").write_bytes(EXAMPLE.read_bytes())
     page.write_bytes(hw_render_plan.render(pl.load(EXAMPLE)).encode("utf-8"))
+    stage = "architecture" if project else "hardware"
+    select_design(session, stage, "hardware-plan", page)
+    if not project:
+        select_design(session, stage, "hardware-plan", session / f"{session.name}.html")
+    select_design(session, stage, "xlsx", session_output.hardware_list_target(session, session_output.read_manifest(session)),
+                  root=Path(project["state_root"]) if project else session)
     approve_artifact(session, "hardware", "04-hardware/hardware-plan.html")
     adopt_rules(session, "硬件设计规范 › 清单", "按规范出清单")
     return session
@@ -247,42 +258,79 @@ class OutputLayoutTests(unittest.TestCase):
             self.assertTrue(read_json(root / "002-环境变量" / "raw" / "99-delivery" / "MANIFEST.json")["project"])
             self.assertFalse(list(root.glob("003-*")))
 
-    def test_project_results_go_only_to_the_project_and_the_session_keeps_a_summary_page(self) -> None:
+    def test_a_project_session_does_not_publish_and_nothing_is_written_to_docs(self) -> None:
+        """Project mode: the files in docs are Luz-Project's (project.py document), approved by the user file by file; publish.py only points there."""
         with tempfile.TemporaryDirectory() as tmp:
             _, deliver, state = fake_project(tmp)
-            session = approved_system(tool_root(tmp), project_link.load(state))
-            final = publish(session, "system_design")
-            page = deliver / "docs" / "02-产品开发" / "01-系统设计.html"
-            self.assertTrue(page.is_file())
-            self.assertEqual(sorted(p.name for p in session.iterdir()), sorted(["raw", final.name]))
-            self.assertEqual(check_output_layout.check_session(session, True), ([], []))
-            self.assertEqual(check_output_layout.check_project(deliver)[0], [])
-            summary = final.read_text(encoding="utf-8")
-            self.assertTrue(summary.startswith("<!doctype html>"))
-            self.assertIn("<h1>订餐系统</h1>", summary)
-            self.assertIn("docs\\02-产品开发\\01-系统设计.html", summary)
-            self.assertIn("<h2>成果</h2>", summary)
-            self.assertNotIn("user-scalable", summary)
-            self.assertEqual(validate(session, allow_live_crawl_offline=True), [])
-            # The architecture page is another result with the next number; publishing the design again replaces its own page.
-            self.assertEqual(publish(session, "architecture"), final)
-            publish(session, "system_design")
-            self.assertEqual(sorted(p.name for p in (deliver / "docs" / "02-产品开发").iterdir()), ["01-系统设计.html", "02-系统架构.html"])
-            self.assertEqual(check_output_layout.check_project(deliver)[0], [])
-            self.assertEqual([item["stage"] for item in read_json(session / "raw" / "99-delivery" / "MANIFEST.json")["project"]["published"]],
-                             ["architecture", "system_design"])
-            self.assertEqual(validate(session, allow_live_crawl_offline=True), [])
-            # The project's directory holds results only: nothing of raw\ was written there.
-            self.assertEqual(sorted(p.name for p in deliver.iterdir()), ["docs"])
-            # A file left in the root of a project session is an error.
-            (session / "附件.pdf").write_bytes(b"%PDF-1.4")
-            errors = validate(session, allow_live_crawl_offline=True)
-            self.assertTrue(any("成品已写入项目目录" in e for e in errors), errors)
-            (session / "附件.pdf").unlink()
-            publish(session, "system_design", "04-系统设计说明")
-            self.assertTrue((deliver / "docs" / "02-产品开发" / "04-系统设计说明.html").is_file())
+            link = project_link.load(state)
+            session = approved_system(tool_root(tmp), link)
+            for stage, project_stage, document in (("architecture", "architecture", "01-系统架构.html"), ("system_design", "architecture", "01-系统架构.html"),
+                                                   ("visual", "design", "02-前端界面设计.html"), ("prototype", "design", "02-前端界面设计.html")):
+                with self.assertRaises(ProjectModeError, msg=stage) as raised:
+                    publish(session, stage)
+                message = str(raised.exception)
+                self.assertIn("publish refused, project mode", message)
+                self.assertIn(f'project.py document "{link["state_root"]}" {project_stage} --file <spec.json>', message)
+                self.assertIn(f'project.py context "{link["state_root"]}" {project_stage} --skill luz-system', message)
+                self.assertIn(document, message)
+                self.assertIn("references/dev-documents.md", message)
+                self.assertIn("approve --doc", message)
+            self.assertIn("并入 01-系统架构", str(self.refusal(session, "system_design")))
+            self.assertNotIn("并入 01-系统架构", str(self.refusal(session, "architecture")))
+            # nothing was written: no docs\ in the project, no summary page or copy in the session, no final record in the manifest
+            self.assertEqual(list(deliver.iterdir()), [])
+            self.assertEqual(sorted(p.name for p in session.iterdir()), ["raw"])
+            manifest = read_json(session / "raw" / "99-delivery" / "MANIFEST.json")
+            self.assertNotIn("final", manifest)
+            self.assertEqual(manifest["project"]["published"], [])
+            # the CLI says the same and fails
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(publish_main([str(session), "architecture"]), 1)
+            self.assertIn("FAIL: publish refused, project mode", err.getvalue())
+            self.assertEqual(list(deliver.iterdir()), [])
 
-    def test_project_hardware_excel_goes_to_the_requirements_folder(self) -> None:
+    def test_a_project_session_needs_no_approvals_and_no_stage_page_to_get_the_answer(self) -> None:
+        """The session-level APPROVALS.json gate is for standalone sessions: in a project the user's approvals are Project's, so nothing here asks for them."""
+        with tempfile.TemporaryDirectory() as tmp:
+            _, deliver, state = fake_project(tmp)
+            kwargs = dict(skill_root=ROOT, session_kind="system", system_name="未批准系统", modules=["订单"])
+            root = tool_root(tmp)
+            project_session = create_session(root, "项目任务", ["system"], project=project_link.load(state), **kwargs)
+            with self.assertRaises(ProjectModeError):
+                publish(project_session, "architecture")                       # no approval, no page: still the project answer, not the approval gate's
+            standalone = create_session(root, "独立任务", ["system"], **kwargs)
+            write_architecture(standalone)
+            with self.assertRaises(PermissionError) as raised:                  # the standalone gate is unchanged
+                publish(standalone, "architecture")
+            self.assertIn("approval gate", str(raised.exception))
+            self.assertEqual(list(deliver.iterdir()), [])
+
+    def test_a_project_hardware_session_is_pointed_to_the_architecture_spec(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            _, deliver, state = fake_project(tmp)
+            session = approved_hardware(tool_root(tmp), project_link.load(state))
+            message = str(self.refusal(session, "hardware"))
+            self.assertIn("硬件方案页在 Luz-Project 的 docs 里没有对应文件", message)
+            self.assertIn("architecture 的 spec", message)
+            self.assertEqual(list(deliver.iterdir()), [])
+
+    def test_new_session_cli_tells_a_project_task_where_the_docs_come_from(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            _, deliver, state = fake_project(tmp)
+            err = io.StringIO()
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(err):
+                self.assertEqual(new_session.main(["--name", "项目任务", "--modes", "hardware", "--root", str(tool_root(tmp)), "--project", str(state)]), 0)
+            self.assertIn("project.py document / client", err.getvalue())
+            self.assertIn("publish.py 在项目任务里不写 docs", err.getvalue())
+            self.assertEqual(list(deliver.iterdir()), [])
+
+    def refusal(self, session: Path, stage: str) -> ProjectModeError:
+        with self.assertRaises(ProjectModeError) as raised:
+            publish(session, stage)
+        return raised.exception
+
+    def test_project_hardware_excel_still_goes_to_the_requirements_folder_and_no_page_is_published(self) -> None:
         try:
             import openpyxl  # noqa: F401
         except ImportError:
@@ -293,22 +341,36 @@ class OutputLayoutTests(unittest.TestCase):
             _, deliver, state = fake_project(tmp)
             session = approved_hardware(tool_root(tmp), project_link.load(state))
             (session / "raw" / "04-hardware" / "plan.json").write_bytes(EXAMPLE.read_bytes())
-            final = publish(session, "hardware")
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(hw_export.main([str(session)]), 0)
-            excel = deliver / "docs" / "01-需求对接" / "01-硬件选型清单.xlsx"
-            self.assertTrue(excel.is_file())
-            self.assertEqual(sorted(p.name for p in session.iterdir()), sorted(["raw", final.name]))
-            summary = final.read_text(encoding="utf-8")
-            self.assertIn("docs\\01-需求对接\\01-硬件选型清单.xlsx", summary)         # the summary page was rebuilt to list it
-            self.assertIn("docs\\02-产品开发\\01-硬件方案.html", summary)
+            self.assertTrue((deliver / "docs" / "01-需求对接" / "01-硬件选型清单.xlsx").is_file())
+            self.assertEqual(sorted(p.name for p in (deliver / "docs").iterdir()), ["01-需求对接"], "no 02-产品开发 page: publish.py wrote none")
+            self.assertEqual(sorted(p.name for p in session.iterdir()), ["raw"])
             self.assertEqual(check_output_layout.check_project(deliver)[0], [])
             self.assertEqual(validate(session, allow_live_crawl_offline=True), [])
+
+    def test_strict_hardware_validation_uses_the_projects_architecture_research(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            _, _, state = fake_project(tmp)
+            session = approved_hardware(tool_root(tmp), project_link.load(state))
+            errors = validate(session, strict=True, allow_live_crawl_offline=True)
+            self.assertEqual([error for error in errors if "Crawl" in error], [])
+            from test_crawl_preflight import complete_fixture
+            complete_fixture(session, "luz-system", "hardware")
+            record = state / "00-crawl" / "luz-system-architecture.json"
+            proof = json.loads(record.read_text(encoding="utf-8"))
+            body = Path(proof["sources"][0]["archive"]) / "content.json"
+            body.write_text('{"text":"changed after approval"}', encoding="utf-8")
+            errors = validate(session, strict=True, allow_live_crawl_offline=True)
+            self.assertTrue(any("Crawl" in error for error in errors), errors)
 
     # ---- the shared generator
     def test_summary_generator_passes_the_layout_check(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             session = Path(tmp) / "007-汇总页示例"
+            from test_crawl_preflight import complete_fixture
+            complete_fixture(session, "luz-system", "summary")
+            select_design(session, "summary", "reading-html", session / f"{session.name}.html")
             spec = Path(tmp) / "spec.json"
             spec.write_text(json.dumps({"title": "汇总页示例", "sections": [
                 {"title": "成果", "table": {"caption": "表 1 成果清单", "columns": ["名称", "用途", "位置"], "rows": [["清单", "给客户", "清单.xlsx"]]}}]},

@@ -19,7 +19,7 @@ from validate_session import OUTPUT_LAYOUT, SESSION_RE  # noqa: E402
 
 SKILL_ROOT = Path(__file__).resolve().parents[1]
 # The skill holds rules, templates and scripts; every session it creates is an output and lives here.
-OUTPUT_ROOT = Path(r"D:\Codes\skill输出\Luz-System")
+OUTPUT_ROOT = Path(r"E:\Skill输出\Luz-System")
 INVALID = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
 # Luz-System owns system design, product visual, interactive prototype and hardware.
 # Posters, brand visuals and document layout belong to Luz-Design (D:\Codes\Luz-Design).
@@ -32,7 +32,7 @@ HW_REQUIREMENTS = """# 硬件需求
 | HW-01 | 系统类型与规模（面积、门店数、入口数、灶位数） | |
 | HW-02 | 运营模式（营业时间、付费方式、是否无人值守） | |
 | HW-03 | 已有设备或指定品牌 | |
-| HW-04 | 硬件预算区间 | |
+| HW-04 | 硬件预算区间（只记下来用于选型；默认不进客户清单，要在清单里写参考价须用户明确要求，并在 plan.json 写 budget_requested） | |
 | HW-05 | 后台系统（自研 / SaaS）与设备接入要求 | |
 """
 SESSION_KINDS = ("general", "system")
@@ -171,6 +171,8 @@ def parse_modes(value: str | None) -> list[str]:
 
 def read_template(skill_root: Path, name: str) -> str:
     """Return one block of references/templates.txt (all session templates live in that single file)."""
+    if name in {"system-architecture.html", "system-design.html"}:
+        return (skill_root.parent / "Luz-Design" / "templates" / "documents" / "reading" / name).read_text(encoding="utf-8")
     text = (skill_root / "references" / "templates.txt").read_text(encoding="utf-8")
     start = f"=== template: {name} ===\n"
     if start not in text:
@@ -370,7 +372,7 @@ def create_session(
     project: dict | None = None,
 ) -> Path:
     """Create `NNN-名称\\` with raw\\ in it. The root of a session holds only raw\\ and the summary page `NNN-名称.html`, which
-    publish.py writes. `project` (project_link.load) marks a project task: its results go to the project directory."""
+    publish.py writes. `project` (project_link.load) marks a project task: the session keeps process files only, the files in the project's docs are Luz-Project's."""
     requested_modules = list(dict.fromkeys(modules or []))
     validate_creation(modes, session_kind, system_name, requested_modules, approval_mode)
     kinds = rule_card_kinds(modes, cards)
@@ -408,7 +410,7 @@ def create_session(
             # The hardware list is approved by the person like every other stage (hardware-design.html 工作流程).
             approvals["hardware"]["status"] = "pending"
         if approval_mode == "authorization":
-            # Filled when the person signs, before generation (SKILL.md 调用协议 6, 一次授权).
+            # Filled when the person signs, before generation (SKILL.md 调用协议 6; WORKFLOW.md 审批).
             approvals["authorizations"] = []
         (delivery / "APPROVALS.json").write_text(
             json.dumps(approvals, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -445,6 +447,17 @@ def create_session(
             )
         # The rules, preferences, lessons, tools and checks for this task, cut from the rule pages (read before producing).
         save_rule_cards(work, kinds)
+        # Reserve the real Luz-Design reading shell for the session summary
+        # before any writer can create the HTML file.  The selection is
+        # scoped to this session and is later hash-bound by session_output.
+        design_scripts = skill_root.parent / "Luz-Design" / "scripts"
+        if design_scripts.is_dir():
+            import importlib.util
+            definition = importlib.util.spec_from_file_location("_system_summary_templates", design_scripts / "template_library.py")
+            library = importlib.util.module_from_spec(definition)
+            definition.loader.exec_module(library)
+            summary_stage = (project.get("stage") or "architecture") if project else "summary"
+            library.select(folder, "luz-system", summary_stage, "reading-html", f"{folder.name}.html")
     except Exception:
         shutil.rmtree(folder, ignore_errors=True)
         raise
@@ -480,7 +493,7 @@ def main(argv: list[str] | None = None) -> int:
                         help="per_stage (default): a person approves each stage; authorization: a platform demo session where a "
                              "person signs one authorization before generation (APPROVALS.json authorizations)")
     parser.add_argument("--project", help="Project task: the project's state root, project directory or Luz-Project session folder "
-                        f"(default: the environment variable {project_link.ENV_VAR}). Results are then written only to the project directory's docs\\")
+                        f"(default: the environment variable {project_link.ENV_VAR}). The session then holds process files only; the files in the project's docs are made by Luz-Project (project.py document / client ...), publish.py refuses")
     args = parser.parse_args(argv)
     root = Path(args.root).resolve() if args.root else OUTPUT_ROOT
     kind = args.session_kind
@@ -504,7 +517,8 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     print(str(folder))
     if project:
-        print(f"PROJECT: results go to {project['deliver_root']}\\docs; the session root keeps only the summary page and raw\\", file=sys.stderr)
+        print(f"PROJECT: 本会话只放过程文件（raw）；{project['deliver_root']}\\docs 里的文件由 Luz-Project 的命令生成"
+              "（project.py document / client …，用户逐个审批），publish.py 在项目任务里不写 docs", file=sys.stderr)
     print_card_hint(folder)
     return 0
 

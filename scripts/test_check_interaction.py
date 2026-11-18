@@ -376,6 +376,33 @@ class RuleAndCheckAgreementTests(unittest.TestCase):
         self.assertEqual(split_list("加载 空 失败"), ["加载", "空", "失败"])
         self.assertEqual(split_list(""), [])
 
+    def ordered(self, extra: str = "", values: str = "初次,面谈,二轮,成交,流失", terminal: str = "成交,流失") -> str:
+        return (f'<div class="node" data-state-id="S-009" data-values="{values}" data-initial="初次" data-terminal="{terminal}" '
+                f'data-transitions="初次>面谈@约见;面谈>二轮@跟进;二轮>成交@签约;二轮>流失@放弃;面谈>流失@放弃;初次>流失@放弃" {extra}>沟通深度</div>')
+
+    def test_an_ordered_state_set_that_says_its_order_terminals_and_configurability_is_clean(self) -> None:
+        errors, warnings = run(*BASE, self.ordered('data-ordered="是" data-configurable="管理员可增减与排序"'))
+        self.assertEqual([e for e in errors if "S-009" in e], [])
+        self.assertEqual([w for w in warnings if "S-009" in w], [])
+
+    def test_an_ordered_state_set_without_configurability_warns(self) -> None:
+        _, warnings = run(*BASE, self.ordered('data-ordered="是"'))
+        self.assertTrue(any("S-009" in w and "data-configurable" in w for w in warnings), warnings)
+
+    def test_an_ordered_state_set_with_end_states_in_the_middle_warns(self) -> None:
+        _, warnings = run(*BASE, self.ordered('data-ordered="是" data-configurable="否"', values="初次,面谈,成交,二轮,流失"))
+        self.assertTrue(any("S-009" in w and "end states are not last" in w and "二轮" in w for w in warnings), warnings)
+
+    def test_an_ordered_state_set_with_one_value_or_a_stray_terminal_is_an_error(self) -> None:
+        errors, _ = run(*BASE, self.ordered('data-ordered="是" data-configurable="否"', values="初次", terminal=""))
+        self.assertTrue(any("S-009" in e and "at least two" in e for e in errors), errors)
+        errors, _ = run(*BASE, self.ordered('data-ordered="是" data-configurable="否"', terminal="成交,归档"))
+        self.assertTrue(any("S-009" in e and "归档" in e for e in errors), errors)
+
+    def test_a_state_set_that_is_not_marked_ordered_is_not_asked_about_order(self) -> None:
+        errors, warnings = run(*BASE, self.ordered())
+        self.assertFalse(any("ordered" in x and "S-009" in x for x in errors + warnings))
+
     def test_state_value_with_a_space_is_one_value(self) -> None:
         state = ('<div class="node" data-state-id="S-001" data-values="草稿,AI 已润色,已发布" data-initial="草稿" '
                  'data-terminal="已发布" data-transitions="草稿>AI 已润色@润色;AI 已润色>已发布@发布">稿件状态</div>')

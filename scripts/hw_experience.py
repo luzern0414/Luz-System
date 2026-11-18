@@ -10,6 +10,9 @@
   py -X utf8 scripts/hw_experience.py check                                # 校验结构、标出超过 180 天的价格
   py -X utf8 scripts/hw_experience.py stats
 
+价格样本只是调研数据（来源页面上的零售或批发价，带日期），不得直接当作本项目的报价或预算；客户清单默认不带价格，
+用户明确要求预算时才在方案里写 budget_requested，带出的也只是标明“参考价”的来源页面样本（references/hardware/plan-schema.md）。
+
 数据文件（只通过本脚本修改）：
   experience/hardware/catalog.json        产品：参数、接口、协议、功耗、价格证据、结论
   experience/hardware/compatibility.json  两类设备之间能否直接相连、怎么连、注意什么
@@ -156,7 +159,7 @@ def cmd_search(args: list[str]) -> int:
     hits.sort(key=lambda p: order.get(p.get("verdict"), 9))
     for p in hits:
         print(fmt_product(p))
-    print(f"共 {len(hits)} 条")
+    print(f"共 {len(hits)} 条（价格样本是调研数据，不得直接当作本项目报价）")
     return 0
 
 
@@ -164,6 +167,7 @@ def cmd_show(args: list[str]) -> int:
     for p in load("products"):
         if p["id"] == args[0]:
             print(fmt_product(p, full=True))
+            print("注：价格样本是调研数据，不得直接当作本项目报价。")
             return 0
     print("未找到")
     return 1

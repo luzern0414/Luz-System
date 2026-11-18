@@ -1,4 +1,4 @@
-"""entrances_check.py: the entrance table System hands to Luz-Design follows Luz-Design's page_pattern rules."""
+"""The standalone System entrance validator and its published contract."""
 from __future__ import annotations
 
 import contextlib
@@ -13,9 +13,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import entrances_check as ec  # noqa: E402
-
-MODULE = ec.load_design_module()
-needs_design = unittest.skipIf(MODULE is None, "Luz-Design checkout not found")
 
 BASE = {
     "entrances": [
@@ -34,22 +31,30 @@ def run(mutate=None, features=None):
     doc = copy.deepcopy(BASE)
     if mutate:
         mutate(doc)
-    return ec.check_entrances(doc, MODULE, features)
+    _, errors, warnings = ec.check_entrances(doc, features)
+    return errors, warnings
 
 
 def row(doc, fn):
     return next(r for r in doc["entrances"] if r["fn"] == fn)
 
 
-@needs_design
 class EntranceTableTests(unittest.TestCase):
     def test_clean_table_passes(self) -> None:
         self.assertEqual(run(), ([], []))
 
     def test_missing_field_and_bad_enum_are_errors(self) -> None:
-        errors, _ = run(lambda d: (row(d, "FN-006").pop("destination"), row(d, "FN-021").update(entry="sidebar")))
+        errors, _ = run(lambda d: (row(d, "FN-006").pop("destination"), row(d, "FN-021").update(entry="unknown-area")))
         self.assertTrue(any("缺 destination" in e for e in errors), errors)
-        self.assertTrue(any("entry=sidebar" in e for e in errors), errors)
+        self.assertTrue(any("entry=unknown-area" in e for e in errors), errors)
+
+    def test_desktop_sidebar_does_not_count_as_a_mobile_tab_bar(self) -> None:
+        rows = [
+            {"fn": f"FN-{number}", "name": f"管理{number}", "type": "task", "category": "core",
+             "entry": "sidebar", "destination": f"/manage/{number}", "freq": "mid"}
+            for number in range(1, 9)
+        ]
+        self.assertEqual(ec.check_entrances({"entrances": rows})[1:], ([], []))
 
     def test_empty_destination_is_an_error(self) -> None:
         errors, _ = run(lambda d: row(d, "FN-006").update(destination=""))
@@ -59,10 +64,19 @@ class EntranceTableTests(unittest.TestCase):
         errors, _ = run(lambda d: d["entrances"].append(dict(row(d, "FN-021"), entry="mine")))
         self.assertTrue(any("fn 重复" in e for e in errors), errors)
 
-    def test_account_on_home_needs_a_summary(self) -> None:
-        errors, _ = run(lambda d: row(d, "FN-040").update(entry="home", summary=False))
-        self.assertTrue(any("账户类" in e and "summary" in e for e in errors), errors)
-        self.assertEqual(run(lambda d: row(d, "FN-040").update(entry="home"))[0], [])
+    def test_wallet_never_gets_a_home_entrance_even_with_a_summary(self) -> None:
+        errors, _ = run(lambda d: row(d, "FN-040").update(name="我的优惠券", entry="home"))
+        self.assertTrue(any("我的优惠券" in e and "摘要" in e for e in errors), errors)
+        self.assertEqual(run(lambda d: row(d, "FN-040").update(name="我的优惠券"))[0], [])
+
+    def test_campaign_is_a_distinct_approved_home_action(self) -> None:
+        campaign = {"fn": "FN-042", "name": "领取本周活动券", "type": "marketing", "category": "marketing",
+                    "entry": "home", "destination": "P42", "freq": "mid"}
+        self.assertEqual(run(lambda d: d["entrances"].append(campaign))[0], [])
+
+    def test_order_history_is_distinct_from_a_resume_status(self) -> None:
+        errors, _ = run(lambda d: row(d, "FN-030").update(entry="home"))
+        self.assertTrue(any("订单模块" in e for e in errors), errors)
 
     def test_only_one_summary(self) -> None:
         extra = {"fn": "FN-041", "name": "积分", "type": "account", "category": "core", "entry": "mine", "destination": "P41", "freq": "low", "summary": True}
@@ -77,8 +91,8 @@ class EntranceTableTests(unittest.TestCase):
     def test_default_placements_are_warnings(self) -> None:
         errors, warnings = run(lambda d: (row(d, "FN-020").update(entry="home"), row(d, "FN-021").update(entry="mine"),
                                           d["entrances"].append({"fn": "FN-050", "name": "发票抬头", "type": "tool", "category": "aux", "entry": "home", "destination": "P50", "freq": "low"})))
-        self.assertEqual(errors, [])
-        for needle in ("全局上下文", "搜索类", "低频工具"):
+        self.assertTrue(any("工具与条款" in e for e in errors), errors)
+        for needle in ("全局上下文", "搜索类"):
             self.assertTrue(any(needle in w for w in warnings), (needle, warnings))
 
     def test_a_shared_destination_is_a_warning(self) -> None:
@@ -119,20 +133,14 @@ class EntranceTableTests(unittest.TestCase):
         self.assertTrue(any("FN-021" in w and "不在功能清单" in w for w in warnings), warnings)
 
     def test_wrong_shape_is_reported(self) -> None:
-        self.assertEqual(len(ec.check_entrances([], MODULE)[0]), 1)
-        self.assertEqual(len(ec.check_entrances({"entrances": []}, MODULE)[0]), 1)
-        self.assertEqual(len(ec.check_entrances({"entrances": ["x"]}, MODULE)[0]), 1)
+        self.assertEqual(len(ec.check_entrances([])[1]), 1)
+        self.assertEqual(len(ec.check_entrances({"entrances": []})[1]), 1)
+        self.assertEqual(len(ec.check_entrances({"entrances": ["x"]})[1]), 1)
 
-    def test_importing_the_validator_leaves_sys_path_and_modules_alone(self) -> None:
-        path, modules = list(sys.path), set(sys.modules)
-        ec.load_design_module()
-        self.assertEqual(sys.path, path)
-        self.assertEqual(set(sys.modules) - modules, set())
-
-    def test_the_example_in_the_design_schema_passes(self) -> None:
-        example = MODULE.load()["entrances_schema"]["example"]
-        errors, _ = ec.check_entrances(example, MODULE)
+    def test_the_published_example_passes(self) -> None:
+        rows, errors, _ = ec.check_entrances(ec.schema()["example"])
         self.assertEqual(errors, [])
+        self.assertEqual(len(rows), len(ec.schema()["example"]["entrances"]))
 
 
 class CommandLineTests(unittest.TestCase):
@@ -142,7 +150,6 @@ class CommandLineTests(unittest.TestCase):
             code = ec.main(args)
         return code, out.getvalue()
 
-    @needs_design
     def test_file_and_folder_targets(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp)
@@ -162,18 +169,13 @@ class CommandLineTests(unittest.TestCase):
         code, out = self.call(["no-such-folder/entrances.json"])
         self.assertEqual(code, 2)
 
-    def test_without_the_design_validator_it_says_so_and_does_not_block(self) -> None:
+    def test_legacy_design_option_cannot_skip_validation(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "entrances.json"
             path.write_text("{}", encoding="utf-8")
-            saved = (ec.DESIGN_SCRIPTS, ec.FALLBACK_DESIGN_SCRIPTS)
-            ec.DESIGN_SCRIPTS = ec.FALLBACK_DESIGN_SCRIPTS = Path(temp) / "nowhere"
-            try:
-                code, out = self.call([str(path)])
-            finally:
-                ec.DESIGN_SCRIPTS, ec.FALLBACK_DESIGN_SCRIPTS = saved
-        self.assertEqual(code, 0)
-        self.assertIn("找不到视觉技能的校验器", out)
+            code, out = self.call([str(path), "--design-scripts", str(Path(temp) / "absent")])
+        self.assertEqual(code, 1)
+        self.assertIn("ERROR", out)
 
 
 if __name__ == "__main__":

@@ -22,7 +22,7 @@ import { useNav } from '../nav.js'
 import { avatar } from '../../shared/avatar.js'
 import { cardState, myCards } from './CardDetail.vue'
 
-const { go, replace } = useNav()
+const { go } = useNav()
 const say = (message) => showToast({ message, teleport: '#phone-overlay', duration: 1500 })
 const scene = useScene('me')
 const phase = ref('loading')
@@ -46,7 +46,7 @@ const pct = computed(() => Math.round((profileItems.value.filter((i) => i[1]).le
 const todo = computed(() => profileItems.value.filter((i) => !i[1]).map((i) => i[0]))
 const memberNo = computed(() => me.value.memberNo || String(80000000 + me.value.id * 137))
 
-// 资产：余额、可用券、使用中的会员卡（口径和首页一致）
+// 资产：余额、可用券、使用中的会员卡
 const balance = computed(() => (newbie.value ? 0 : me.value.balance))
 const gift = computed(() => Math.min(me.value.giftBalance || 0, balance.value))
 const coupons = computed(() => (newbie.value ? [] : state.db.myCoupons.filter((c) => c.state === 'UNUSED' && c.expire >= today)))
@@ -80,10 +80,6 @@ async function call() {
   say('正在呼叫（模拟）')
 }
 function open(f) { if (f[0] === 'call') call(); else go(f[0], f[3] || {}) }
-async function logout() {
-  if (!(await ask({ title: '退出登录', message: '退出后需要重新登录，才能查看订单、会员卡和优惠券。', ok: '退出', danger: true }))) return
-  state.role = 'guest'; state.signedIn = false; replace('login')
-}
 </script>
 
 <template>
@@ -146,7 +142,6 @@ async function logout() {
         </van-cell-group>
       </div>
 
-      <van-button v-if="!guest" block round plain @click="logout">退出登录</van-button>
     </MiniState>
 
     <van-dialog v-model:show="dlg.show" :title="dlg.title" :message="dlg.message" show-cancel-button :confirm-button-text="dlg.ok" :cancel-button-text="dlg.cancel" :confirm-button-color="dlg.danger ? 'var(--luz-danger)' : undefined" @confirm="answer(true)" @cancel="answer(false)" />

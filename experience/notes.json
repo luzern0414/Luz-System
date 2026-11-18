@@ -1,20 +1,11 @@
 {
   "schema_version": "1.0",
   "caps": {
-    "preference": 60,
+    "preference": 80,
     "lesson": 120,
     "fact": 120
   },
   "notes": [
-    {
-      "key": "admin-density-14px",
-      "kind": "preference",
-      "text": "后台正文与表格 14 像素、行高 22，辅助说明 12 像素只给时间、单位等次要信息；表格行高 44–48，1440×900 首屏至少 10 行，统计卡不高于 112",
-      "why": "用户 2026-10-28 反馈字太小、留白多、密度低；参考 Ant Design、TDesign、Carbon",
-      "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
-    },
     {
       "key": "admin-version-info",
       "kind": "preference",
@@ -32,6 +23,24 @@
       "uses": 1,
       "first_seen": "2026-10-30",
       "last_confirmed": "2026-10-30"
+    },
+    {
+      "key": "agent-horizontal-stage-progress-with-details",
+      "kind": "preference",
+      "text": "通用智能体平台回答时在当前回答上方用横向阶段进度条实时显示进度，并展示检索细节（检索词、命中文档与片段数、耗时）与思考摘要；思考只展示公开的决策理由与摘要，不展示原始内部推理。",
+      "why": "用户 2026-11-11 在 Agent Atlas 需求中明确要求横向进度条与检索细节、进度、思考；适用范围为该项目，与“不显示内部推理”规则的取舍是只展示摘要。",
+      "uses": 1,
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11"
+    },
+    {
+      "key": "agent-langgraph-complete-lifecycle",
+      "kind": "preference",
+      "text": "问数智能体用 LangGraph 编排意图识别、澄清、记忆调取、受控工具调用、分类限次重试、结果核验和交付；程序控制授权与运行预算，持久记忆和恢复不能绕过当前授权。",
+      "why": "用户明确指定 LangGraph 及完整 Agent 链路；官方 overview 和 persistence 文档已核读，确认状态编排与两类记忆机制；具体依赖版本在技术阶段验证。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
     },
     {
       "key": "agent-model-decides-program-runs",
@@ -79,6 +88,24 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "agent-retrieval-results-visualized",
+      "kind": "preference",
+      "text": "智能体查询数据与网页检索（含 Luz-Crawl 搜索）得到的结果都要能汇总成驾驶舱式图表，并可由用户定制图型与指标；图表只用本次核实过的工具结果。",
+      "why": "用户 2026-11-11 在 Agent Atlas 需求中要求查询结果与检索结果都做成可视化并可定制；适用范围为该项目，与 agent-workbench-three-column-verified-charts 一致。",
+      "uses": 1,
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11"
+    },
+    {
+      "key": "agent-workbench-three-column-verified-charts",
+      "kind": "preference",
+      "text": "数据分析 Agent 工作台采用左侧导航与会话、中间分析图表、右侧问答的三列关系；提问后由核实结果自动出图，追问更新关联分析，图表与解释共用同一结果和权限范围；图表数量服务真实问题，不填造业务数据。",
+      "why": "用户明确要求重构高级 Agent 工作台、问答在右列、图表居中并支持大量相关图表；当前任务按完整来源规则选择与核验，不把候选参考当作已准入 UI。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
+    },
+    {
       "key": "ai-decision-agent-copy",
       "kind": "preference",
       "text": "写作先理解对象、独立用途与具体痛点，再提炼清晰精准的标题；不用问句、口号或含糊过程动作，同级标题保持一致的概括层级。服务目录优先采用行业常见、高频、用途完整、可独立理解和交付的业务场景，优先能直接产出业务结果的工作；不把细小步骤包装成产品，不生造陌生服务名。咨询、导购等条目需有明确用途和结果，不以泛泛问答或建议充数。名称写清业务对象与用途，形态按需选择系统、小程序或智能体，规则处理和设备控制按需用系统表达；此类目录先系统和小程序、后智能体。正文精简具体，交代必要依据、动作、输出与边界，不套句式、不新增事实。统一的是思考与表达标准，版式、表头、列数、条目数量和命名后缀随任务决定，不固定为文档模板。",
@@ -103,7 +130,8 @@
       "why": "用户要求高级、浅色调，并明确搜索状态变化和卡片背景随状态变化。",
       "uses": 1,
       "first_seen": "2026-10-30",
-      "last_confirmed": "2026-10-30"
+      "last_confirmed": "2026-10-30",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "b2b-status-text-and-surface",
@@ -112,7 +140,8 @@
       "why": "彩色边框会让浅色后台显得嘈杂，步骤状态需要直接可读并随事件变化。",
       "uses": 1,
       "first_seen": "2026-10-30",
-      "last_confirmed": "2026-10-30"
+      "last_confirmed": "2026-10-30",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "b2b-tool-graphite",
@@ -121,7 +150,8 @@
       "why": "用户 2026-11-04：人像图标可以换成随机头像",
       "uses": 3,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-11-04"
+      "last_confirmed": "2026-11-04",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "backend-workbench-noise-reduction",
@@ -130,16 +160,17 @@
       "why": "用户 2026-11-04 看到石墨主题的后台原型多色（紫、青、粉）、有卡通插画与彩色头像，说太丑，要求按信息降噪的 B 端工作台思路重做；主题库的石墨主题本来写明避免卡通形象与彩色底块，但没有渲染后的检查挡住",
       "uses": 1,
       "first_seen": "2026-11-04",
-      "last_confirmed": "2026-11-04"
+      "last_confirmed": "2026-11-04",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "business-logic-propose-then-confirm",
       "kind": "preference",
-      "text": "业务逻辑先给出拟定方案再请客户确认或修改，只问只有客户才有的定制信息，不问每个项目都一样的通用内容；密钥密码只问是否已通过安全渠道发送",
-      "why": "用户 2026-11-02：业务逻辑确认表取代旧的客户信息收集表",
-      "uses": 1,
+      "text": "业务逻辑先给出拟定方案再请客户确认或修改，只问只有客户才有的定制信息，不问每个项目都一样的通用内容；密钥密码只问是否已通过安全渠道发送。",
+      "why": "本次沿用已批准功能和本阶段官方资料，只产生问题、拟定规则与填写格式，不代客户答复。",
+      "uses": 2,
       "first_seen": "2026-11-02",
-      "last_confirmed": "2026-11-02"
+      "last_confirmed": "2026-11-06"
     },
     {
       "key": "business-settings-in-admin",
@@ -149,6 +180,16 @@
       "uses": 1,
       "first_seen": "2026-10-30",
       "last_confirmed": "2026-10-30"
+    },
+    {
+      "key": "chinese-first-readable-content",
+      "kind": "preference",
+      "text": "说明、报告和界面文案尽量使用中文；代码、字段、命令、路径、固定协议值、必要专名及核对用原文保留原样。必要缩写首次解释中文含义，不无故中英文夹杂。",
+      "why": "2026-11-07 用户明确要求中文表达，并取消强制双主题、组件最低数量及所有按钮图标规则。",
+      "uses": 1,
+      "first_seen": "2026-11-07",
+      "last_confirmed": "2026-11-07",
+      "codified": "Luz-Project/references/skill-architecture.md › 用户的共同硬规则"
     },
     {
       "key": "client-files-pdf-excel-only",
@@ -161,7 +202,8 @@
       "previous": {
         "text": "交给客户的文件只有 PDF 和 Excel（Word 只是方案说明书的排版源，HTML 只给评审与开发）；每份文件自己写完整、不提及其他文件；事实写在数据文件里，成品是派生物，不手改",
         "replaced_at": "2026-11-05"
-      }
+      },
+      "codified": "Luz-Project/references/skill-architecture.md › 用户的共同硬规则"
     },
     {
       "key": "commerce-ui-commercial-grade",
@@ -179,25 +221,17 @@
       "why": "用户 2026-11-04 要求小程序的字按官方推荐或主流设计适配、不能太小；官方常用字号 22、17、15、14、12，标准字号 iOS 17、Android 16；取代 2026-10-29 的紧凑字阶（正文 14、描述 12）",
       "uses": 4,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-11-04"
-    },
-    {
-      "key": "dashboard-computed-metrics",
-      "kind": "preference",
-      "text": "驾驶舱先分运营型与分析型，指标给计算后的变化、比率、排名与异常，长期为 0 的指标合并为一行状态，数据少于 3 个点不画折线、1 类不画环图，卡片时间范围服从页面",
-      "why": "用户 2026-10-28 要求",
-      "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-11-04",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "default-view-important-first",
       "kind": "preference",
       "text": "每个列表写明默认视图并先显示最需要处理或最有价值的子集（订单已支付、线索待跟进、工单待处理、会员有效、评价待回复），“全部”作可选项；状态标签按处理顺序排列，0 数量弱化，终态排后",
-      "why": "用户 2026-10-28 要求，获客工具后台实测",
+      "why": "用户 2026-10-28 要求，获客工具后台实测（因存储上限被误挤出后复原）",
       "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
     },
     {
       "key": "demo-for-sales-final-only",
@@ -209,22 +243,58 @@
       "last_confirmed": "2026-10-29"
     },
     {
-      "key": "drop-empty-columns",
+      "key": "demo-library-tabs-and-company-card",
       "kind": "preference",
-      "text": "当前数据下整列为空的列默认隐藏到列设置，每行相同的列改为在筛选摘要写一次，不放“—”占位副标题；没有信息量的元素删除或收起",
-      "why": "用户 2026-10-28 要求",
+      "text": "演示库按“上线产品 / 个人演示”两个标签分开显示，上线产品在前；公司官网做成“全部演示”标题上方的卡片，网址在系统设置里维护，未填则不显示。",
+      "why": "用户 2026-11-11 要求",
       "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11",
+      "scope": "project"
     },
     {
-      "key": "export-cleaned-chinese",
+      "key": "demokit-daily-one-customer-enter",
       "kind": "preference",
-      "text": "导出的是清洗归类后的中文数据：中文业务表头、枚举翻译、统一日期与金额格式、去掉内部编号与空列，范围等于当前筛选，文件名写中文标题与范围，版式按表格文件规范",
-      "why": "用户 2026-10-28 要求",
+      "text": "DemoKit日报每次只提交一个客户，日期在三个业务Tab上方；老客户资料紧凑只读，新客户标签输入同行，手机首屏至少五个字段；Enter逐字段前进、末项保存，制作数量直接手填，输入框空白无建议提示。",
+      "why": "用户2026-11-17至18的明确指令及本轮临时库单客户10组、自适应18组与控件4组实测。",
       "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "first_seen": "2026-11-18",
+      "last_confirmed": "2026-11-18",
+      "scope": "project"
+    },
+    {
+      "key": "demokit-profile-settings",
+      "kind": "preference",
+      "text": "DemoKit 的修改密码、退出登录和显示等账号设置只从我的页面的设置进入。销售在我的页面直接填写日报和周报。",
+      "why": "本次明确要求重组我的页面",
+      "uses": 1,
+      "first_seen": "2026-11-18",
+      "last_confirmed": "2026-11-18",
+      "scope": "project"
+    },
+    {
+      "key": "demokit-responsive-layout-preview",
+      "kind": "preference",
+      "text": "DemoKit需按窗口大小自动切换桌面与手机布局，并在桌面我的页面提供切换为移动端及恢复自动布局；切换和刷新保留调试选择、身份、权限、日期、业务标签和草稿。",
+      "why": "用户2026-11-17至18的明确指令及本轮临时库单客户10组、自适应18组与控件4组实测。",
+      "uses": 1,
+      "first_seen": "2026-11-18",
+      "last_confirmed": "2026-11-18",
+      "scope": "project"
+    },
+    {
+      "key": "entry-ownership-by-function-type",
+      "kind": "preference",
+      "text": "按角色、业务对象与生命周期归并功能。首页先呈现主要任务，个人资产由我的承接，账号安全由设置承接。活动领券和结算用券各回所属流程，快捷入口引用同一业务对象与规则。",
+      "why": "用户要求首页优先主要功能，个人券包、修改密码与切换账号归相应入口，并要求业务模块高内聚。已复验两套原型和入口表。",
+      "uses": 3,
+      "first_seen": "2026-11-04",
+      "last_confirmed": "2026-11-18",
+      "previous": {
+        "text": "相关功能按端、角色、业务对象和任务归到一个主入口。本人改密与切换账号放在设置的账号与安全，提示与头像链接到同一处。业务规则由所属功能定义，其他场景引用。",
+        "replaced_at": "2026-11-18"
+      },
+      "codified": "references/ui-standards.html › 入口与内容分层"
     },
     {
       "key": "frontend-copy-from-backend",
@@ -236,22 +306,28 @@
       "last_confirmed": "2026-10-29"
     },
     {
-      "key": "html-tab-icon-required",
+      "key": "hardware-console-readonly-direct-touch",
       "kind": "preference",
-      "text": "每个交付的网页都要有浏览器标签页图标（内联 SVG，主题图案 + 主色线稿 + 圆角浅底，无文字），后台与网站页头放同一图案的图形品牌标识加系统名，不用字母方块；模板与生成脚本内置图标参数",
-      "why": "用户要求（2026-10-28）",
+      "text": "用户展示的语音智控台仅供查看；硬件演示应沿用项目自有适配层，点屏幕后直接说话，不能额外要求开启口令。",
+      "why": "用户明确要求只看平台、直接改硬件交互。",
       "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05",
+      "scope": "project"
     },
     {
       "key": "imagegen-decorative-elements",
       "kind": "preference",
-      "text": "装饰位置（品牌主卡主视觉、空状态、完成页、封面）可用 Imagegen 生成品牌色的柔和立体元素，透明底、无文字；导航、按钮、单元格里的功能图标仍用线性矢量；尽量一次生成 4×4 拼板再切图，提高效率",
-      "why": "用户 2026-10-29：装饰性的元素图案可以做；尽量生成4*4的，提高效率",
-      "uses": 1,
+      "text": "默认不添加无任务依据的生成装饰图；复用来源已有资产。显式source-locked资产保持原件；另有素材任务时按实际授权处理。 2026-11-07用户组件复用规则替代此键的旧全局默认，历史内容留维护快照。",
+      "why": "用户2026-11-07明确将默认设计改为组件优先与UX/DX/AX；旧规则保留在维护快照，不作为新任务默认。",
+      "uses": 4,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
+      "last_confirmed": "2026-11-07",
+      "previous": {
+        "text": "历史规则限定：旧“新UI只改文字/保留整页原件”的要求仅用于显式 source-locked；旧独立定制中的装饰、主题和字号要求仅用于原授权范围。默认新项目执行组件复用合同：System先定行为，Design先选统一来源框架，本地组件优先、Crawl补缺，允许统一适配文字/颜色/图表配置；缺来源的新组件具体人批，完整任务和整页审阅。主题及装饰按需求，简洁优先。",
+        "replaced_at": "2026-11-07"
+      },
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "interaction-closure",
@@ -265,20 +341,16 @@
     {
       "key": "light-and-dark-themes-required",
       "kind": "preference",
-      "text": "所有前端（后台、小程序、手机网页、网站、智能体界面及其原型）都要有深色与浅色两套主题：默认跟随系统，可手动切换（跟随系统、浅色、深色），浅色是设计与验收的基准，深色按“更暗的底、更亮的前景、品牌色取同色相更亮的一阶”做，不是反相；原型的场景配置面板全局里有“外观”项；阅读型网页不做深色",
-      "why": "用户 2026-11-04：补充，所有前端需要有深色浅色的主题色；取代之前“深色只在用户明确要求时才做”的规则",
-      "uses": 1,
+      "text": "主题数量由当前需求确定，不默认强制深浅两套；所有已支持主题均核验可读性与状态。显式source-locked保持来源主题能力。 2026-11-07用户组件复用规则替代此键的旧全局默认，历史内容留维护快照。",
+      "why": "用户2026-11-07明确将默认设计改为组件优先与UX/DX/AX；旧规则保留在维护快照，不作为新任务默认。",
+      "uses": 3,
       "first_seen": "2026-11-04",
-      "last_confirmed": "2026-11-04"
-    },
-    {
-      "key": "list-pagination-default-20",
-      "kind": "preference",
-      "text": "后台与网站里可能超过一页的列表都要分页：默认每页 20 条，可选 10/20/50/100 条/页，分页条在表格下方靠右（共 N 条、条/页、上一页、页码、下一页，超过 7 页折叠），页码与条数写进地址并记住用户选择；小程序与移动端滚动加载，每批 20 条",
-      "why": "用户要求（2026-10-28）；依据 Element Plus、Ant Design、TDesign 分页组件与 NN/g 分页偏好研究",
-      "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-11-07",
+      "previous": {
+        "text": "新产品UI只沿用并核验完整来源已有浅色、深色、跟随系统能力；来源缺少必需外观时继续找来源或如实记录，不新增主题。另有明确授权的独立设计才要求全端浅深两套、默认跟随系统且手动切换；原稿维护保留已有能力；阅读HTML不做深色。",
+        "replaced_at": "2026-11-07"
+      },
+      "codified": "Luz-Project/references/skill-architecture.md › 用户的共同硬规则"
     },
     {
       "key": "no-blue-focus-box",
@@ -287,25 +359,42 @@
       "why": "用户 2026-11-04：点击文本框时会显示蓝色的选中框，严格禁止此类多余的显示，太丑了",
       "uses": 1,
       "first_seen": "2026-11-04",
-      "last_confirmed": "2026-11-04"
+      "last_confirmed": "2026-11-04",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
-      "key": "no-title-repeat-nav",
+      "key": "ops017-agent-separate-fifo-stop",
       "kind": "preference",
-      "text": "页面顶部不放与导航高亮项同名的标题，顶部留给操作与筛选；导航分组不与唯一子项同名；卡片不复述页面标题与时间范围",
-      "why": "用户 2026-10-28 要求",
+      "text": "017 运营问数的通用智能体待发送项逐条独立 FIFO；仅正常完成自动发送下一条，停止或失败暂停队列，澄清回答形成新一轮。",
+      "why": "当前交互要求；已核对 Open WebUI 的合并发送行为，它只能作为差异对照。",
       "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "first_seen": "2026-11-13",
+      "last_confirmed": "2026-11-13",
+      "scope": "project"
+    },
+    {
+      "key": "opsplatform-query-chinese-chart-revisions",
+      "kind": "preference",
+      "text": "适用当前OpsPlatform问数结果：只展示经核实的中文业务字段，丰富适用图型，并在数据修订和重新连接时保留用户的图型与指标选择。未知业务含义、单位和倍率不猜测；不扩成全局项目偏好。",
+      "why": "当前用户明确要求中文字段、柱状饼状等展示以及实时动态更新；13表533字段审阅和修订续接失败回归已形成过程证据，尚未声称生产验收。",
+      "uses": 1,
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11",
+      "scope": "project"
     },
     {
       "key": "output-layout-standard",
       "kind": "preference",
-      "text": "输出目录统一：会话目录是 D:/Codes/skill输出/Luz-System/NNN-名称/（三位序号加短横线，取现有最大序号加 1，不补洞不复用），根目录只有 raw/ 和同名汇总页 NNN-名称.html；系统设计页本身是 HTML，它就是汇总页（h1 最前、lang、不禁用缩放、同一份 md-type 版式）；独立任务的 Excel 与 PDF 放会话根并列在页内；项目任务的成果只写进项目目录的 docs（页面进 02-产品开发，客户文件进 01-需求对接），会话根只留汇总页和 raw，项目不保存任何原始文件",
+      "text": "输出目录统一：会话目录是 E:/Skill输出/Luz-System/NNN-名称/（三位序号加短横线，取现有最大序号加 1，不补洞不复用），根目录只有 raw/ 和同名汇总页 NNN-名称.html；系统设计页本身是 HTML，它就是汇总页（h1 最前、lang、不禁用缩放、同一份 md-type 版式）；独立任务的 Excel 与 PDF 放会话根并列在页内；项目任务的成果只写进项目目录的 docs（页面进 02-产品开发，客户文件进 01-需求对接），会话根只留汇总页和 raw，项目不保存任何原始文件",
       "why": "用户 2026-11-05 定：按序号加主题保存到各技能输出根，raw 存源文件与检索信息，同级生成按标准格式的汇总页，只在项目目录下生成结果",
-      "uses": 1,
+      "uses": 2,
       "first_seen": "2026-11-05",
-      "last_confirmed": "2026-11-05"
+      "last_confirmed": "2026-11-11",
+      "previous": {
+        "text": "输出目录统一：会话目录是 D:/Codes/skill输出/Luz-System/NNN-名称/（三位序号加短横线，取现有最大序号加 1，不补洞不复用），根目录只有 raw/ 和同名汇总页 NNN-名称.html；系统设计页本身是 HTML，它就是汇总页（h1 最前、lang、不禁用缩放、同一份 md-type 版式）；独立任务的 Excel 与 PDF 放会话根并列在页内；项目任务的成果只写进项目目录的 docs（页面进 02-产品开发，客户文件进 01-需求对接），会话根只留汇总页和 raw，项目不保存任何原始文件",
+        "replaced_at": "2026-11-11"
+      },
+      "codified": "Luz-Project/references/skill-architecture.md › 用户的共同硬规则"
     },
     {
       "key": "photo-upload-no-size-limit",
@@ -315,6 +404,25 @@
       "uses": 2,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "platform-label-end-dot-system-type",
+      "kind": "preference",
+      "text": "演示的使用端写成“端·系统类型”，例如小程序·预约系统、Web端·管理系统，不写“网页”；其中“Web端”是用户明确确认的中英夹杂例外，只限这一个词。",
+      "why": "用户 2026-11-11 原话要求并在二次确认中选择保留 Web端",
+      "uses": 1,
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11",
+      "scope": "project"
+    },
+    {
+      "key": "proactive-platform-requirements-research",
+      "kind": "preference",
+      "text": "建设运营或问数平台时，要主动调研同类产品，并从经营驾驶舱、指标口径、权限、业务流程、缓存与故障降级、运行治理和验收逐项补齐需求；不能只围绕最小问答入口写需求，也不能未经分析排除平台能力。",
+      "why": "用户要求自主思考并补全平台需求；按场景说明基础、可选和暂不采用的理由。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
     },
     {
       "key": "purchase-rules",
@@ -332,7 +440,8 @@
       "why": "用户 2026-11-04：HTML 的字体偏小、不好看，桌面端要大、手机端可以小一点，层级做成 md 格式、分清楚、美观",
       "uses": 1,
       "first_seen": "2026-11-04",
-      "last_confirmed": "2026-11-04"
+      "last_confirmed": "2026-11-04",
+      "codified": "Luz-Design/references/file-design.html › 网页文件 › 排版参数"
     },
     {
       "key": "remote-config-hot-update",
@@ -353,13 +462,38 @@
       "last_confirmed": "2026-10-28"
     },
     {
+      "key": "speech-captions-follow-audio-three-lines",
+      "kind": "preference",
+      "text": "设备语音字幕最多三行，按短句补入并移走最早行；数字单位整体显示、标点不在行首，滚动应跟随语音，不能明显快于播报。",
+      "why": "用户对实体小智屏幕的连续反馈。",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05",
+      "scope": "project"
+    },
+    {
       "key": "stable-display-no-jump-no-flash",
       "kind": "preference",
-      "text": "前端要稳定显示，不跳屏、不闪烁：图片与异步块先占位且同尺寸，新内容不推开已有内容，主滚动区保留滚动条槽，外观在绘制前设好，骨架屏出现后至少停留 500 毫秒，动画只用透明度与位移；用 audit_stability.py 在真实浏览器里量累计布局偏移（不超过 0.05）、底色闪烁与可视宽度变化，浅色深色各一遍",
-      "why": "2026-11-04 用户要求前端稳定显示不跳屏不闪烁；检索与自己的样板页实测",
-      "uses": 1,
+      "text": "前端要稳定显示，不跳屏、不闪烁：图片与异步块先占位且同尺寸，新内容不推开已有内容，主滚动区保留滚动条槽，外观在绘制前设好，骨架屏出现后至少停留 500 毫秒，动画只用透明度与位移；用 audit_stability.py 在真实浏览器里量累计布局偏移（不超过 0.05）、底色闪烁与可视宽度变化，对已确认需求中声明支持的主题逐一验证，不要求为验收新增第二套主题",
+      "why": "2026-11-04 用户要求前端稳定显示不跳屏不闪烁；检索与自己的样板页实测；2026-11-07 用户取消默认双主题配额，本次仅调整主题验收范围",
+      "uses": 2,
       "first_seen": "2026-11-04",
-      "last_confirmed": "2026-11-04"
+      "last_confirmed": "2026-11-07",
+      "previous": {
+        "text": "前端要稳定显示，不跳屏、不闪烁：图片与异步块先占位且同尺寸，新内容不推开已有内容，主滚动区保留滚动条槽，外观在绘制前设好，骨架屏出现后至少停留 500 毫秒，动画只用透明度与位移；用 audit_stability.py 在真实浏览器里量累计布局偏移（不超过 0.05）、底色闪烁与可视宽度变化，浅色深色各一遍",
+        "replaced_at": "2026-11-07"
+      },
+      "codified": "Luz-Design/references/ui-ownership.md"
+    },
+    {
+      "key": "stage-research-template-evidence",
+      "kind": "preference",
+      "text": "每个独立业务阶段和项目阶段先实际调用 Luz-Crawl：至少5组不同查询、10篇去重正文、3个独立主体，其中至少3篇官方/标准/一手原文；文档与UI实际使用Design模板。读完正文，逐字引用、定位与覆盖核验后才写作设计开发；关键缺口阻塞，禁止凭模型记忆编造。",
+      "why": "用户2026-11-06明确要求及现行AGENTS规则；统一合同见Luz-Crawl/references/evidence-policy.md。",
+      "uses": 2,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-07",
+      "codified": "Luz-Crawl/references/evidence-policy.md"
     },
     {
       "key": "store-open-close-one-click",
@@ -373,11 +507,40 @@
     {
       "key": "ui-adaptive-readable-text",
       "kind": "preference",
-      "text": "原型随窗口自适应、文字不能太小：小程序手机框按窗口放大，字号随微信字体大小七档缩放；具体字号见 commercial-miniprogram-density 与 reading-page-md-hierarchy",
-      "why": "用户 2026-11-04 先答“改成自适应，字体不能太小”，再要求小程序字按官方推荐或主流设计、HTML 桌面字要大手机可小、层级做成 md 格式",
-      "uses": 2,
+      "text": "默认组件模式使用统一框架的字阶和响应式能力，核对长内容及窄屏；正文数值由当前适用卡与平台决定。显式source-locked不改原字阶。 2026-11-07用户组件复用规则替代此键的旧全局默认，历史内容留维护快照。",
+      "why": "用户2026-11-07明确将默认设计改为组件优先与UX/DX/AX；旧规则保留在维护快照，不作为新任务默认。",
+      "uses": 4,
       "first_seen": "2026-11-04",
-      "last_confirmed": "2026-11-04"
+      "last_confirmed": "2026-11-07",
+      "previous": {
+        "text": "新产品UI保持已核验原件的字阶与响应式，只改允许文案；长文先缩短原意不变的允许文字，仍不适合则换完整来源。另有明确授权的独立设计/原稿维护才采用后台正文14、小程序正文16和描述14、手机框适配与微信字号档位。阅读HTML桌面18、手机16。",
+        "replaced_at": "2026-11-07"
+      },
+      "codified": "Luz-Design/references/ui-ownership.md"
+    },
+    {
+      "key": "ui-decisions-follow-function",
+      "kind": "preference",
+      "text": "界面只需清楚展现已确认功能，由模型根据任务、成熟组件和统一规范决定主题、组件与图标；取消全局双主题、至少六种组件和按钮一律配图标等配额。按实际功能、操作和整体一致性验收，保留必要语义与恢复。",
+      "why": "2026-11-07 用户明确要求中文表达，并取消强制双主题、组件最低数量及所有按钮图标规则。",
+      "uses": 1,
+      "first_seen": "2026-11-07",
+      "last_confirmed": "2026-11-07",
+      "codified": "Luz-Project/references/skill-architecture.md › 用户的共同硬规则"
+    },
+    {
+      "key": "ui-full-page-configurable",
+      "kind": "preference",
+      "text": "组件参考库保留原花店，顶层仅移动端、网页端、组件模块。两端都补充Agent会话与任务列表、流式回复、工具调用链、进度、七种运行状态及恢复示例；既有门店管理继续可用，单HTML参考不宣称连接生产Agent服务。",
+      "why": "用户本轮明确要求两端增加Agent前端UI并调整顶层名称。",
+      "uses": 6,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06",
+      "previous": {
+        "text": "用户指定认可的现有花店时，手机 App 直接保留其完整页面、外观控件和原逻辑，不能另造应用替换；参考库仅三个标签：手机 App、后台管理、组件模块。后台沿用原花店的页面/外观、预览、逻辑/规则/状态分区，可切左中右和上下、电脑和手机。",
+        "replaced_at": "2026-11-06"
+      },
+      "scope": "maintenance"
     },
     {
       "key": "一个入口",
@@ -391,11 +554,16 @@
     {
       "key": "一物一图",
       "kind": "preference",
-      "text": "不同对象不共用同一个图标，同一对象在全系统用同一个图标；菜单与功能按钮配线性图标",
-      "why": "用户纠正",
-      "uses": 1,
+      "text": "只对实际需要并采用的图标保持语义和风格一致：同一对象各处用同一图形，不同对象避免混淆。导航、菜单和功能按钮不强制配图标；清楚的文字可以单独使用。",
+      "why": "2026-11-07 用户明确要求中文表达，并取消强制双主题、组件最低数量及所有按钮图标规则。",
+      "uses": 2,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-11-07",
+      "previous": {
+        "text": "不同对象不共用同一个图标，同一对象在全系统用同一个图标；菜单与功能按钮配线性图标",
+        "replaced_at": "2026-11-07"
+      },
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "低操作成本",
@@ -413,7 +581,8 @@
       "why": "用户偏好",
       "uses": 1,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-10-28",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "卡片等高",
@@ -422,7 +591,8 @@
       "why": "用户纠正",
       "uses": 1,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-10-28",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "后台浅底",
@@ -431,16 +601,22 @@
       "why": "用户偏好",
       "uses": 1,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-10-28",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "居中悬浮面板",
       "kind": "preference",
-      "text": "详情、编辑、确认用居中悬浮面板，不用贴右侧的抽屉，视觉重心在中间",
-      "why": "用户纠正",
-      "uses": 1,
+      "text": "详情就近展开或进入独立详情页，完整填写进入独立页面，需要确认的警告用居中对话框；不用贴边抽屉，也不用居中表单弹窗",
+      "why": "用户 2026-11-08 的界面硬规则取代原“详情、编辑、确认都用居中悬浮面板”",
+      "uses": 2,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-11-11",
+      "previous": {
+        "text": "详情、编辑、确认用居中悬浮面板，不用贴右侧的抽屉，视觉重心在中间",
+        "replaced_at": "2026-11-11"
+      },
+      "codified": "Luz-Design/references/design/hard-rules.md › 界面交互"
     },
     {
       "key": "扁平线性风格",
@@ -449,7 +625,8 @@
       "why": "用户多次纠正；2026-10-29 要求补立体感，并决定入口图标、插画与装饰元素可以生成（与 Luz-Design visual-design.html 层级与立体感、图像生成一致）",
       "uses": 3,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-29"
+      "last_confirmed": "2026-10-29",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "表格居中",
@@ -458,7 +635,8 @@
       "why": "用户 2026-10-28 纠正，替换原“表头与数据全部居中”",
       "uses": 2,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "last_confirmed": "2026-10-28",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "配置闭环",
@@ -485,7 +663,8 @@
       "why": "用户 2026-11-04：人像图标可以换成随机头像",
       "uses": 2,
       "first_seen": "2026-10-28",
-      "last_confirmed": "2026-11-04"
+      "last_confirmed": "2026-11-04",
+      "codified": "Luz-Design/references/ui-ownership.md"
     },
     {
       "key": "admin-prototype-page-structure",
@@ -495,6 +674,24 @@
       "uses": 2,
       "first_seen": "2026-10-29",
       "last_confirmed": "2026-10-29"
+    },
+    {
+      "key": "agent-checkpoint-scope-current-authorization",
+      "kind": "lesson",
+      "text": "问数智能体恢复前重核当前授权、指标版本与结果时效；检查点和跨会话记忆不能充当业务事实或授权凭证。",
+      "why": "LangGraph 持久化与中断原文结合 OWASP 逐请求授权；三列问数工作台的图表、解释和导出需绑定同一已核验结果。",
+      "uses": 1,
+      "first_seen": "2026-11-07",
+      "last_confirmed": "2026-11-07"
+    },
+    {
+      "key": "agent-run-snapshot",
+      "kind": "lesson",
+      "text": "智能体会话恢复应保留运行编号、事件序号、步骤、部分文字、审批决定和未发送队列；不能仅凭场景名重建已完成示例。拒绝或接管不能解锁后续写入，断线不等于完成。",
+      "why": "状态与DOM回归复现并修复停止后误显示完成；核验了审批分支、运行隔离、去重和断点恢复。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
     },
     {
       "key": "alert-resume-validation-order",
@@ -522,15 +719,6 @@
       "uses": 1,
       "first_seen": "2026-11-05",
       "last_confirmed": "2026-11-05"
-    },
-    {
-      "key": "arch-html-inline-style",
-      "kind": "lesson",
-      "text": "架构等审阅页不要写内联 style：校验器把多个内联样式拼接后按 font 声明检查，会把 margin、padding 误判为字号；数据字段名避开 更新时间、生成时间、SHA-256、示例数据 等被 check_document 拦截的元数据词",
-      "why": "架构审阅页首次校验失败",
-      "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
     },
     {
       "key": "architecture-claims-need-read-sources",
@@ -598,6 +786,46 @@
       "uses": 1,
       "first_seen": "2026-11-04",
       "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "business-agent-proposes-before-write",
+      "kind": "lesson",
+      "text": "自动转写和纪要属于获授权的分析流程，可在录音结束后直接启动；客户、项目及正式需求的新增修改先展示可编辑结果再确认。不要把所有 Agent 步骤一律做成人工审批。",
+      "why": "区分分析授权与业务写入，按用户明确的自动化时点执行。",
+      "uses": 2,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05",
+      "previous": {
+        "text": "业务 Agent 需求应明确任务对象、资料来源、拟修改字段、确认时点、实际保存结果与失败恢复；确认绑定当前版本和权限，重试先核查结果，不能把生成文本或批准状态当作业务动作已经完成。",
+        "replaced_at": "2026-11-05"
+      }
+    },
+    {
+      "key": "business-entry-research-gate",
+      "kind": "lesson",
+      "text": "业务 CLI（含汇总页）必须在写入正式内容前核验同需求、对应技能与项目阶段的正文归档、采用结论和报告；纯排版 API 由已通过门禁的上游负责，不递归检索；诊断只写过程目录并明确标记，不能冒充正式交付。",
+      "why": "跨技能审计已覆盖缺证据零写入、项目状态根、引用绑定、汇总入口与下游纯 API 的正负回归。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06",
+      "codified": "Luz-Crawl/references/evidence-policy.md"
+    },
+    {
+      "key": "business-schema-before-metric-claims",
+      "kind": "lesson",
+      "text": "问数和驾驶舱指标必须核对字段注释、状态枚举、数据粒度、去重关联、有效范围及更新时点，再与业务报表对账；表名含 order 可能是工单，零值可能表示启用，采集记录不等于业务交易，计次数不等于去重人数，应实收差额不自动等于逾期欠款。",
+      "why": "本次只读元数据核对发现招商工单、上次合同到期日、识别采集记录和设备启用反向枚举等歧义；字段可见只能支持候选需求，不能直接据此承诺营业额、出租率、转化率或实时设备状态。经验不保存客户表名、记录和连接资料。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
+    },
+    {
+      "key": "category-only-product-copy",
+      "kind": "lesson",
+      "text": "用户仅给产品类别并授权补写介绍时，可拟定目标读者与适用方向；不能由同类产品推断具体业务能力、AI能力或设备兼容。",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
     },
     {
       "key": "chart-share-vs-ranking",
@@ -669,11 +897,15 @@
     {
       "key": "crawl-preflight-one-failure-blocks-run",
       "kind": "lesson",
-      "text": "Luz-Crawl 前置检索的 run 对 search 与 capture 每条命令设 300 秒上限，任何一条超时或失败整次记录变为 blocked 且已读来源不进记录；联网慢时先只传 --url 官方原文（不放 --query），查询要少且 --read 1，失败后换掉出问题的网址重跑。",
-      "why": "界面功能说明阶段的 Bing 搜索两次超时，整次记录 blocked",
-      "uses": 1,
+      "text": "按当前 Luz-Crawl preflight 协议，一条搜索或采集路线失败、超时要保留日志并继续其余路线，只有全部路线都没有有效正文才 blocked；doctor、experience 或 summary 失败仍停下。同一 caller 与阶段再次 run 会覆盖其来源记录，补采须事先安排来源或用独立实际 caller 的归档，不能改编号冒充原归档。",
+      "why": "2026-11-06 核对 Luz-Crawl/references/preflight.md，替换旧版任何单条失败就阻断整轮的经验；本轮权限候选页 404 未采用，其他同次官方正文仍有效，不因失败标签虚构登录要求。",
+      "uses": 2,
       "first_seen": "2026-11-04",
-      "last_confirmed": "2026-11-04"
+      "last_confirmed": "2026-11-06",
+      "previous": {
+        "text": "Luz-Crawl 前置检索的 run 对 search 与 capture 每条命令设 300 秒上限，任何一条超时或失败整次记录变为 blocked 且已读来源不进记录；联网慢时先只传 --url 官方原文（不放 --query），查询要少且 --read 1，失败后换掉出问题的网址重跑。",
+        "replaced_at": "2026-11-06"
+      }
     },
     {
       "key": "css-var-resolved-where-declared",
@@ -748,6 +980,24 @@
       "last_confirmed": "2026-11-04"
     },
     {
+      "key": "deletion-covers-provider-state",
+      "kind": "lesson",
+      "text": "需求要求删除后不留内容时，删除须覆盖原件、派生草稿、任务写回、日志、缓存和可恢复备份；外部接口及工具逐一核查留存，不用于训练或关闭保存不等于全链路零留存。",
+      "why": "删除状态须跟实际内容清理结果一致，并区别已采用的独立业务成果。",
+      "uses": 2,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
+    },
+    {
+      "key": "demo-library-and-public-product-boundaries",
+      "kind": "lesson",
+      "text": "私人演示、团队公共库与官网产品分别定义访问和审核边界；复用建立独立副本，公开前清理客户资料，原项目后续修改不得自动公开。",
+      "why": "销售演示复用与产品宣传同时存在时，必须分别界定内容来源、发布权限和版本关系。",
+      "uses": 3,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-07"
+    },
+    {
       "key": "demo-seed-reset-and-invariants",
       "kind": "lesson",
       "text": "页面懒补的演示数据，重置演示数据时要连同多出来的键一起清掉（先删键再赋值）；种子数据本身必须满足跨页数字不变量（订单金额=小计-优惠、退款不超实付、卡次数=扣次记录、余额不为负），用 check_data.py 逐页访问后核对。",
@@ -757,6 +1007,16 @@
       "last_confirmed": "2026-11-04"
     },
     {
+      "key": "demokit-short-form-with-state",
+      "kind": "lesson",
+      "text": "DemoKit复杂表单以业务短步骤组织，单步仍过长时下拉选择当前说明或条目；每段数据独立保留，验证失败回到对应步骤和对象，最终提交仍遵守原业务事务。",
+      "why": "矮屏周报两段说明相互挤压，单段选择后可完整填写。",
+      "uses": 1,
+      "first_seen": "2026-11-17",
+      "last_confirmed": "2026-11-17",
+      "scope": "project"
+    },
+    {
       "key": "design-return-answers-by-owner",
       "kind": "lesson",
       "text": "答复视觉技能的退回清单按归属分三类：属于功能与文案键的由 System 裁定并回写说明；会新增或删除功能、改变数据口径或选项集合的保持现状并列入待用户决定；属于视觉的只写归 Design；每条一行写明是否改了说明、是否需要用户决定。",
@@ -764,15 +1024,6 @@
       "uses": 1,
       "first_seen": "2026-11-04",
       "last_confirmed": "2026-11-04"
-    },
-    {
-      "key": "disabled-variant-specificity",
-      "kind": "lesson",
-      "text": "置灰样式写在主按钮、危险按钮、文字按钮等变体规则之后并同时覆盖 :hover，否则只读或已注销时红色危险按钮仍像可点；浏览器验收要截图核对每个变体的禁用态，量浮层尺寸前等入场动画结束",
-      "why": "001 会员管理列表页只读截图发现行内“注销”仍为红色，390 宽测量浮层时取到缩放动画中的尺寸",
-      "uses": 1,
-      "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
     },
     {
       "key": "element-plus-hidden-columns-and-heights",
@@ -791,6 +1042,30 @@
       "uses": 1,
       "first_seen": "2026-11-04",
       "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "entrances-tabbar-web-admin-sidebar",
+      "kind": "lesson",
+      "text": "网页后台的主导航用 sidebar 表示，移动标签栏才用 tab 计数。个人设置的子动作按 in-page 交接，首页规划保留其归属。",
+      "why": "用移动标签栏记录后台侧栏会产生虚假的五项上限。入口校验已覆盖八项侧栏。",
+      "uses": 2,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-18",
+      "previous": {
+        "text": "entrances_check 的标签栏限 2 到 5 项且偏向手机；网页后台的侧栏有八个入口时，只把最常用的 5 项登记为 tab，其余登记为 home 或 mine，同一页面多个功能共用目的地只是警告，并在决定记录里写明接受理由。",
+        "replaced_at": "2026-11-18"
+      },
+      "codified": "Luz-Design/references/ui-ownership.md › 交接物"
+    },
+    {
+      "key": "estimate-policy-human-quote",
+      "kind": "lesson",
+      "text": "预算、人日、报价默认不写，只给功能清单；只有用户或客户明确要求才写：estimate.workdays 开启后每项功能写 hours 加 hours_basis（用户批准前标拟定），estimate.quote 开启后才有报价清单，数字只能来自人工报价单（quote.json 带 provided_by、provided_at、request_note、evidence），agent 不得自拟、暂估或套用示例值，缺数字就把等待人工报价列为用户待办并停下；开关带 requested_by、requested_at、request_note，读不到 config/documents.json 按都关",
+      "why": "用户 2026-11-05 原话：有一些项目是不需要写预算的，只有明确要求写人日和报价，才写，否则只需要给出清单即可，且报价必须人工报价，不允许agent随便填",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05",
+      "codified": "Luz-Project/references/runbook.md › 11"
     },
     {
       "key": "face-data-not-over-internet",
@@ -856,6 +1131,15 @@
       "last_confirmed": "2026-11-02"
     },
     {
+      "key": "hardware-list-no-price-by-default",
+      "kind": "lesson",
+      "text": "硬件选型清单（Excel 与评审页）默认不带任何价格列、小计、合计和预算节；只有用户明确要求预算、plan.json 写了 budget_requested（requested_by、requested_at、request_note）才带“参考价”，逐项有来源页面链接，页面和表格注明“参考价来自公开页面，非报价”，不写成报价；采购渠道（出处页面或联系方式）与价格分开，经验库价格样本只是调研数据，不得直接当报价；hw_export 带价时给规格写 allow_quote 与 quote_evidence",
+      "why": "用户 2026-11-05 补充：报价必须人工，不允许 agent 随便填；协调者代用户决定硬件清单默认不带价格",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
+    },
+    {
       "key": "hardware-service-catalog",
       "kind": "lesson",
       "text": "介绍软硬件结合项目时，以常见、完整的业务场景命名，写清软件如何联动门禁、电控、收银或设备启停，并说明收费核对、求助或故障处理等具体用途；保留人工处理异常的去向，避免只罗列设备或泛称智能化。条目数量和放置位置按当前文档决定。",
@@ -874,13 +1158,22 @@
       "last_confirmed": "2026-11-04"
     },
     {
-      "key": "icon-label-consistency",
+      "key": "identity-switch-same-tick",
       "kind": "lesson",
-      "text": "图标目录的说明文字要与页面上同一图标旁的对象名一致或互相包含；确属不同对象就另画一个图标，例如项目问答用问号气泡，与对话分开",
-      "why": "check_document --allow interface 把同一图形后面互不包含的文字判为一图多义",
+      "text": "切换身份（代入、退出代入）时，会话角色、标签页和页面栈必须在同一个渲染周期里改完；先改角色再改标签页会短暂挂载只有该角色才有的组件（如 Vant 选项卡），随即卸载并报 offsetWidth 空值。",
+      "why": "DemoKit 进入代入查看时 pageerror，调换顺序后消失",
       "uses": 1,
-      "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11"
+    },
+    {
+      "key": "isolated-sensor-local-before-live",
+      "kind": "lesson",
+      "text": "营业现场接入新门磁时，先确认测试板与锁控独立、备份现状并验证本地输入，再做业务联网接入；其他项目默认固件参数不可直接沿用。",
+      "why": "用户明确本轮只本地测试且不配置营业开关；资料中的服务器与本次目标不一致。",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
     },
     {
       "key": "library-defaults-fixed-in-theme-layer",
@@ -901,22 +1194,13 @@
       "last_confirmed": "2026-11-02"
     },
     {
-      "key": "log-audit-in-architecture",
+      "key": "live-board-poll-render-safety",
       "kind": "lesson",
-      "text": "系统架构要写“日志与审计”一行：哪些动作写审计、谁能看只读审计页、错误页显示请求编号；日志字段、脱敏与留存期限交给开发技能",
-      "why": "2026-10-29 补充日志开发要求时发现架构清单缺这一行",
+      "text": "轮询刷新的实时看板：按结构签名决定卡片是否重建，通知状态和已等时长原位更新，编辑中的回复草稿按工单加状态保存，刷新不能覆盖正在输入的内容；来自客人语音的工单文字一律用 textContent 渲染；手机宽度的状态标签收窄内边距并均分宽度，保证全部标签一屏可见。",
+      "why": "Playwright 在 1440、1200、900、760、390 宽度实测：草稿跨6.5秒轮询保留，带 img onerror 的内容未执行；初版第4个标签在390宽被裁掉，改后四个标签完整显示。",
       "uses": 1,
-      "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
-    },
-    {
-      "key": "luzcrawl-nngroup-rate-limit",
-      "kind": "lesson",
-      "text": "NN/g 连续采集 5–6 篇后返回 429，后续条目被跳过；每批 NN/g 不超过 4 篇并放在批次最前，被拦后停在该站不换入口",
-      "why": "Luz-Crawl 采集 NN/g 时触发限流（交互闭环调研）",
-      "uses": 1,
-      "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
     },
     {
       "key": "mini-tabbar-flex-squeeze",
@@ -937,6 +1221,16 @@
       "last_confirmed": "2026-11-04"
     },
     {
+      "key": "module-rule-fact-owner",
+      "kind": "lesson",
+      "text": "用业务对象、状态变化、共同约束与角色权限识别模块。交接只传必要输入、状态结果与稳定规则编号，同一业务事实有一个维护者。",
+      "why": "用订单、库存、优惠、售后和预约案例核对规则出处与跨模块失败责任。",
+      "uses": 1,
+      "first_seen": "2026-11-18",
+      "last_confirmed": "2026-11-18",
+      "codified": "references/system-design.html › 业务模块与规则归属"
+    },
+    {
       "key": "multistore-switch-selection",
       "kind": "lesson",
       "text": "门店选择器必须显示实际生效的门店；取消切换立即还原原生选择框，加载期间清除旧权限和私有页面。",
@@ -953,6 +1247,15 @@
       "uses": 1,
       "first_seen": "2026-11-02",
       "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "nlq-cache-authorization-freshness-backpressure",
+      "kind": "lesson",
+      "text": "问数缓存先验证当前权限，键身份绑定授权范围与版本、指标和连接版本、规范化参数、绝对期间及结果形态；结果时效与源数据延迟分开显示，撤权使旧结果不可再用；外部只读源无可靠变更事件时用有界时效，故障以限流、排队或暂停保护业务库，结果缓存与持久任务状态分开。",
+      "why": "读取 Redis 客户端缓存及淘汰文档 https://redis.io/docs/latest/develop/clients/client-side-caching/ 和 https://redis.io/docs/latest/develop/reference/eviction/，并对照 Superset 缓存与 OWASP 授权指南；Redis 键跟踪不能发现外部 MySQL 更新，命中缓存不能绕过授权，故障全量回源会放大问数负荷。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
     },
     {
       "key": "ops-reminders-one-status-page",
@@ -977,6 +1280,24 @@
       "last_confirmed": "2026-11-04"
     },
     {
+      "key": "ordered-state-set-ownership",
+      "kind": "lesson",
+      "text": "有先后顺序的状态集合（沟通深度、轮次、审批与订单的过程环节）要在功能说明里写成有序集合：状态名、先后顺序、管理员能否增减与排序、哪些是终态；颜色与样式归 Luz-Design，功能说明不写颜色；状态节点用 data-ordered 与 data-configurable，终态排在 data-values 最后，check_interaction.py 检查。",
+      "why": "用户 2026-11 补充要求：同页不同进度状态要用颜色区分并随进度递增，顺序与终态由功能侧给出，Design 只按顺序位置取色。",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
+    },
+    {
+      "key": "ordered-states-addendum-after-freeze",
+      "kind": "lesson",
+      "text": "界面功能说明已随架构阶段哈希冻结后，才发现要补有序状态集合时，不改冻结的八个产物：在 frontend-spec 目录新增 ORDERED-STATES.md（只写名称、顺序、管理员能否增减与排序、有无终态、出现在哪些页面、其他状态机为什么不是有序集合，不含颜色），登记为设计阶段的 frontend-spec-notes，等下次架构修订再并入 frontend-spec.json",
+      "why": "014-CustomerEntry 变更 CHG-010：用户补充同页有序进度状态要有递进配色，System 侧只补事实",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
+    },
+    {
       "key": "page-pattern-entrances-one-row-per-fn",
       "kind": "lesson",
       "text": "page_pattern.py 的入口表要求一个功能一行，同一个 fn 重复会报错：多端或同端多入口时按端拆成多份，同端第一行为主、其余写进该行的 also；记录级与页内动作要标 task 且 entry 为 in-page，标成 tool 会被建议放进我的。首页骨架对不适用的应用类型要在决定记录里写清楚。",
@@ -986,13 +1307,22 @@
       "last_confirmed": "2026-11-04"
     },
     {
-      "key": "photo-card-contrast",
+      "key": "page-stack-pop-one-at-a-time",
       "kind": "lesson",
-      "text": "照片主卡按 0.35–0.5 黑色遮罩压白字时，先量文字区域的亮度：明亮的环境照片在 0.5 遮罩下只有约 3.7:1，要选偏暗、低调的照片，或改成主色块加照片分栏让白字不压在照片上",
-      "why": "卡片方案预览实测，会议桌照片第 90 百分位亮度换算",
+      "text": "共用页面栈（form-page 带浏览器历史）一次移除两层页面会留下过期历史记录，使下面一层页面被连带关闭；多层返回要一层一层关，或不要把两个页面叠在一起，完成后回到上一层并让它自己刷新。",
+      "why": "DemoKit 账号编辑页进设置初始密码页再点完成时账号列表被关闭，改为只关最上层后恢复",
       "uses": 1,
-      "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11"
+    },
+    {
+      "key": "platform-research-capability-to-acceptance",
+      "kind": "lesson",
+      "text": "运营问数平台调研要覆盖问数智能体、BI 驾驶舱、流程平台、授权与缓存治理，形成能力对照、业务痛点、采纳取舍、分期需求与可执行验收的映射；来源事实、产品判断和客户数据证据分别记录，不能把一篇 SQL 教程当作完整平台需求。",
+      "why": "用户纠正只做简单问答的需求；SQLBot、WrenAI、Vanna、Metabase、Superset 与 Dify 的正文比较显示，看板复用、语义版本、权限传播、事项闭环和运行恢复需一起考虑，扩展能力按收益及前置条件取舍。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
     },
     {
       "key": "preflight-crawl-before-system",
@@ -1012,13 +1342,24 @@
       "last_confirmed": "2026-11-04"
     },
     {
-      "key": "prototype-acceptance-record",
+      "key": "project-gates-via-readonly-api",
       "kind": "lesson",
-      "text": "原型审批记录的浏览器验收文件写进 browser_acceptance_path 与 browser_acceptance_sha256，MANIFEST 每个模式各有一个交付项（编号前缀 ARCH、SYS、VIS、PROTO），验证记录写本轮实际结果；自起字段名或漏交付项，严格模式会拦下",
-      "why": "validate_session 按固定字段核对审批与交付清单",
+      "text": "项目模式下，检索记录的七天期限还算不算只向 Luz-Project 的只读接口问（approval_docs.crawl_expiry_waived，sys.path.append 引入）；接口读不到或出错按不豁免处理，本技能不自带判定；docs 里的文件由 Luz-Project 的 project.py document / client 生成，publish.py 在项目任务里不写 docs、不要求会话级 APPROVALS.json。",
+      "why": "Luz-Project runbook 第 12 节与 project-mode.md；publish.py 项目分支退役，crawl_gate 加七天豁免",
       "uses": 1,
-      "first_seen": "2026-10-29",
-      "last_confirmed": "2026-10-29"
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05",
+      "codified": "Luz-Project/references/runbook.md › 12"
+    },
+    {
+      "key": "project-mode-file-by-file",
+      "kind": "lesson",
+      "text": "项目模式下用户只逐个审批 docs 里的文件，一次一个，不自己判定用户已批准；规则卡、Crawl、自检、trace、评审页等内部步骤一步不省，只是不让用户审、也不向用户罗列；rules 与 specialist 两步由本技能的 agent 用 project.py step 自己记录。",
+      "why": "Luz-Project 流程改造：用户只关注 docs 的产出文件，要求路径完整、不跳步骤、不偷工减料；步骤缺失时生成命令、approve 与下游阶段都会拒绝",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05",
+      "codified": "Luz-Project/references/runbook.md"
     },
     {
       "key": "prototype-non-action-controls",
@@ -1068,11 +1409,41 @@
     {
       "key": "prototype-validator-drift",
       "kind": "lesson",
-      "text": "写项目原型前先在项目的校验脚本里用实际参数跑一遍 _prototype_errors，不要只信任务书：校验器可能在任务期间新增要求（例如 prototype 块要写 library 且构建文件要有至少 6 种该组件库的组件），与“不用外部库”的任务书冲突时写进冲突清单交给用户，不改类名去骗检查。",
-      "why": "2026-11 某后台原型：dev_documents.py 在任务书之后加了 library 要求，原型按任务书手写控件，函数返回 1 条 library 错误。",
-      "uses": 1,
+      "text": "校验器与当前任务合同不一致时，先核对现行规则、实际调用路径和用户授权并修正检查器；不改类名或伪造标记骗检查。旧的六组件下限等历史门槛已撤销，不得据此增加无用组件或向用户索要例外批准。",
+      "why": "2026-11-07 用户明确要求中文表达，并取消强制双主题、组件最低数量及所有按钮图标规则。",
+      "uses": 2,
       "first_seen": "2026-11-03",
-      "last_confirmed": "2026-11-03"
+      "last_confirmed": "2026-11-07",
+      "previous": {
+        "text": "写项目原型前先在项目的校验脚本里用实际参数跑一遍 _prototype_errors，不要只信任务书：校验器可能在任务期间新增要求（例如 prototype 块要写 library 且构建文件要有至少 6 种该组件库的组件），与“不用外部库”的任务书冲突时写进冲突清单交给用户，不改类名去骗检查。",
+        "replaced_at": "2026-11-07"
+      }
+    },
+    {
+      "key": "provider-retention-before-activation",
+      "kind": "lesson",
+      "text": "严格删除场景须在启用前逐项核验模型、工具及运行环境的留存与清理能力；不训练、应用删除或私有转写均不能替代全链路证明。",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
+    },
+    {
+      "key": "public-showcase-static-projection",
+      "kind": "lesson",
+      "text": "公开产品展厅采用静态构建时，先按发布状态筛选再做公开字段与素材白名单投影；目录、详情、查找、元信息和撤下页必须从同一版本生成。",
+      "why": "只过滤列表不足以阻止内部资料进入浏览器包或旧素材直链。",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
+    },
+    {
+      "key": "query-results-semantic-revision-boundaries",
+      "kind": "lesson",
+      "text": "问数展示把业务字段、中文显示名、类型、单位与转换口径分开；流式事件另定运行、证据与版本身份，空值和大整数保留原义，饼图必须先核完整构成。",
+      "why": "本轮已读Metabase显示元数据与饼图、MySQL聚合、MDN安全整数、WHATWG续传和W3C暂停正文；规范证据不代表本地交互已验证，字段字典或事件合同变化后复核。",
+      "uses": 1,
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11"
     },
     {
       "key": "reading-page-banned-words-in-spec",
@@ -1115,15 +1486,6 @@
       "last_confirmed": "2026-11-04"
     },
     {
-      "key": "reuse-knowledge-only-sources",
-      "kind": "lesson",
-      "text": "experience.py reuse 遇到只有 Luz-Crawl 原始路径、没有会话快照的来源（如 SRC-078/079/106）会中断整批，复用前先确认 snapshot 带 session 字段，并分小批复用",
-      "why": "复用时 KeyError session",
-      "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
-    },
-    {
       "key": "rule-calc-config-driven",
       "kind": "lesson",
       "text": "核算类数字由规则引擎按配置版本算，模型只取数、解释、复核；阶梯必须显式选分档累计或整体计价（同一阶梯表 6 件分别是 41.5 与 39）；结果记录配置版本与输入快照以便复算；在途运行固定读取时的版本，续跑发现版本已变先重算并显示新旧差异；无权字段显示无权查看而不是零",
@@ -1135,11 +1497,15 @@
     {
       "key": "rule-card-size-budget",
       "kind": "lesson",
-      "text": "规则卡的规则正文每张 8–35 KB，不提高上限、不用 max_chars 截断：规范页新增小节后先量 context.make_card 的第 3 部分；整层被引用的小节下加新子标题会撑爆原卡，改为逐个小节引用（按 h4 引用时同级后续 h4 不会带上，要逐个列出）、新规则放新 h4 并另建规则卡；被多张卡共用的表新增行会撑爆旧卡，把新增内容放进独立 h3，原表只留一行指向它，新卡单独引用该 h3；通用小节可让给别的卡并在 tools 里指路",
-      "why": "agent-ui 引用整层“五、组件”，加输入区状态机后超限，改为逐个小节引用并新增 agent-composer；加客户文件与隐私小节后 function-list、system-design、miniprogram、admin-form 卡超限，逐卡裁剪后通过 test_context；平台配置台新增 8 张卡时 system-design 卡因架构清单加 7 行超限，改为独立 h3 后恢复",
-      "uses": 5,
+      "text": "规则卡按真实任务引用完整小节，校验可解析章节与关键规则，保留约 35 KB 上限但不设置 8 KB 下限；不为凑字数复制规则，不用截断掩盖缺失。视觉规则归 Design，迁移列表只保留仍存在的经验键。",
+      "why": "2026-11-08 test_context.py；删除失效的 admin-density-14px 迁移引用，未复活旧字号要求。",
+      "uses": 6,
       "first_seen": "2026-10-29",
-      "last_confirmed": "2026-11-02"
+      "last_confirmed": "2026-11-08",
+      "previous": {
+        "text": "规则卡的规则正文每张 8–35 KB，不提高上限、不用 max_chars 截断：规范页新增小节后先量 context.make_card 的第 3 部分；整层被引用的小节下加新子标题会撑爆原卡，改为逐个小节引用（按 h4 引用时同级后续 h4 不会带上，要逐个列出）、新规则放新 h4 并另建规则卡；被多张卡共用的表新增行会撑爆旧卡，把新增内容放进独立 h3，原表只留一行指向它，新卡单独引用该 h3；通用小节可让给别的卡并在 tools 里指路",
+        "replaced_at": "2026-11-08"
+      }
     },
     {
       "key": "rule-page-check-document",
@@ -1149,6 +1515,15 @@
       "uses": 1,
       "first_seen": "2026-11-02",
       "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "sensor-current-versus-last-reading",
+      "kind": "lesson",
+      "text": "硬件卡片的连接状态、当前门位和上次读数应独立建模；过期显示状态未知并保留历史时间，沿用既有卡片且不为只读传感器添加控制入口。",
+      "why": "用户要求沿用Gym AB门UI，独立ESP32不接锁控；桌面与390px三状态验证及公网真实closed读数通过。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
     },
     {
       "key": "session-revision-archive",
@@ -1169,6 +1544,14 @@
       "last_confirmed": "2026-11-04"
     },
     {
+      "key": "showcase-file-maintenance-boundary",
+      "kind": "lesson",
+      "text": "单一公开宣传网站可通过集中资料、校验与复核发布完成维护；文件流程不应被描述成网页后台或额外公开接口。",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
+    },
+    {
       "key": "small-fill-selector-naming",
       "kind": "lesson",
       "text": "小块实色与 12 号辅助字的选择器要写明约定标记（.dot、-bar i、-mark、badge；caption、meta、time、unit）；主卡内的白字选择器以 .brand-card 开头，否则对比度按白底计算报错；控件按钮文字保持 14",
@@ -1185,6 +1568,24 @@
       "uses": 1,
       "first_seen": "2026-11-04",
       "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "source-ui-complete-archive-publish",
+      "kind": "lesson",
+      "text": "来源 UI 发布必须交付 Design 实际 check/export 的完整来源 ZIP 与阅读汇总，保留全部资源；阶段审批绑定完整包，旧原型骨架、单页 HTML 和邻阶段检索不能充当来源证明。交付再核来源、ZIP 文件字节、模板快照及成品哈希。",
+      "why": "本次源码审计和离线编排回归发现直接发布 API、旧骨架批准与完整来源交付之间的缺口；真实浏览器审计仍由 Design 独立核验。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
+    },
+    {
+      "key": "source-ui-real-document-check",
+      "kind": "lesson",
+      "text": "完整来源的浏览器审计通过后，正式汇总仍须运行真实文档检查；过程目录绝对路径留在来源记录中，不进入交付正文。编排回归保留真实文档检查器，避免假通过掩盖交付契约冲突。",
+      "why": "实际完整来源输出通过六十个浏览器条件后，真实文档检查发现汇总页泄漏过程路径；移除后正式发布、完整压缩包逐文件核验与最终会话检查通过。",
+      "uses": 1,
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
     },
     {
       "key": "spec-derived-files-single-source",
@@ -1223,13 +1624,22 @@
       "last_confirmed": "2026-11-04"
     },
     {
-      "key": "system-design-table-cells",
+      "key": "summary-source-link-base",
       "kind": "lesson",
-      "text": "系统设计页模块内容区按标签规则逐格检查：表头加 cell-label，单元格加 cell-value，长文本按分号拆成不超过 30 字的 line-value 行，避免 详情、原因、步骤、提示、流程、指南、备注、点击查看 等词，内容区外层用 module-content",
-      "why": "系统设计页多轮校验失败后归纳",
+      "text": "同一汇总页原稿复制到会话根发布时，链接必须在原稿与发布位置都能解析；本机记录可用已核实的文件 URI，便携成品仍用包内相对链接。",
+      "why": "按两个实际基准目录逐项检查目标，并分别记录汇总页与真实来源文件的哈希；普通契约会话不填写未开展阶段的哈希或批准。",
       "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "first_seen": "2026-11-06",
+      "last_confirmed": "2026-11-06"
+    },
+    {
+      "key": "supplement-details-as-pending-requirements",
+      "kind": "lesson",
+      "text": "用户明确要求执行者自行补充细节时，补充项单列为待确认需求，随模块确认页一并提交用户勾选，不混入用户原话需求，也不因“不补全常见模块”而停下不做。",
+      "why": "系统设计规范要求只取用户原话的模块，而当前用户指令优先；分列并经批准可同时满足两者。",
+      "uses": 1,
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11"
     },
     {
       "key": "theme-rules-need-a-rendered-check",
@@ -1259,6 +1669,15 @@
       "last_confirmed": "2026-11-02"
     },
     {
+      "key": "ui-requirements-component-feature-subset",
+      "kind": "lesson",
+      "text": "luz-ui-requirements/1 要求每个组件的 feature_ids 是它所在全部页面 feature_ids 的子集且非空，所以跨页复用的通用外壳、筛选条、表格没有共同功能就无法登记；按页面的功能分组拆成各自的组件，系统外壳写在界面功能说明里而不进合同。",
+      "why": "018-MES 架构阶段：首版把外壳、筛选条、数据表格放在多页上，校验报 component features are not covered；拆成 20 个按功能分组的组件后通过。复核触发：ui_requirements.py 的组件与页面映射规则改变。",
+      "uses": 1,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
+    },
+    {
       "key": "universal-search-agent",
       "kind": "lesson",
       "text": "搜索 Agent 的澄清、补充重规划、路径表和表格结果必须共用同一份 SSE 运行状态。",
@@ -1275,6 +1694,20 @@
       "uses": 1,
       "first_seen": "2026-11-04",
       "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "ux-dx-ax-measured-rules-20261107",
+      "kind": "lesson",
+      "text": "需求先定义任务成功条件、功能、页面、动作、数据、权限、状态和组件能力；采样前固定分母与范围，按唯一quality-rules检查，外部案例不替用户造事实。组件名称不等于实际平台能力：原型先验证触控、键盘、禁用和恢复；更换同框架成熟控件配置时同步需求合同与当前包哈希。AX指Agent Experience。",
+      "why": "确认当前质量合同；本次预约H5实测成熟组件行为后调整原生按钮配置，保持任务与功能范围。",
+      "uses": 4,
+      "first_seen": "2026-11-07",
+      "last_confirmed": "2026-11-07",
+      "previous": {
+        "text": "需求先定义任务成功条件、功能/页面/非UI/动作/数据/权限/状态和组件能力；度量先固定分母与采样范围，按quality-rules的System项检查，外部案例不替客户造事实。 适用当前七技能协作；具体数值、例外与证据见Luz-Project/references/quality-rules.md及quality-rules.json。",
+        "replaced_at": "2026-11-07"
+      },
+      "codified": "Luz-Project/references/quality-rules.md"
     },
     {
       "key": "vant-dark-theme-wiring",
@@ -1349,13 +1782,40 @@
       "last_confirmed": "2026-11-04"
     },
     {
+      "key": "voice-device-proactive-reply-captions",
+      "kind": "lesson",
+      "text": "设备端主动播报（前台回复、通知）不要走先整句显示文字再朗读的控制回复路径：整句先显示会用完文字，语音时间轴就没有可逐字揭示的内容；只发 start 再朗读，字幕交给 EdgeTTS 词时间逐字推进，无时间轴的语音服务再退回整句显示。",
+      "why": "回环模拟设备端到端验证：先整句显示时只收到1条字幕；改成只发 start 后收到13到26条逐字字幕，每条不超过3行，居中并预留行宽。",
+      "uses": 1,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
+    },
+    {
+      "key": "web-recording-validation-intake",
+      "kind": "lesson",
+      "text": "响应式网页录音先收实际设备、浏览器和脱敏场景样本，验证锁屏、后台及停止末段，不把一般平台能力当具体设备兼容性。",
+      "why": "MDN getUserMedia 与 MediaRecorder dataavailable 正文；DemoKit 只收项目专属资料，不新增原生应用。",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
+    },
+    {
       "key": "规范页技术记号",
       "kind": "lesson",
       "text": "规范页正文用中文，99+、Esc、YYYY-MM-DD 等技术记号放进 code 或 kbd 元素；“不要字母”指的是不用文字头像，不是页面里禁止一切拉丁字母",
       "why": "用户澄清，validate_skill.py 已改为只放行 code 与 kbd",
       "uses": 1,
-      "first_seen": "2026-10-28",
-      "last_confirmed": "2026-10-28"
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
+    },
+    {
+      "key": "admin-view-as-readonly-server-enforced",
+      "kind": "fact",
+      "text": "管理员代入销售身份做成只读：管理员会话上记被查看的销售与开始时间，服务端统一入口拒绝所有写入与管理接口（只放行读取与结束代入），读取按被查看销售返回；30 分钟自动结束，被查看账号停用立即结束；开始、切换、结束都写审计；前端把会话映射成销售角色并隐藏写入控件，同时显示常驻横幅和返回入口。",
+      "why": "DemoKit 2026-11-11 实现与测试；检索结论：Pigment、SuperTokens、GitHub 文档支持只读、横幅、审计与时限；Zendesk 可写代入会把写入记到被代入者名下",
+      "uses": 1,
+      "first_seen": "2026-11-11",
+      "last_confirmed": "2026-11-11"
     },
     {
       "key": "agent-foundation-design-split",
@@ -1403,6 +1863,15 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "arch-contract-rows-and-row-actions",
+      "kind": "fact",
+      "text": "架构页的页面、动作、状态节点可用表格行（tr）承载 data-* 交互契约，check_interaction 能识别；列表行的编辑动作把目标页留空、由进入该页的另一个动作做 data-entry，否则同一页两个动作指向同一目的地会报“两条入口”；全部取值相同的表格列改写成一句说明，check_document 才无提醒；第一列编号加 nowrap 防止换行。",
+      "why": "DemoKit 登录演示库与分享链接界面会话 018 的架构阶段实测",
+      "uses": 1,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
+    },
+    {
       "key": "audit-rendered-walk-with-component-library",
       "kind": "fact",
       "text": "audit_rendered.py 的 --walk 脚本定义 walk(page, scan)，每走到一个状态返回 (标签, scan())，真实组件库的对话框、底部面板和各场景都要逐个走到才会被审计；单选与多选（role=radio、role=checkbox）不在点击区域检查范围里，要自己用样式和脚本量到 44 以上。",
@@ -1410,6 +1879,15 @@
       "uses": 1,
       "first_seen": "2026-11-04",
       "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "builder-wbr-regex-must-keep-separator",
+      "kind": "fact",
+      "text": "页面生成脚本给路径和字段名插入断行点时，正则替换必须保留原字符（替换成反向引用加 wbr 标签）；只写 wbr 标签会吞掉斜杠、点和下划线，路由、接口地址和字段名在页面上显示成连写，例如 chart_spec 变成 chartspec。",
+      "why": "运营问数工作台 019 修订时发现已批准架构页的 #/workbench/analysis 被显示成 #/workbenchanalysis，生成脚本的正则吞掉了分隔符",
+      "uses": 1,
+      "first_seen": "2026-11-10",
+      "last_confirmed": "2026-11-10"
     },
     {
       "key": "chat-booking-interaction-loop",
@@ -1421,10 +1899,41 @@
       "last_confirmed": "2026-11-04"
     },
     {
+      "key": "chat-entry-points",
+      "kind": "fact",
+      "text": "聊天类预约的患者入口按可靠程度排：二维码、网站或社交页的点击聊天链接（wa.me 加完整国际号码，可预填一句话）、广告上的发消息按钮、已保存的联系人；没有查到按商家名字搜索的官方入口，不当作入口写。",
+      "why": "入口资料取自第三方产品帮助页与 Meta 价格页，未读到 WhatsApp 帮助中心原文",
+      "uses": 1,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05"
+    },
+    {
+      "key": "check-document-bans-updated-at-wording",
+      "kind": "fact",
+      "text": "Luz-Design 的 check_document 会拦截正文任何位置的“更新于”（生产元数据规则），“更新时间”出现在短单元格里也会被拦；界面文案要表达数据新旧时写“数据更新至 {time}”，不要写“更新于”。",
+      "why": "运营问数工作台 019 修订：文案“数据更新于”使架构页 check_document 报 10 个错误，改为“数据更新至”后通过",
+      "uses": 1,
+      "first_seen": "2026-11-10",
+      "last_confirmed": "2026-11-10"
+    },
+    {
       "key": "client-feature-list-without-amounts",
       "kind": "fact",
-      "text": "项目设了 amounts:false 时，客户功能清单 Excel 只有“功能清单”一张工作表，类型之后是工时（人天）列，没有报价清单、单价、金额、小计、合计；规则卡里“两张工作表、报价清单”的写法在这类项目里不适用；可选功能被客户选择“不需要”时仍列在清单里，客户的选择写在需求说明书、方案说明书和变更台账里",
-      "why": "014 整体返工；取舍：04 不依赖确认表的回填，免得确认表重新导入后 04 变成已过期",
+      "text": "默认（estimate.workdays 与 estimate.quote 都关，旧配置 amounts:false 等价）时客户功能清单 Excel 只有“功能清单”一张工作表：使用端、使用角色、功能模块分组加功能、功能说明、类型，没有工时、单价、金额、小计、合计和报价清单；打开 workdays 才在类型之后加“工时（人天）”列，打开 quote 才有报价清单；可选功能被客户选择“不需要”时仍列在清单里，客户的选择写在需求说明书、方案说明书和变更台账里",
+      "why": "014 整体返工；取舍：04 不依赖确认表的回填，免得确认表重新导入后 04 变成已过期。用户 2026-11-05 补充的预算政策改写了此前“类型之后是工时列”的写法",
+      "uses": 2,
+      "first_seen": "2026-11-05",
+      "last_confirmed": "2026-11-05",
+      "previous": {
+        "text": "项目设了 amounts:false 时，客户功能清单 Excel 只有“功能清单”一张工作表，类型之后是工时（人天）列，没有报价清单、单价、金额、小计、合计；规则卡里“两张工作表、报价清单”的写法在这类项目里不适用；可选功能被客户选择“不需要”时仍列在清单里，客户的选择写在需求说明书、方案说明书和变更台账里",
+        "replaced_at": "2026-11-05"
+      }
+    },
+    {
+      "key": "clinic-chat-booking-workflows",
+      "kind": "fact",
+      "text": "诊所聊天预约的使用流程：患者侧 11 种情况（首次同意、预约、确认、提醒、改期、取消、问信息、找真人、症状转人工、押金、退订、网页版备用）；员工侧按一天的时点（开门前、接手聊天、录入、到诊、完成、休诊、未到诊、收工、每周、对账、数据请求）；同类产品把候补、统计、召回放在以后。",
+      "why": "同类产品介绍页检索",
       "uses": 1,
       "first_seen": "2026-11-05",
       "last_confirmed": "2026-11-05"
@@ -1448,6 +1957,15 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "component-docs-content-incomplete-not-bypassed",
+      "kind": "fact",
+      "text": "组件库文档页内容很长时采集器会因滚动预算用完标为内容不完整、待用户处理，重试仍如此；不绕过也不把它当证据，据实写进未覆盖范围，用同一发布方镜像域名或其他一手页面覆盖。",
+      "why": "Ant Design 的 Progress、Steps 与 Ant Design X 的 Bubble、Conversations 页在两个阶段都被标为待用户处理",
+      "uses": 2,
+      "first_seen": "2026-11-10",
+      "last_confirmed": "2026-11-10"
+    },
+    {
       "key": "component-library-reference",
       "kind": "fact",
       "text": "组件库登记在 Luz-Design 视觉设计规范“组件与组件库”（ui-standards.html“参考组件库”只写怎么查）；2026-10-28 已采集 Ant Design 字体与数据格式、Arco、TDesign 字体与表格、Semi、Element Plus、Carbon、Polaris、Atlassian 表格及 NN/g 数据表格、驾驶舱、筛选共 16 页",
@@ -1466,6 +1984,38 @@
       "last_confirmed": "2026-11-03"
     },
     {
+      "key": "demo-entry-internal-external-address",
+      "kind": "fact",
+      "text": "DemoKit 演示库的做法：每个演示有内部地址（可读前缀加随机后缀，登录后在库里可见可复制，无有效期）和外部地址（纯随机路径，销售生成、可设有效期并可撤销，客户只读），两者指向同一个演示；所有无效情形统一显示友好失效页，页面不出现状态码数字。",
+      "why": "用户2026-11-09对 DemoKit 上线的要求；任务性做法，记为事实不占用偏好名额",
+      "uses": 2,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09",
+      "previous": {
+        "text": "演示库的每个演示有两种地址：内部地址（可读前缀加随机后缀，登录后在演示库里可见可复制，无有效期）和外部地址（纯随机路径，销售生成、可设有效期并可撤销，客户只读）；两者指向同一个演示；所有无效情形统一显示“链接已失效，请联系销售”，页面不出现状态码数字。",
+        "replaced_at": "2026-11-09"
+      },
+      "scope": "project"
+    },
+    {
+      "key": "design-first-table-no-descriptive-words",
+      "kind": "fact",
+      "text": "系统设计页紧跟二级标题的第一张表，单元格不能含“步骤、提示、说明、详情、流程”等描述性词且不超过 32 字；功能名里常有这些词，所以第一张表用编号、类别、需求，功能名放第二张表。",
+      "why": "运营问数工作台系统设计页校验的实际报错与修正；2026-11-10 重写后仍按此格式通过",
+      "uses": 2,
+      "first_seen": "2026-11-10",
+      "last_confirmed": "2026-11-10"
+    },
+    {
+      "key": "design-hard-rules-vs-approved-system-design",
+      "kind": "fact",
+      "text": "视觉阶段才发现 Luz-Design 硬规则与已批准的系统设计冲突：填写业务表单禁止居中弹窗（须独立页面，居中对话框只给不含文本框的确认警告）、所有标题禁止问号与疑问句、新建入口只用模块标题行右侧的生成图标；系统设计阶段写“居中悬浮面板”“撤销这条分享链接？”时就应按这三条核对，否则批准后要退回系统设计修订并重新批准。visual 与 prototype 阶段的发布物是 Luz-Design 的完整 UI 来源包，不是单页视觉板，图标图案须用本地 Imagegen 生成（计费请求）。",
+      "why": "DemoKit 会话 018 进入 visual 阶段前的核对",
+      "uses": 3,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
+    },
+    {
       "key": "element-plus-overlay-in-prototype-frame",
       "kind": "fact",
       "text": "原型里对话框用 append-to 挂进原型框内并把 .el-overlay 改成 position:absolute，场景面板在框外保持可点；el-drawer 的样式会触发 check_document 的内容抽屉误报，窄屏菜单面板改用 el-dialog 做左侧升起的面板；图表悬浮提示用单个 el-tooltip 的 virtual-ref 加 virtual-triggering，离开页面时要隐藏",
@@ -1482,15 +2032,6 @@
       "uses": 1,
       "first_seen": "2026-11-02",
       "last_confirmed": "2026-11-02"
-    },
-    {
-      "key": "entry-ownership-by-function-type",
-      "kind": "fact",
-      "text": "每个功能按类型（上下文、搜索、核心任务、状态、账户、订单、营销、内容、工具）有默认入口位置：门店与配送方式在顶部上下文栏，会员收藏优惠券归我的，订单首页只出进行中状态卡，金刚区只放并列高频核心业务；架构阶段同时交 entrances.json 给视觉技能，用 entrances_check.py 检查",
-      "why": "用户 2026-11-04 要求金刚区不放账户类与标签栏重复项，入口精简",
-      "uses": 1,
-      "first_seen": "2026-11-04",
-      "last_confirmed": "2026-11-04"
     },
     {
       "key": "five-skill-boundary-contracts",
@@ -1518,6 +2059,15 @@
       "uses": 1,
       "first_seen": "2026-11-02",
       "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "headless-edge-390-width-observation",
+      "kind": "fact",
+      "text": "界面实际观察可用本机 Edge 无头加 Playwright：宽度 390 与 1440 各截一张并读 scrollWidth 判断横向溢出；Playwright 取自已装依赖的前端工程；观察只读，不提交问题以免产生模型调用。",
+      "why": "运营问数工作台现有界面观察：390 宽度 scrollWidth 等于 390，无溢出；修订后的架构页与系统设计页同法复测",
+      "uses": 2,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-10"
     },
     {
       "key": "imagegen-actual-size",
@@ -1601,6 +2151,19 @@
       "last_confirmed": "2026-11-04"
     },
     {
+      "key": "progress-bar-honest-without-plan",
+      "kind": "fact",
+      "text": "智能体进度条不伪造百分比：没有计划时按已完成步骤分段点亮并显示已用时；用户也可以决定即使后端有百分比和预计剩余也不显示，此时统一按已完成的阶段与步骤分段，后端的 progress 与 eta_s 只用于判断阶段，不写出；命中保存的分析时仍走同一套进度与数据展示。",
+      "why": "运营问数工作台优化：计划先行在真实模型上冷问题没有变快，默认路径没有百分比字段；2026-11-10 用户决定不显示进度百分比与剩余时间",
+      "uses": 2,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-10",
+      "previous": {
+        "text": "智能体进度条的形态取决于后端是否给出计划：有计划才显示百分比与阶段，没有计划时按已完成步骤分段点亮并显示已用时，不伪造百分比；命中保存的分析时仍走同一套进度与数据展示。",
+        "replaced_at": "2026-11-10"
+      }
+    },
+    {
       "key": "prototype-chart-drill-consistency",
       "kind": "fact",
       "text": "驾驶舱图表的钻取要区分统计口径：按客户统计的图（沟通深度、行业、各销售客户数）进客户表，按记录统计的图（业务类型、趋势、各销售记录数）进记录表，明细条数才等于图上数字；用脚本把每个图表项点一遍，核对明细页“共 N 条”等于图上数字。",
@@ -1628,6 +2191,15 @@
       "last_confirmed": "2026-11-04"
     },
     {
+      "key": "reapprove-architecture-and-design-ordering",
+      "kind": "fact",
+      "text": "架构与系统设计两份批准同时作废时，validate_session 会报“系统设计页在架构批准前已存在”和“根汇总页与来源不一致”，这是批准顺序造成的预期状态：先在批准账本一次记下两个哈希，再运行 publish.py system_design 刷新根汇总页（来源字节不变，哈希不变）；publish.py architecture 要求架构页 head 与 Luz-Design 模板逐字相同、正文无样式，所以架构页不能为过网页检查往 head 里加样式，窄屏溢出要靠拆窄表和加换行点解决。",
+      "why": "DemoKit 会话 018 架构与系统设计同时重新批准前的核对",
+      "uses": 1,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
+    },
+    {
       "key": "research-source-method-webfetch",
       "kind": "fact",
       "text": "审计与规范核对的来源用 WebSearch 与 WebFetch 读取，记入 sources.json 时 method 写 WebFetch、不留快照，只作知识来源，不能 reuse 进会话调研",
@@ -1635,6 +2207,15 @@
       "uses": 1,
       "first_seen": "2026-11-02",
       "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "revise-approved-arch-keep-ids-diff-by-id",
+      "kind": "fact",
+      "text": "修订已批准的架构时：先备份旧版与全部生成脚本；已有编号一律不改不重用已废编号，新增用后续编号；功能表另列“期次”（已批准、已批准·调整、一期、二期）和变化说明；用按稳定编号的前后对照脚本核对新增、删除和改动，才能只列变化点。",
+      "why": "运营问数工作台 019 一次性扩大范围修订：25 项功能增至 43 项，旧编号 0 删除",
+      "uses": 1,
+      "first_seen": "2026-11-10",
+      "last_confirmed": "2026-11-10"
     },
     {
       "key": "script-bracket-paren-link",
@@ -1659,9 +2240,35 @@
       "kind": "fact",
       "text": "登录、首次改密、无法访问这类共用页不属于任何标签或侧栏项：原型生成器会报“没写 tab”的警告是预期的（schema 里 tab 必须是标签编号）；说明里写明它们的栈语义——没有返回，出路都是清空页面栈后进入本角色首页。",
       "why": "原型 v3 退回清单 R-2、R-A2",
-      "uses": 1,
+      "uses": 3,
       "first_seen": "2026-11-04",
-      "last_confirmed": "2026-11-04"
+      "last_confirmed": "2026-11-09",
+      "previous": {
+        "text": "登录、首次改密、无法访问这类共用页不属于任何标签或侧栏项：没有返回，出路都是清空页面栈后进入本角色首页。",
+        "replaced_at": "2026-11-09"
+      }
+    },
+    {
+      "key": "single-page-desk-board-design-hard-rules",
+      "kind": "fact",
+      "text": "单页前台看板按 Design 硬规则做：页面标题写当前内容名而非品牌名，浏览器标题用业务名；回复等单字段原位编辑，不用表单弹窗；多卡片并列时操作按钮用浅底主色而非实色，满足一屏一个实色主按钮；有序状态列标题取 stage_ramp 色阶，终态用成功色；提示条用白底加发丝边，不用深色底；字体声明拆成 font-family 与字号，字号只取 12、14、16、18、22、28、32；check_document 加 --allow interface 检查，剩余的页头品牌标识警告与禁用产品名的硬规则冲突，保持硬规则。",
+      "why": "check_document 初版报6个错误：横幅 danger 文字对比4.3:1、列标题20px、悬停色和提示条被判为深色或饱和填充、font 简写未识别；逐项改后0错误。",
+      "uses": 1,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
+    },
+    {
+      "key": "single-page-workbench-one-explicit-entry",
+      "kind": "fact",
+      "text": "单页工作台的架构里，发送问题、重新提问这类会让画布自动更新的动作不标目标页，只保留一个显式跳转入口（如查看数据册）；顶栏已有通往某页的入口时，品牌标志也不做可点击回该页，否则交互规则会出现同一页面通往同一目的地的两个入口。",
+      "why": "运营问数工作台架构阶段 check_interaction 的实际报错与修正；2026-11-10 修订时品牌标志取不可点击",
+      "uses": 2,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-10",
+      "previous": {
+        "text": "单页工作台的架构里，发送问题、重新提问这类会让画布自动更新的动作不标目标页，只保留一个显式跳转入口（如查看分析数据）；否则交互检查会报同一页面通往同一目的地有两个入口。",
+        "replaced_at": "2026-11-10"
+      }
     },
     {
       "key": "spec-source-access",
@@ -1671,6 +2278,15 @@
       "uses": 1,
       "first_seen": "2026-11-02",
       "last_confirmed": "2026-11-02"
+    },
+    {
+      "key": "system-design-page-shell-and-first-region",
+      "kind": "fact",
+      "text": "系统设计页的 head 必须与 Luz-Design 模板逐字相同且正文不能有样式或脚本；每个模块标题后的第一块内容区只能是短标签表（无段落与表题、单元格不超过 32 字、不含句号分号和“提示”“详情”“流程”“原因”等说明词，类名带 label 或 value），长表格放在后续内容区；接口路径与文案键用 wbr 加换行点，窄屏表格才不被撑宽；已批准的架构页若为通过网页检查往 head 里加了样式，就过不了发布的模板外壳检查。",
+      "why": "DemoKit 会话 018 的系统设计阶段实测；architecture 发布因 head 被加样式而被拒",
+      "uses": 1,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
     },
     {
       "key": "ui-recipes-moved-to-design",
@@ -1700,6 +2316,15 @@
       "last_confirmed": "2026-10-29"
     },
     {
+      "key": "ui-requirements-bound-review-needs-covers",
+      "kind": "fact",
+      "text": "包绑定了 ui-requirements.json 后，Design 审阅里的 interactions 每条都要带 covers（page_ids、action_ids、journey_ids），合起来须覆盖全部页面、动作与旅程；用逐旅程的真实浏览器操作脚本记录每一步截图与覆盖编号，比事后补记可靠。",
+      "why": "DemoKit 会话 018 视觉阶段，16 页 28 动作 8 旅程一次通过",
+      "uses": 1,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-09"
+    },
+    {
       "key": "uview-plus-scope-and-package-size",
       "kind": "fact",
       "text": "uview-plus 是 uni-app 生态专用的界面框架，官方写明除微信小程序外其他小程序平台兼容可能有问题；组件清单没有图表组件（侧栏的图表是外链的另一个产品）；有经验文章专讲它让小程序主包过大，要按需引入并分包；深浅两套主题能否成立没有读到，要样板页验证",
@@ -1707,6 +2332,41 @@
       "uses": 1,
       "first_seen": "2026-11-04",
       "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "validate-design-before-arch-approval-gate",
+      "kind": "fact",
+      "text": "架构批准被撤回（置待批准）而系统设计页已存在时，validate_session 必报“system-design HTML exists before architecture approval”；要架构与系统设计一并批准时，在临时副本里把架构标为已批准来检查其余项，真实目录保持待批准，不改脚本，并如实告知这一道流程闸门。",
+      "why": "运营问数工作台 019 因用户扩大范围修订架构，真实目录只剩这一条流程闸门错误，临时副本验证全部通过",
+      "uses": 1,
+      "first_seen": "2026-11-10",
+      "last_confirmed": "2026-11-10"
+    },
+    {
+      "key": "visual-canvas-document-model",
+      "kind": "fact",
+      "text": "人工UI画布按端、页、区域、组件、条目和动作建模；每页业务标题与背景独立，导航名与标题不得重复；编辑器折叠状态和体验临时状态独立于产品配置。定高内容仍可滚动与键盘访问，删除可撤销；我的页可配置资料、订单和设置。",
+      "why": "当前人工配置工作台模型和用户明确要求；不声明生产服务。",
+      "uses": 2,
+      "first_seen": "2026-11-08",
+      "last_confirmed": "2026-11-08",
+      "previous": {
+        "text": "人工UI工作台先定义端、页面、区域、组件实例、内容条目与交互合同，再配置颜色和视觉；设计模式选择对象，体验模式运行本地状态。配置和体验输入分离，非法导入原子拒绝，跨页引用校验并可撤销；媒体解码失败、配额不足及剪贴板拒绝有恢复路径。App内容检查手机宽度，桌面编辑器不作为移动产品。",
+        "replaced_at": "2026-11-08"
+      }
+    },
+    {
+      "key": "visual-stage-publish-chain",
+      "kind": "fact",
+      "text": "视觉阶段发布链：add_mode.py visual；Luz-Design 建会话并做 design 阶段前置检索，frontend.py init、seal、review 与 ui_package check 通过；System 侧另做 stage visual 的前置检索（caller luz-system），为 ZIP 选这个包自己的模板（frontend.py 包是 frontend-<kind>，component_ui.py 包是 ui-component-output，以 ui_package check 返回的 template_id 为准），汇总页选 reading-html；最后 publish.py visual 带 --source-session、--source-package、--source-entry。汇总页由 publish 生成，不手写。",
+      "why": "DemoKit 会话 018 视觉阶段；2026-11-11 publish.py 改为按包的真实类型取模板，原文写的 ui-component-output 只适用于 component_ui 包",
+      "uses": 2,
+      "first_seen": "2026-11-09",
+      "last_confirmed": "2026-11-11",
+      "previous": {
+        "text": "视觉阶段发布链：add_mode.py visual；Luz-Design 建会话并做 design 阶段前置检索，frontend.py init、seal、review 与 ui_package check 通过；System 侧另做 stage visual 的前置检索（caller luz-system），选择 ui-component-output 与 reading-html 两个模板；最后 publish.py visual 带 --source-session、--source-package、--source-entry。汇总页由 publish 生成，不手写。",
+        "replaced_at": "2026-11-11"
+      }
     },
     {
       "key": "wcag22-aa-product-criteria",

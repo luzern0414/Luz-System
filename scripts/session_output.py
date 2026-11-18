@@ -2,30 +2,22 @@
 
 Standalone task: the root of the session holds raw\\ and the summary page NNN-名称.html. The published stage page is that summary page;
 deliverable files (the hardware list Excel) sit beside it and the page lists them with a link.
-Project task (MANIFEST "project"): results are written only to the project directory (docs\\01-需求对接, docs\\02-产品开发), the session
-root keeps raw\\ and a summary page built from the results, and nothing else.
+Project task (MANIFEST "project"): publish.py writes nothing (the docs\\02-产品开发 files are Luz-Project's, made by project.py document); only the
+hardware list Excel still goes to docs\\01-需求对接 (hw_export.py), and the session root keeps raw\\ and a summary page built from such results.
 """
 from __future__ import annotations
 
 import html
+import importlib.util
 import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
 
-import make_summary
 import project_link
 from new_session import tab_icon_href
-from validate_session import final_html, root_files, sha256_file, work_dir
+from validate_session import final_html, sha256_file, work_dir
 
-# stage -> (name of the page in the project's docs\02-产品开发, what it is for)
-STAGE_DOCS = {
-    "architecture": ("系统架构", "系统架构：角色、功能、页面、导航、动作、流程与状态"),
-    "system_design": ("系统设计", "系统设计页：各模块的介绍与设计"),
-    "visual": ("视觉稿", "产品界面视觉稿"),
-    "prototype": ("交互原型", "可交互原型，供评审与开发"),
-    "hardware": ("硬件方案", "硬件方案页：设备、系统连接图与现场条件，供评审与开发"),
-}
 HARDWARE_LIST = ("硬件选型清单", "设备清单与现场条件，交给客户")
 FILE_PURPOSE = {".xlsx": "表格文件", ".pdf": "PDF 文件", ".docx": "Word 文件", ".pptx": "演示文稿"}
 RAW_PURPOSE = (
@@ -95,13 +87,32 @@ def project_summary_page(folder: Path, manifest: dict) -> str:
         sections.append({"title": "成果", "table": {"caption": "表 1 成果清单", "columns": ["名称", "用途", "位置"], "rows": results}})
     sections.append({"title": "依据", "table": {"caption": f"表 {len(sections) + 1} 依据", "columns": ["依据", "内容"], "rows": basis}})
     sections.append({"title": "过程文件", "table": {"caption": f"表 {len(sections) + 1} 过程文件", "columns": ["文件", "用途"], "rows": files}})
-    return make_summary.render({"title": subject, "sections": sections}).replace(make_summary.ICON, tab_icon_href(subject))
+    file = Path(__file__).resolve().parents[2] / "Luz-Design" / "scripts" / "make_summary.py"
+    spec = importlib.util.spec_from_file_location("_system_design_summary", file)
+    renderer = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(renderer)
+    return renderer.render({"title": subject, "sections": sections}).replace(renderer.ICON, tab_icon_href(subject))
 
 
 def write_summary(folder: Path, manifest: dict) -> Path:
     """Write the project task's summary page and return it (bytes, so the line endings are the generator's own)."""
     target = final_html(folder)
+    project = manifest.get("project") or {}
+    stage = project.get("stage") or ("architecture" if project else "summary")
+    context = Path(project["state_root"]).resolve() if project.get("state_root") else folder
+    gate_spec = importlib.util.spec_from_file_location("_system_summary_crawl_gate", Path(__file__).with_name("crawl_gate.py"))
+    gate = importlib.util.module_from_spec(gate_spec)
+    gate_spec.loader.exec_module(gate)
+    errors = gate.crawl_errors(context, stage, caller="luz-system", state_root=context)
+    if errors:
+        raise ValueError("Crawl 前置检索未通过：" + "; ".join(errors))
+    file = Path(__file__).resolve().parents[2] / "Luz-Design" / "scripts" / "template_library.py"
+    spec = importlib.util.spec_from_file_location("_system_design_templates", file)
+    library = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(library)
+    library.require_selected(folder, "luz-system", stage, target, "reading-html")
     target.write_bytes(project_summary_page(folder, manifest).encode("utf-8"))
+    library.record_output(folder, "luz-system", stage, target, "reading-html", generator="Luz-System/scripts/session_output.py")
     return target
 
 

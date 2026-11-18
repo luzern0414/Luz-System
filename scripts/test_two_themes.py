@@ -1,5 +1,4 @@
-"""Two themes (Luz-Design visual-design.html 深色与浅色两套主题): product interfaces ship a light and a dark theme with a 跟随系统 / 浅色 / 深色 switch,
-reading pages stay light. The page validator, the product skeletons and the rule text agree on it."""
+"""通用页面不强制双主题或外观开关；既有双主题模板仍保持自身能力。"""
 from __future__ import annotations
 
 import re
@@ -18,6 +17,8 @@ from validate_session import (  # noqa: E402
     parse_html,
     split_theme_blocks,
     validate_light_html,
+    validate_prototype,
+    PROTOTYPE_PATH,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -73,10 +74,10 @@ class PageValidatorTest(unittest.TestCase):
         errors, _ = check("body{background:#f7f9fc}:root{color-scheme:dark}", 12.0)
         self.assertTrue(any("outside its dark theme blocks" in e for e in errors), errors)
 
-    def test_a_product_interface_without_a_dark_theme_gets_a_warning(self) -> None:
+    def test_a_product_interface_without_a_dark_theme_needs_no_extra_theme(self) -> None:
         errors, warnings = check("body{background:#f7f9fc}", 12.0, warn=True)
         self.assertEqual(errors, [])
-        self.assertTrue(any("no dark theme block" in w for w in warnings), warnings)
+        self.assertFalse(any("no dark theme block" in w for w in warnings), warnings)
         self.assertEqual(check("body{background:#f7f9fc}", 12.0)[1], [], "no warning list asked, none given")
 
     def test_dark_variables_do_not_leak_into_the_light_body_check(self) -> None:
@@ -160,6 +161,20 @@ class SkeletonTest(unittest.TestCase):
             path.write_text(fill_icon_slots(stripped, "订单助手"), encoding="utf-8")
             self.assertFalse(has_appearance_switch(parse_html(path, [])))
 
+    def test_prototype_validator_does_not_require_an_unrequested_appearance_control(self) -> None:
+        text = read_template(ROOT, "interactive-prototype.html")
+        text = re.sub(r'<section id="prototype-config".*?</section>\n', "", text, flags=re.S)
+        text = fill_icon_slots(text, "订单助手").replace("{{ACTION_ID}}", "A-001").replace("{{PAGE_ID}}", "P-001")
+        with tempfile.TemporaryDirectory() as temp:
+            session = Path(temp)
+            path = session / PROTOTYPE_PATH
+            path.parent.mkdir(parents=True)
+            path.write_text(text, encoding="utf-8")
+            errors, warnings = [], []
+            validate_prototype(session, set(), {"data-action-id": {"A-001"}, "data-page-id": {"P-001"}},
+                               None, errors, warnings)
+            self.assertFalse(any("外观 switch" in w for w in warnings), warnings)
+
 
 class AppearanceRadioTest(unittest.TestCase):
     def test_only_radios_in_the_appearance_group_are_exempt_from_action_ids(self) -> None:
@@ -174,23 +189,29 @@ class AppearanceRadioTest(unittest.TestCase):
 
 
 class RuleTextTest(unittest.TestCase):
-    def test_the_old_title_is_gone_and_the_new_one_is_used(self) -> None:
-        old = "用户明确要求深色时"
-        for path in list((ROOT / "references").glob("*.html")) + [ROOT / "SKILL.md", ROOT / "references" / "cards.json"]:
-            self.assertNotIn(old, path.read_text(encoding="utf-8"), path.name)
+    def test_product_theme_rules_follow_confirmed_requirements(self) -> None:
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("产品主题与外观开关仅在已批准任务要求时提供", skill)
         text = (ROOT / "references" / "system-design.html").read_text(encoding="utf-8")
-        self.assertIn("外观（跟随系统、浅色、深色）", text)
-        self.assertIn('aria-label="外观"', text)
+        self.assertIn("支持哪些主题就验收哪些主题", text)
+        self.assertIn("纯阅读页面无需人为加入交互或主题开关", text)
         ui = (ROOT / "references" / "ui-standards.html").read_text(encoding="utf-8")
-        self.assertIn("深色与浅色两套主题", ui)
+        self.assertIn("不强制双主题或三选一控件", ui)
 
-    def test_every_product_card_checks_both_themes(self) -> None:
+    def test_product_cards_limit_theme_checks_to_supported_capabilities(self) -> None:
         import json
         cards = json.loads((ROOT / "references" / "cards.json").read_text(encoding="utf-8"))["cards"]
-        for kind in ("prototype", "admin-list", "admin-dashboard", "admin-form", "miniprogram", "agent-ui", "website", "commerce"):
+        for kind in ("admin-list", "admin-dashboard", "admin-form", "miniprogram", "agent-ui", "website", "commerce"):
             joined = "\n".join(cards[kind]["checks"])
-            self.assertIn("--scheme dark", joined, kind)
-            self.assertIn("三选一", joined, kind)
+            with self.subTest(card=kind):
+                self.assertIn("不默认要求双主题或外观三选一", joined)
+                self.assertIn("验证所有实际支持的主题", joined)
+                self.assertIn("仅在已确认需求要求时检查主题切换和选择记忆", joined)
+                self.assertIn("--scheme dark", joined)
+                self.assertIn("显式 source-locked 保留来源能力", joined)
+        prototype = "\n".join(cards["prototype"]["checks"])
+        self.assertIn("只验证来源已有视口、浅深外观、交互和状态", prototype)
+        self.assertIn("不新增配置面板/主题", prototype)
 
 
 if __name__ == "__main__":

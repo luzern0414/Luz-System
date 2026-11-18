@@ -17,7 +17,7 @@ const rows = (group) => PAGES.filter((p) => p.group === group)
 function jump(p) { open.value = false; router.push('/' + p.id) }
 function pick(p, sceneId) { setScene(p.id, sceneId || null); if (sceneId) jump(p) }
 function setRole(role) { state.role = role; router.push('/' + homeOf(role)) }
-function reset() { resetDemo(); ElMessage.success('演示数据已重置'); router.push('/' + homeOf(state.role)) }
+function reset() { resetDemo(); globalThis.LuzDemoAccount.reset(); ElMessage.success('演示数据已重置'); router.push('/' + homeOf(state.role)) }
 </script>
 
 <template>

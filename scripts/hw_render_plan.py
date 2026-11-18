@@ -3,16 +3,18 @@
 用法：
   py -X utf8 scripts/hw_render_plan.py <plan.json> <out.html> [--force]
 
+生成前检查会话或项目 architecture 阶段的 Crawl；--force 只跳过方案结构校验，不能跳过前置检索。
 先运行 hw_plan_lib.validate；有错误时停止（--force 仅用于调试，交付前必须零错误）。
 版式遵循 Luz-Design references/file-design.html 的网页文件规则：
 唯一 h1、各节以 h2 开头、单字体族、浅色、一个主色、字重 400/600（22 像素以上的标题 700）。
-文字层级（h1–h6、正文、表格、辅助字的字号、行高、间距）读取 references/md-type.css 的文本直接拼进页面：
+文字层级（h1–h6、正文、表格、辅助字的字号、行高、间距）读取 Luz-Design 母本 references/md-type.css 的文本直接拼进页面：
 桌面（768 像素及以上）正文 18，手机 16；不在这里另写标题与正文的字号。
 """
 from __future__ import annotations
 
 import argparse
 import html
+import json
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -20,22 +22,20 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import hw_plan_lib as pl  # noqa: E402
 from new_session import pick_icon, tab_icon_href  # noqa: E402
+from hw_crawl_gate import generation_errors, session_for_plan, template_binding  # noqa: E402
 
 E = lambda s: html.escape(str(s if s is not None else ""), quote=True)  # noqa: E731
 
 ACCENT = {"brand": "#0958D9", "hover": "#003EB3", "tint": "#E6F4FF", "line": "#91CAFF"}
-MD_TYPE = Path(__file__).resolve().parents[1] / "references" / "md-type.css"
+MD_TYPE = Path(__file__).resolve().parents[2] / "Luz-Design" / "references" / "md-type.css"
 
 
 def md_type_css() -> str:
-    """Markdown 层级样式（Luz-Design 母本的副本，sync_md_type.py 同步）。整段文本作为 format 的参数传入，不经过花括号加倍。"""
+    """Markdown 层级样式，读 Luz-Design 母本（与硬件方案模板同属模板 hardware-plan）。整段文本作为 format 的参数传入，不经过花括号加倍。"""
     return MD_TYPE.read_text(encoding="utf-8")
 
 
-def money(v) -> str:
-    if v is None:
-        return "询价"
-    return f"{v:,.2f}"
+REFERENCE_PRICE_NOTE = "参考价来自公开页面，非报价；下单前以供应商报价为准。"
 
 
 # ---------------------------------------------------------------- 连接图
@@ -280,27 +280,6 @@ def dev_names(plan, ids) -> str:
     return "、".join(E(devs[i]["name"]) for i in ids if i in devs)
 
 
-def link_cell(d) -> str:
-    """采购渠道：价格出处链接 + 厂家联系方式（电话、网站、二维码），至少一项。"""
-    parts = []
-    url = d.get("url")
-    if url:
-        label = d.get("url_label") or ("1688" if "1688.com" in url else "价格出处")
-        parts.append(f'<a href="{E(url)}">{E(label)}</a>')
-    c = d.get("contact") or {}
-    if c.get("name"):
-        parts.append(E(c["name"]))
-    if c.get("website"):
-        parts.append(f'<a href="{E(c["website"])}">{E(c.get("website_label") or "官网")}</a>')
-    if c.get("phone"):
-        parts.append(f'<a href="tel:{E(c["phone"].replace("-", ""))}">{E(c["phone"])}</a>')
-    if c.get("email"):
-        parts.append(f'<a href="mailto:{E(c["email"])}">{E(c["email"])}</a>')
-    if c.get("qr"):
-        parts.append(f'<img class="qr" src="{E(c["qr"])}" alt="{E(c.get("name") or d["name"])}微信二维码">')
-    return "<br>".join(parts) or "—"
-
-
 SKILL_DIR = Path(__file__).resolve().parent.parent
 
 # 模块：清单按业务模块分组；每个模块一个线性图标（内联 SVG，描边用主色）
@@ -383,7 +362,7 @@ def ports(d: dict) -> list[str]:
 def channel_links(d: dict) -> str:
     out = []
     if d.get("url"):
-        out.append(f'<a class="btn" href="{E(d["url"])}">{E(d.get("url_label") or ("1688" if "1688.com" in d["url"] else "价格出处"))}</a>')
+        out.append(f'<a class="btn" href="{E(d["url"])}">{E(d.get("url_label") or ("1688" if "1688.com" in d["url"] else "出处页面"))}</a>')
     c = d.get("contact") or {}
     if c.get("website"):
         out.append(f'<a class="btn" href="{E(c["website"])}">{E(c.get("website_label") or "官网")}</a>')
@@ -397,17 +376,20 @@ def channel_links(d: dict) -> str:
     return '<div class="links">' + "".join(out) + "</div>" + qr
 
 
-def card(d: dict) -> str:
+def card(d: dict, prices: bool = False) -> str:
+    """prices: only when the user asked for a budget (pl.show_prices); then the figure is a reference price taken from the linked page, not a quotation."""
     pic = photo(d, "pic")
     price = "询价" if d.get("unit_price") is None else f'¥{d["unit_price"]:,.0f}' if float(d["unit_price"]).is_integer() else f'¥{d["unit_price"]:,.2f}'
     qty = d.get("qty", 1)
     level = d.get("level", "")
+    price_row = (f'<div class="price"><strong>{E(price)}</strong>{f"<span>× {E(qty)}</span>" if qty != 1 else ""}</div>' if prices
+                 else (f'<div class="price"><span>× {E(qty)}</span></div>' if qty != 1 else ""))
     duty = f'<div class="duty">{E(d["duty"])}</div>' if d.get("duty") else ""
     return (f'<article class="card">{pic}<div class="body">'
             f'<div class="top"><h4>{E(d["name"])}</h4><span class="lv lv-{E(level)}">{E(level)}</span></div>'
             f'<div class="model">{E(" ".join(x for x in (d.get("brand"), d.get("model")) if x))}</div>'
             f'{duty}'
-            f'<div class="price"><strong>{E(price)}</strong>{f"<span>× {E(qty)}</span>" if qty != 1 else ""}</div>'
+            f'{price_row}'
             f'<div class="chips">{chips(highlights(d))}</div>'
             f'<div class="chips">{chips(ports(d), "port")}<span class="port pw">{E(d.get("power", ""))}</span></div>'
             f'{channel_links(d)}</div></article>')
@@ -467,7 +449,7 @@ def matrix(plan: dict) -> str:
 
 
 def bars(rows: list[tuple[str, float]], total: float) -> str:
-    """预算：单系列横向条形图（一种主色，按金额降序，条端标数值，悬停提示）。"""
+    """参考价：单系列横向条形图（一种主色，按金额降序，条端标数值，悬停提示）。"""
     mx = max(v for _, v in rows) if rows else 1
     out = []
     for name, v in rows:
@@ -475,21 +457,23 @@ def bars(rows: list[tuple[str, float]], total: float) -> str:
         out.append(f'<div class="bar" tabindex="0" data-tip="{E(name)}：¥{v:,.2f}（{pct:.1f}%）">'
                    f'<span class="bl">{E(name)}</span><span class="track"><span class="bar-fill" style="width:{v / mx * 100:.1f}%"></span></span>'
                    f'<span class="bv">¥{v:,.0f}</span></div>')
-    return '<div class="bars" role="img" aria-label="各模块硬件金额">' + "".join(out) + '<div class="tip" hidden></div></div>'
+    return '<div class="bars" role="img" aria-label="各模块硬件参考价">' + "".join(out) + '<div class="tip" hidden></div></div>'
 
 
 def render(plan: dict) -> str:
     devs = pl.device_map(plan)
     buy = [d for d in plan["devices"] if d.get("purchase", True) and d["tier"] in ("field", "edge")]
     b = pl.budget(plan)
+    prices = pl.show_prices(plan)
     req = pl.site_requirements(plan)
     out = []
 
     # 1 方案总览：指标 + 动线
     mods = sorted({d.get("category") for d in buy}, key=lambda m: MODULE_ORDER.index(m) if m in MODULE_ORDER else 99)
     qty = sum(int(d.get("qty", 1)) for d in buy)
-    tiles = [(f"¥{b['total']:,.0f}", "系统硬件合计"), (str(qty), "设备台数"), (str(len(mods)), "业务模块"),
-             (str(len(b["unpriced"])), "需询价设备")]
+    tiles = [(str(qty), "设备台数"), (str(len(mods)), "业务模块")]
+    if prices:        # reference prices only when a budget was asked for
+        tiles = [(f"¥{b['total']:,.0f}", "参考价合计")] + tiles + [(str(len(b["unpriced"])), "需询价设备")]
     s = ['<section id="overview"><h2>方案总览</h2>', conclusion(plan, "ops"),
          '<div class="metrics">' + "".join(f'<div><strong>{E(v)}</strong><span>{E(k)}</span></div>' for v, k in tiles) + "</div>"]
     for chain in plan.get("journeys", []):
@@ -511,11 +495,14 @@ def render(plan: dict) -> str:
 
     # 3 设备清单：按模块分组的图文卡片
     s = ['<section id="devices"><h2>设备清单</h2>', conclusion(plan, "bom")]
+    if prices:
+        s.append(f'<p class="note-line">{E(REFERENCE_PRICE_NOTE)}</p>')
     for m in mods:
         items = [d for d in buy if d.get("category") == m]
         sub = sum(pl.subtotal(d) or 0 for d in items)
-        s.append(f'<div class="mod"><h3>{icon(m)}{E(m)}<span class="msum">{len(items)} 种 · ¥{sub:,.0f}</span></h3>'
-                 f'<div class="cards">{"".join(card(d) for d in items)}</div></div>')
+        amount = f" · ¥{sub:,.0f}" if prices else ""
+        s.append(f'<div class="mod"><h3>{icon(m)}{E(m)}<span class="msum">{len(items)} 种{amount}</span></h3>'
+                 f'<div class="cards">{"".join(card(d, prices) for d in items)}</div></div>')
     s.append("</section>")
     out.append("".join(s))
 
@@ -539,17 +526,18 @@ def render(plan: dict) -> str:
     s.append("</section>")
     out.append("".join(s))
 
-    # 6 预算
-    s = ['<section id="budget"><h2>预算</h2>', conclusion(plan, "budget")]
-    lv = b["by_level"]
-    s.append('<div class="metrics">' + "".join(
-        f'<div><strong>¥{lv.get(k, 0):,.0f}</strong><span>{k}</span></div>' for k in pl.LEVELS) +
-        f'<div><strong>¥{b["total"]:,.0f}</strong><span>合计</span></div></div>')
-    s.append(bars(sorted(b["by_category"].items(), key=lambda x: -x[1]), b["total"]))
-    if b["unpriced"]:
-        s.append(f'<p class="note-line">询价：{dev_names(plan, b["unpriced"])}</p>')
-    s.append("</section>")
-    out.append("".join(s))
+    # 6 参考价：只在用户明确要求预算（budget_requested 证据齐全）时才有
+    if prices:
+        s = ['<section id="budget"><h2>参考价</h2>', conclusion(plan, "budget"), f'<p class="note-line">{E(REFERENCE_PRICE_NOTE)}</p>']
+        lv = b["by_level"]
+        s.append('<div class="metrics">' + "".join(
+            f'<div><strong>¥{lv.get(k, 0):,.0f}</strong><span>{k}</span></div>' for k in pl.LEVELS) +
+            f'<div><strong>¥{b["total"]:,.0f}</strong><span>参考价合计</span></div></div>')
+        s.append(bars(sorted(b["by_category"].items(), key=lambda x: -x[1]), b["total"]))
+        if b["unpriced"]:
+            s.append(f'<p class="note-line">询价：{dev_names(plan, b["unpriced"])}</p>')
+        s.append("</section>")
+        out.append("".join(s))
 
     # 7 附录（折叠）
     apx = []
@@ -578,166 +566,10 @@ def render(plan: dict) -> str:
     # Tab icon: the system's pictogram in its theme colour; a hardware plan with no subject keyword gets the chip.
     pictogram = pick_icon(plan["title"])
     tab_icon = tab_icon_href(plan["title"], icon="chip" if pictogram == "grid" else pictogram)
-    return PAGE.format(title=E(plan["title"]), tab_icon=E(tab_icon), body="".join(out), md_type=md_type_css(), **ACCENT)
+    return DESIGN_TEMPLATE.read_text(encoding="utf-8").format(title=E(plan["title"]), tab_icon=E(tab_icon), body="".join(out), md_type=md_type_css(), **ACCENT)
 
 
-PAGE = """<!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title}</title>
-<link rel="icon" href="{tab_icon}">
-<style>
-:root{{color-scheme:light;--ink:#1F1F1F;--muted:#595959;--line:#E8E8E8;--line2:#D9D9D9;--soft:#FAFAFA;--brand:{brand};--tint:{tint};--bl:{line}}}
-*{{box-sizing:border-box}}
-body{{margin:0;background:#FFFFFF;color:var(--ink);font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif}}
-{md_type}
-main{{max-width:1120px;margin:0 auto;padding:48px 24px 72px}}
-h2{{margin:0 0 16px;padding:0 0 0 12px;border-bottom:0;border-left:4px solid var(--brand)}}
-h3{{margin:28px 0 12px;display:flex;align-items:center;gap:8px}}
-h4{{margin:0}}
-section{{margin:0 0 56px}}
-a{{color:var(--brand);text-decoration:none}}a:hover{{color:{hover};text-decoration:underline}}
-.ic{{fill:none;stroke:var(--brand);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}}
-.conclusion{{background:var(--tint);border-left:4px solid var(--brand);padding:12px 16px;margin:0 0 20px;max-width:var(--md-measure)}}
-.metrics{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:0 0 20px}}
-.metrics div{{border:1px solid var(--line);border-radius:8px;padding:16px;text-align:center}}
-.metrics strong{{display:block;font-size:32px;line-height:1.25}}
-.metrics span{{font-size:var(--md-aux);color:var(--muted)}}
-.chain,.steps,.fsteps,.story{{max-width:none}}
-.chain,.steps{{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:12px}}
-.chain li,.steps li,.fsteps li,.story li{{margin:0}}
-.chain li,.steps li{{display:flex;align-items:flex-start;gap:8px;font-size:var(--md-table);line-height:1.5;padding:8px 12px;border:1px solid var(--line2);border-radius:8px;background:#FFFFFF}}
-.chain li b,.steps li b{{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:50%;background:var(--tint);color:var(--brand);font-size:var(--md-aux);flex:none}}
-.steps li{{max-width:260px}}
-.steps li div{{display:flex;flex-direction:column}}
-.steps .dev{{color:var(--muted)}}
-.flows{{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px}}
-.flow{{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:start;padding:14px 16px;border-bottom:1px solid var(--line)}}
-.flow:last-child{{border-bottom:0}}
-.flow h4{{padding-top:2px}}
-.fsteps{{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 0}}
-.fsteps li{{display:flex;flex-direction:column;gap:4px;padding-right:28px;position:relative;font-size:var(--md-table);line-height:1.5}}
-.fsteps li:not(:last-child)::after{{content:"";position:absolute;right:8px;top:11px;width:12px;height:0;border-top:2px solid var(--bl)}}
-.act{{display:flex;align-items:center;gap:6px}}
-.act b{{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--tint);color:var(--brand);font-size:var(--md-aux);font-weight:400}}
-.who{{display:flex;flex-wrap:wrap;gap:4px;padding-left:26px}}
-.dv{{font-size:var(--md-aux);line-height:1.4;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 6px}}
-.mod h3{{border-bottom:1px solid var(--line);padding-bottom:8px}}
-.msum{{margin-left:auto;font-size:var(--md-aux);font-weight:400;color:var(--muted)}}
-.cards{{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}}
-.card{{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#FFFFFF}}
-.ph{{display:block;object-fit:contain;background-color:#FFFFFF}}
-.ph.none{{display:flex;align-items:center;justify-content:center;background-color:var(--soft)}}
-.pic{{width:100%;height:180px;border-bottom:1px solid var(--line);flex:none;padding:8px}}
-.stage{{margin:0 0 24px}}
-.stage h3{{margin:20px 0 10px}}
-.role{{font-size:var(--md-aux);font-weight:600;color:var(--brand);background-color:var(--tint);border:1px solid var(--bl);border-radius:4px;padding:0 8px;line-height:1.6}}
-.story{{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:8px}}
-.sc{{display:grid;grid-template-columns:44px minmax(0,1.3fr) minmax(0,1.7fr) 112px;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}}
-.sc:last-child{{border-bottom:0}}
-.no{{font-size:var(--md-aux);color:var(--brand);font-weight:600}}
-.what .act{{font-weight:600;line-height:1.5}}
-.what .res{{font-size:var(--md-table);color:var(--muted);line-height:1.5}}
-.exc{{font-size:var(--md-table);line-height:1.5;margin-top:4px;color:var(--muted)}}
-.exc b{{font-weight:600;color:#AD4E00;margin-right:6px}}
-.thumbs{{display:flex;flex-wrap:wrap;gap:8px}}
-.th{{display:flex;flex-direction:column;align-items:center;gap:2px;width:60px;font-size:var(--md-aux);line-height:1.3;text-align:center;color:var(--muted)}}
-.th.cloud{{width:auto;flex-direction:row;padding:4px 10px;border:1px dashed var(--line2);border-radius:6px}}
-.tp{{width:48px;height:48px;border:1px solid var(--line);border-radius:6px;padding:2px}}
-.fn{{justify-self:end;font-size:var(--md-aux);line-height:1.5;padding:2px 10px;border-radius:4px;background-color:var(--tint);color:#003EB3;text-align:center}}
-.dvc{{display:inline-flex;align-items:center;gap:10px;white-space:nowrap}}
-.tm{{width:36px;height:36px;border:1px solid var(--line);border-radius:4px;flex:none;padding:2px}}
-.dot{{display:inline-block;margin:2px;padding:0 6px;border-radius:4px;background-color:var(--tint);color:#003EB3;font-size:var(--md-aux);line-height:1.5}}
-.body{{min-width:0;flex:1;display:flex;flex-direction:column;gap:6px;padding:12px 14px 14px}}
-.top{{display:flex;align-items:flex-start;gap:8px;justify-content:space-between}}
-.model{{font-size:var(--md-aux);color:var(--muted);line-height:1.5}}
-.duty{{font-size:var(--md-table);line-height:1.5}}
-.price{{display:flex;align-items:baseline;gap:8px}}
-.price strong{{font-size:var(--md-h3);color:var(--ink)}}
-.price span{{font-size:var(--md-aux);color:var(--muted)}}
-.chips{{display:flex;flex-wrap:wrap;gap:6px}}
-.chip,.port{{font-size:var(--md-aux);line-height:1.5;padding:0 8px;border-radius:4px}}
-.chip{{background:var(--tint);color:#003EB3}}
-.port{{border:1px solid var(--line2);color:var(--muted)}}
-.port.pw{{border-style:dashed}}
-.lv{{font-size:var(--md-aux);line-height:1.5;padding:0 8px;border-radius:4px;white-space:nowrap;border:1px solid var(--line2);color:var(--muted)}}
-.lv-必选{{border-color:var(--brand);color:var(--brand)}}
-.links{{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}}
-.btn{{font-size:var(--md-aux);line-height:1.5;padding:2px 10px;border:1px solid var(--bl);border-radius:4px;color:var(--brand);white-space:nowrap}}
-.qr{{width:96px;height:96px}}
-.sites{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
-.site{{border:1px solid var(--line);border-radius:8px;padding:16px}}
-.site ul{{margin:8px 0 0;padding-left:18px;font-size:var(--md-table);line-height:1.6;color:var(--muted)}}
-.bars{{position:relative;display:flex;flex-direction:column;gap:10px;max-width:880px}}
-.bar{{display:grid;grid-template-columns:96px 1fr 96px;align-items:center;gap:12px;font-size:var(--md-table)}}
-.bl{{text-align:right;color:var(--muted)}}
-.track{{height:20px;background:var(--soft);border-radius:4px;overflow:hidden}}
-.bar-fill{{display:block;height:100%;background:var(--brand);border-radius:0 4px 4px 0}}
-.bar:hover .bar-fill,.bar:focus .bar-fill{{background:{hover}}}
-.bar:focus-visible{{outline:2px solid var(--ink);outline-offset:2px}}
-.bv{{text-align:left}}
-.tip{{position:absolute;pointer-events:none;background:#FFFFFF;border:1px solid var(--line2);border-radius:6px;padding:6px 10px;font-size:var(--md-aux);box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}}
-.note-line{{margin:12px 0 0;font-size:var(--md-aux);color:var(--muted)}}
-details{{border:1px solid var(--line);border-radius:8px;margin:0 0 12px;background:#FFFFFF}}
-summary{{cursor:pointer;padding:12px 16px;font-weight:600}}
-details[open] summary{{border-bottom:1px solid var(--line)}}
-details .scroll{{padding:0 0 4px}}
-.scroll{{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 8px}}
-table{{border-collapse:collapse;width:100%}}
-th{{background:var(--soft);font-weight:600;text-align:center;vertical-align:middle;padding:10px 12px;border-bottom:1px solid var(--line2);white-space:nowrap}}
-td{{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}}
-td.c{{text-align:center}}td.l{{text-align:left}}
-tbody td:first-child{{white-space:nowrap}}
-a[href^="tel:"]{{white-space:nowrap}}
-.diagram text{{font-family:inherit}}
-.dg-head{{font-size:16px;font-weight:600;fill:#1F1F1F}}
-.dg-zone{{fill:#FAFAFA;stroke:#E8E8E8}}
-.dg-zname{{font-size:14px;font-weight:600;fill:#595959}}
-.dg-node rect{{fill:#FFFFFF;stroke:#BFBFBF;stroke-width:1}}
-.dg-opt rect{{stroke-dasharray:4 3}}
-.dg-site rect{{fill:#FAFAFA;stroke:#8C8C8C;stroke-dasharray:2 3}}
-.dg-name{{font-size:14px;font-weight:600;fill:#1F1F1F}}
-.dg-sub{{font-size:14px;fill:#595959}}
-.dg-data{{fill:none;stroke:{brand};stroke-width:1.4;opacity:.75}}
-.dg-signal{{fill:none;stroke:#8C8C8C;stroke-width:1.4}}
-.dg-route{{stroke-linejoin:round}}
-.dg-power{{fill:none;stroke:#8C8C8C;stroke-width:1.2;stroke-dasharray:5 4}}
-.dg-arrow{{fill:#8C8C8C}}
-.dg-badge circle{{fill:#FFFFFF;stroke:{brand};stroke-width:1.2}}
-.dg-badge text{{font-size:14px;fill:{brand};text-anchor:middle}}
-.legend{{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:var(--md-aux);color:var(--muted);margin:8px 0 16px}}
-.legend span{{display:inline-flex;align-items:center;gap:8px}}
-.legend i{{display:inline-block;width:28px;height:0;border-top:2px solid #8C8C8C}}
-.legend .lg-data{{border-top-color:{brand}}}.legend .lg-power{{border-top-style:dashed}}
-.legend .lg-opt{{width:22px;height:14px;border:1px dashed #8C8C8C}}
-.legend .lg-site{{width:22px;height:14px;border:1px dotted #8C8C8C;background:#FAFAFA}}
-.lg-badge{{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1px solid {brand};border-radius:50%;color:{brand};font-weight:400}}
-@media (max-width:767px){{main{{padding:32px 16px 56px}}.metrics{{grid-template-columns:repeat(2,minmax(0,1fr))}}.metrics strong{{font-size:var(--md-h2)}}.sites{{grid-template-columns:1fr}}.cards{{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}.pic{{height:120px}}.body{{padding:10px}}.bar{{grid-template-columns:72px 1fr 80px}}.flow{{grid-template-columns:1fr;gap:8px}}.sc{{grid-template-columns:36px 1fr;gap:8px 10px}}.thumbs,.fn{{grid-column:2}}.fn{{justify-self:start}}}}
-@media print{{.scroll{{overflow:visible}}details{{break-inside:avoid}}.card{{break-inside:avoid}}}}
-</style>
-</head>
-<body>
-<main>
-<h1>{title}</h1>
-{body}
-</main>
-<script>
-document.querySelectorAll('.bars').forEach(function(box){{
-  var tip=box.querySelector('.tip');
-  box.querySelectorAll('.bar').forEach(function(b){{
-    function show(e){{tip.textContent=b.dataset.tip;tip.hidden=false;var r=box.getBoundingClientRect(),br=b.getBoundingClientRect();
-      var x=(e&&e.clientX?e.clientX:br.left+br.width/2)-r.left+12;tip.style.left=Math.min(x,r.width-tip.offsetWidth)+'px';tip.style.top=(br.top-r.top-36)+'px';}}
-    b.addEventListener('mousemove',show);b.addEventListener('focus',show);
-    b.addEventListener('mouseleave',function(){{tip.hidden=true}});b.addEventListener('blur',function(){{tip.hidden=true}});
-  }});
-}});
-document.querySelectorAll('details').forEach(function(d){{window.addEventListener('beforeprint',function(){{d.open=true}})}});
-</script>
-</body>
-</html>
-"""
+DESIGN_TEMPLATE = Path(__file__).resolve().parents[2] / "Luz-Design" / "references" / "hardware-plan.template.html"
 
 
 def main() -> int:
@@ -745,7 +577,16 @@ def main() -> int:
     ap.add_argument("plan")
     ap.add_argument("out")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--session", type=Path, help="已完成 Crawl 的会话；默认从 raw/04-hardware/plan.json 解析")
     a = ap.parse_args()
+    try:
+        research_errors = generation_errors(a.session or session_for_plan(Path(a.plan)))
+    except ValueError as exc:
+        research_errors = [str(exc)]
+    if research_errors:
+        for error in research_errors:
+            print("  ERROR", error, file=sys.stderr)
+        return 1
     plan = pl.load(a.plan)
     errors, warnings = pl.validate(plan)
     for w in warnings:
@@ -755,9 +596,20 @@ def main() -> int:
     if errors and not a.force:
         print(f"{len(errors)} 个错误，未生成。")
         return 1
-    Path(a.out).parent.mkdir(parents=True, exist_ok=True)
-    Path(a.out).write_text(render(plan), encoding="utf-8")
-    print(f"已生成 {a.out}（{len(plan['devices'])} 台设备，{len(plan['links'])} 条链路）")
+    output = Path(a.out).resolve()
+    session = (a.session or session_for_plan(Path(a.plan))).resolve()
+    # Hardware plans are formal reading documents.  Bind the actual target to
+    # a real Luz-Design template before creating its parent directory, then
+    # register the resulting bytes after the renderer succeeds.
+    try:
+        template_binding(session, output, "hardware-plan")
+    except (OSError, ValueError) as exc:
+        print(f"ERROR {exc}", file=sys.stderr)
+        return 1
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(render(plan), encoding="utf-8")
+    template_binding(session, output, "hardware-plan", post=True, generator="Luz-System/scripts/hw_render_plan.py")
+    print(f"已生成 {output}（{len(plan['devices'])} 台设备，{len(plan['links'])} 条链路）")
     return 0
 
 
