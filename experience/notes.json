@@ -397,6 +397,17 @@
       "codified": "Luz-Project/references/skill-architecture.md › 用户的共同硬规则"
     },
     {
+      "key": "page-module-control-business-ownership",
+      "kind": "preference",
+      "text": "系统设计从可办完的首版业务划分模块，逐页确定功能分组和上下阅读顺序，写清每个入口、按钮、卡片、字段、文字与图片的数据、决策和结果。",
+      "why": "用户明确要求 System 负责每个功能控件并交接给视觉设计。",
+      "uses": 1,
+      "first_seen": "2026-11-20",
+      "last_confirmed": "2026-11-20",
+      "scope": "maintenance",
+      "codified": "system-design.html › 页面模块与控件"
+    },
+    {
       "key": "photo-upload-no-size-limit",
       "kind": "preference",
       "text": "用户无法自行改小的文件（系统相机拍的照片、相册原图）上传时不限制大小、不提示过大：数据统一由前端接收并上传原图，压缩统一在后台完成（缩放、重新编码、去元数据）；只在对象存储设远高于手机原图的防滥用上限；能换文件的合同与文档才限制大小并在选择前写明",
@@ -460,6 +471,16 @@
       "uses": 1,
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-28"
+    },
+    {
+      "key": "short-task-path-with-visible-scope",
+      "kind": "preference",
+      "text": "逐条复核高频任务从入口到结果的实际点按，去掉重复入口和确认。在所属对象处完成可恢复操作，筛选状态返回可恢复，高影响步骤按已确认的业务条件处理。",
+      "why": "用户要求将业务与交互路径收束。任务清单样板验证了筛选保留和直接完成。",
+      "uses": 1,
+      "first_seen": "2026-11-18",
+      "last_confirmed": "2026-11-18",
+      "codified": "references/ui-standards.html › 任务路径精简"
     },
     {
       "key": "speech-captions-follow-audio-three-lines",
@@ -627,6 +648,17 @@
       "first_seen": "2026-10-28",
       "last_confirmed": "2026-10-29",
       "codified": "Luz-Design/references/ui-ownership.md"
+    },
+    {
+      "key": "模块-模块设计-流程-五项逐项回查",
+      "kind": "preference",
+      "text": "每个业务模块依次核对功能逻辑、数据结构、布局、交互和流程。任一维度可按具体问题调用 Luz-Crawl，复核后把判断写回本技能的模块经验。",
+      "why": "用户在本轮明确要求。模块可跨页，纯后台模块注明触发与结果。外部资料供比较，授权和业务承诺由当前项目决定。",
+      "uses": 1,
+      "first_seen": "2026-11-20",
+      "last_confirmed": "2026-11-20",
+      "scope": "maintenance",
+      "codified": "system-design.html › 逐模块设计与经验"
     },
     {
       "key": "表格居中",
@@ -844,6 +876,17 @@
       "uses": 1,
       "first_seen": "2026-11-03",
       "last_confirmed": "2026-11-03"
+    },
+    {
+      "key": "commercial-system-handoff",
+      "kind": "lesson",
+      "text": "商业项目由 System 先检索形成范围，主持联合设计，按原型确认后的版本固化基线。",
+      "why": "首次范围与联合设计分别按批确认",
+      "uses": 1,
+      "first_seen": "2026-11-21",
+      "last_confirmed": "2026-11-21",
+      "scope": "maintenance",
+      "codified": "WORKFLOW.md › 商业项目"
     },
     {
       "key": "component-library-static-check-noise",
@@ -1340,6 +1383,17 @@
       "uses": 1,
       "first_seen": "2026-11-04",
       "last_confirmed": "2026-11-04"
+    },
+    {
+      "key": "product-action-page-ownership",
+      "kind": "lesson",
+      "text": "系统规则卡定义业务动作与返回来源，独立填写、就近选择和移动导航按 Design 当前硬规则交接。",
+      "why": "复核九组活动规则和原型模板，纠正窄屏侧抽屉、底部弹层和居中表单。",
+      "uses": 1,
+      "first_seen": "2026-11-21",
+      "last_confirmed": "2026-11-21",
+      "scope": "ui",
+      "codified": "references/ui-standards.html / 浮层与反馈"
     },
     {
       "key": "project-gates-via-readonly-api",

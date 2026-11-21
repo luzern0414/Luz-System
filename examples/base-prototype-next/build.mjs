@@ -1,6 +1,6 @@
 // node build.mjs [admin|mini|all] [--theme <id>] [--out <dir>]
 //   builds the prototype(s) into single, self-contained HTML files: admin.html and mini.html next to this script
-//   (or into --out). The theme comes from Luz-Design's themes.json (default enterprise-navy).
+//   (or into --out). The product palette comes from Luz-Design's application token export (default enterprise-navy).
 import { spawnSync } from 'node:child_process'
 import { copyFileSync, mkdirSync, rmSync, statSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'

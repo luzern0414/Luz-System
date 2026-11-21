@@ -4,6 +4,24 @@
   "note_command": "py -X utf8 scripts/experience.py note --kind preference|lesson|fact --key <主题> --text \"<一句话原则>\" [--why \"<依据>\"]；硬件另用 py -X utf8 scripts/hw_experience.py add experience/hardware/inbox/<文件>.json",
   "always": [],
   "cards": {
+    "business-discovery": {
+      "title": "从需求推导业务、页面模块与控件",
+      "summary": "从用户想办的事推导首版闭环，逐页交代内容组、入口、所有功能控件与数据、决策、结果和恢复。",
+      "keywords": ["业务推导", "入口", "闭环", "模块", "页面", "字段", "控件", "决策", "阅读顺序"],
+      "preference_keywords": ["业务推导", "模块归属", "业务闭环"],
+      "sections": [
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","从需求推导业务"]},
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","逐模块设计与经验"]},
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","从入口推到实际页面"]},
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","业务模块与规则归属"]},
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","页面模块与控件"]},
+        {"page":"handoff.md","title":"交接","path":["页面结构与控件"]}
+      ],
+      "tools": [
+        "商业项目的 scope 由 System 调 Crawl 真实搜索，两份 PDF 同批。design 由 System 主持，Dev 和 Design 协作四份 HTML。第二批确认后 Design 带用户走 demo，第三次确认后再生成四份基线文件。见 WORKFLOW.md 商业项目。",
+        "范围未定时先在对话中给出候选和待决事项。新合同用 scripts/ui_requirements.py <合同> --require-module-details；用 --module <模块编号> 读同一模块的五项。开始查 experience.py search <模块> <问题>，结束用 note 更新经验目录。"],
+      "checks": ["每页能从第一组读到结果；每个功能性文字、图片、输入和动作能追到本页组与业务功能。跨角色场景核对移交和异常。"]
+    },
     "system-design": {
       "title": "系统设计（需求 → 模块范围 → 架构 → 系统设计页）",
       "summary": "需求台账、模块批准、Luz-Crawl 调研、系统架构与系统设计网页",
@@ -26,6 +44,7 @@
         "运行时"
       ],
       "sections": [
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","从需求推导业务"]},
         {
           "page": "system-design.html",
           "title": "系统设计规范",
@@ -158,8 +177,9 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "商业项目的 scope 由 System 调 Crawl 真实搜索，两份 PDF 同批。design 由 System 主持，Dev 和 Design 协作四份 HTML。第二批确认后 Design 带用户走 demo，第三次确认后再生成四份基线文件。见 WORKFLOW.md 商业项目。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "建会话：`py -X utf8 scripts/new_session.py --name \"<名称>\" --modes system --system-name \"<系统名>\" --modules \"<模块1>,<模块2>\"`（有现场设备用 `--modes system,hardware`）；生成 BRIEF、模块确认页 `raw/01-system/01-module-intake.html` 与本卡，模块由人批准后才往下做",
         "输出：会话目录 `NNN-名称\\` 的根只有 `raw\\` 和同名汇总页 `NNN-名称.html`，发布的系统设计页就是汇总页；项目任务建会话时加 `--project <状态根>`（或设 LUZ_PROJECT_ROOT），会话只放过程文件，`publish.py` 在项目任务里不写 docs（失败并给出该阶段的 `project.py document` 命令），`docs\\02-产品开发\\01-系统架构.html` 由 Luz-Project 生成，项目目录里不放任何原始文件",
         "先查经验：`py -X utf8 scripts/experience.py search <关键词>`；新鲜来源用 `py -X utf8 scripts/experience.py reuse <会话目录> <来源编号…> --module <模块>` 复制进调研，再补采",
@@ -170,7 +190,7 @@
         "有智能体时，架构写出“智能体运行时与底座”一项，并另读规则卡 agent-ui 与 agent-runtime-ui；后端实现见 Luz-Dev `references/agent-foundation.md`",
         "交给客户的是 PDF 和 Excel，不是这里的网页；客户文件的内容与写法读规则卡 `client-docs`，功能清单写成数据文件并用 `py -X utf8 scripts/features_check.py` 自查",
         "没有放进本卡的通用规则另读：设计原则与业务状态命名读 ui-standards.html（规则卡 `interaction`、`agent-ui` 已含设计原则），内容来源与维护闭环（架构清单“内容来源与文案”一项的依据）读规则卡 `remote-config`、`admin-form`，列表的默认视图读规则卡 `admin-list`，页面与各端的规范对照读 system-design.html“设计规则的位置”",
-        "项目模式（Luz-Project 编排；用户只逐个审批 docs 里的文件，评审页、Crawl 记录、规则卡记录、自检是不让用户审、也不向用户罗列的内部步骤，但必须做完）：开工前 `project.py next <项目>` 与 `checklist <项目> architecture`；读完本卡后 `project.py step <项目> architecture rules --note \"读了…；采用的规则：…\"`；写完阶段事实数据、界面功能说明、入口表并过 check_interaction.py、entrances_check.py、check_document.py 后 `project.py step <项目> architecture specialist --note \"<产出了什么；自检结论>\"`（这两步只能自己记）；`01-系统架构.html` 由 `project.py document` 生成，只向用户出示 `next` 指定的这一个文件，不自己判定已批准，修改意见走 `project.py review`；本技能没有动作门；见 SKILL.md“项目模式”",
+        "既有逐文件项目模式（Luz-Project 编排；用户只逐个审批 docs 里的文件，评审页、Crawl 记录、规则卡记录、自检是不让用户审、也不向用户罗列的内部步骤，但必须做完）：开工前 `project.py next <项目>` 与 `checklist <项目> architecture`；读完本卡后 `project.py step <项目> architecture rules --note \"读了…；采用的规则：…\"`；写完阶段事实数据、界面功能说明、入口表并过 check_interaction.py、entrances_check.py、check_document.py 后 `project.py step <项目> architecture specialist --note \"<产出了什么；自检结论>\"`（这两步只能自己记）；`01-系统架构.html` 由 `project.py document` 生成，只向用户出示 `next` 指定的这一个文件，不自己判定已批准，修改意见走 `project.py review`；本技能没有动作门；见 SKILL.md“项目模式”",
         "入口表：架构阶段交付功能说明时同时交 `entrances.json`（每个前台功能一行：类型、类别、唯一入口归属、目的地、使用频次），视觉技能据此设计首页，不增删入口；格式运行 `py -X utf8 scripts/entrances_check.py --schema`，写完用 `py -X utf8 scripts/entrances_check.py <entrances.json> [--features features.json]` 检查",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长"
       ],
@@ -178,7 +198,7 @@
         "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR；交付前加 `--strict-production`",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <系统设计页.html>` 零 ERROR（阅读页的版式按 Luz-Design 文件设计规范“网页文件 › 排版参数”，不加 --allow interface）",
-        "独立会话：模块、架构、系统设计各由人批准，`raw/99-delivery/APPROVALS.json` 记录哈希；脚本和模型不能代替批准。项目模式：`01-系统架构.html` 由用户经 `project.py approve --doc` 逐个审批，会话里的批准账本不替代它",
+        "独立会话：模块、架构、系统设计各由人批准，`raw/99-delivery/APPROVALS.json` 记录哈希；脚本和模型不能代替批准。既有逐文件项目模式：`01-系统架构.html` 由用户经 `project.py approve --doc` 逐个审批，会话里的批准账本不替代它",
         "浏览器 1440 与 390 宽打开系统设计页：第一行是主标题、无说明文字、手机上可操作",
         "`py -X utf8 scripts/check_interaction.py <会话目录>` 零 ERROR（写了交互契约的架构缺项即报错），WARN 逐条处理或在架构里写明理由"
       ]
@@ -318,8 +338,9 @@
         }
       ],
       "tools": [
+        "商业项目的 scope 由 System 调 Crawl 真实搜索，两份 PDF 同批。design 由 System 主持，Dev 和 Design 协作四份 HTML。第二批确认后 Design 带用户走 demo，第三次确认后再生成四份基线文件。见 WORKFLOW.md 商业项目。",
         "项目模式先读 `py -X utf8 D:\\Codes\\Luz-Project\\scripts\\project.py context <项目> <阶段> --skill luz-system` 取前序产物与客户答案；客户文件的目录、顺序和门禁以 `D:\\Codes\\Luz-Project\\references\\client-documents.md` 为准",
-        "项目模式的步骤：开工前 `project.py next <项目>` 与 `checklist <项目> <阶段>`（proposal 或 client-intake）；读完本卡与 `function-list` 卡后 `project.py step <项目> <阶段> rules --note \"读了…；采用的规则：…\"`；features.json、intake-extra.json 过 features_check.py 后 `project.py step <项目> <阶段> specialist --note \"<产出了什么；自检结论>\"`（只能自己记）。用户逐个审批 docs 里的文件，一次一个：方案阶段 02 → 03 → 04，业务逻辑确认表单独一个；评审页与 Crawl 记录是内部步骤，不让用户审；客户的回填表是客户输入，不审批",
+        "既有逐文件项目模式的步骤：开工前 `project.py next <项目>` 与 `checklist <项目> <阶段>`（proposal 或 client-intake）；读完本卡与 `function-list` 卡后 `project.py step <项目> <阶段> rules --note \"读了…；采用的规则：…\"`；features.json、intake-extra.json 过 features_check.py 后 `project.py step <项目> <阶段> specialist --note \"<产出了什么；自检结论>\"`（只能自己记）。用户逐个审批 docs 里的文件，一次一个：方案阶段 02 → 03 → 04，业务逻辑确认表单独一个；评审页与 Crawl 记录是内部步骤，不让用户审；客户的回填表是客户输入，不审批",
         "功能清单、项目专属问题写成 `data/client/features.json`、`intake-extra.json`，写完用 `py -X utf8 scripts/features_check.py <data/client 目录>` 自查（读状态根 `config/documents.json` 的 `estimate`；读不到按人日与报价都关）；默认不写人日、预算、报价，只有 `estimate.workdays` / `estimate.quote` 开启（带 requested_by、requested_at、request_note 三项证据）才写，报价只来自人工提供的 `quote.json`（provided_by、provided_at、request_note、evidence、unit_price），用户还没给数字就把“等待人工报价”列为用户待办并停下；成品 Excel 与 PDF 由 Luz-Project 经 Luz-Design 生成，本技能不手写成品",
         "方案说明书的正文由 Luz-Writing 写（`py -X utf8 D:\\Codes\\Luz-Writing\\scripts\\06-context.py general`），版式由 Luz-Design 的 `docx` 与 `showcase` 规则卡保证；本卡只提供“写什么”",
         "架构图册的图数据写成 `data/client/architecture.json`：节点、数据流、泳道、部署的业务含义取自功能清单和客户确认过的规则，不凭空画",
@@ -534,6 +555,7 @@
         }
       ],
       "tools": [
+        "商业项目的 scope 由 System 调 Crawl 真实搜索，两份 PDF 同批。design 由 System 主持，Dev 和 Design 协作四份 HTML。第二批确认后 Design 带用户走 demo，第三次确认后再生成四份基线文件。见 WORKFLOW.md 商业项目。",
         "功能、页面、动作与状态编号取自已批准的系统架构 `raw/01-system/03-system-architecture.html`，不另起编号；完整项目里功能编号是 `data/client/features.json` 的 `FN-001…`，发布后永不复用",
         "客户的功能清单写成 `data/client/features.json`（模块、功能、使用端、角色、基础或可选、业务逻辑、标签、验收），项目专属问题写 `intake-extra.json`；默认不写人日、预算、报价；只有用户或客户明确要求、`config/documents.json` 的 `estimate.workdays` 打开（带 requested_by、requested_at、request_note）时才加 `hours` 与 `hours_basis`（估算依据），`estimate.quote` 打开时才有 `quote.json`，单价与金额只能来自人工报价单，不得自拟、暂估或套用示例值；成品 Excel 由 Luz-Project 经 Luz-Design 生成，不手改，也不手写 Excel",
         "写完先自查：`py -X utf8 scripts/features_check.py <data/client 目录>`；方案说明书与架构图册的内容另读规则卡 `client-docs`",
@@ -770,8 +792,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "动手前用 Luz-Crawl 查参考组件库（Ant Design / ProComponents 的 ProTable、TDesign、Arco、Semi、Element Plus 的表格、筛选与分页），在设计说明写明主要组件跟随哪一家，借行为不借外观",
         "原型的产出与发布见规则卡 `prototype`，`references/templates.txt` 的 interactive-prototype.html 骨架仅供旧会话沿用（它自带分页条，默认 20 条/页）",
         "导出文件的版式交给 Luz-Design：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py xlsx`",
@@ -941,8 +963,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "先分运营型与分析型，再按价值排指标；只放后端能返回或用户点名的指标，长期为 0 的合并为一行状态",
         "图表借 Ant Design Charts、ECharts、TDesign 图表的悬停与图例行为；每张图有即时的自定义悬停提示与十字线或高亮",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
@@ -1151,8 +1173,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "动手前用 Luz-Crawl 查参考组件库（Ant Design、TDesign、Arco、Element Plus 的 Form、Modal、Switch、Upload、DatePicker）的默认值与状态，写明跟随哪一家",
         "小程序里展示的每项运营内容都在后台有增删改排序；数据只存一份",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
@@ -1254,8 +1276,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "动手前用 Luz-Crawl 查微信小程序设计指南与 Vant、NutUI、TDesign 小程序组件的默认值与状态，写明跟随哪一家",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
         "原型里手机框与后台共用一套演示数据；产出与发布见规则卡 `prototype`，`references/templates.txt` 的 interactive-prototype.html 骨架仅供旧会话沿用",
@@ -1353,8 +1375,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "效果怎么画（划线价、角标、券面缺口、一大两小、出框元素、分类联动的样式、悬浮栏避开安全区）读 Luz-Design 的规则卡 `interface-recipes`：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py interface-recipes`；这些效果何时触发（分类联动、预估到手价展开构成、倒计时依据、强公告与遮罩、加购飞入）由本页规则决定，Luz-Design 只画不改",
         "价格色、强调色与营业状态的颜色见 Luz-Design 视觉设计规范“价格色与营业状态”，营销区的不规则排版见“营销区的不规则排版”；本卡只规定价格怎么算、怎么显示哪几项",
         "商品图、入口图标、活动主视觉与弹窗主视觉的风格和生成由 Luz-Design 决定（规则卡 `image-assets`：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py image-assets`）；本卡只规定哪些对象要有图、缺图时怎么办",
@@ -1443,8 +1465,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "架构里写配置清单表；服务端实现交给 Luz-Dev（模块详设 config 与规则 OPS-005、REL-003）",
         "调研前先查经验库：`py -X utf8 scripts/experience.py search 远程配置`（已采的调研来源记在经验 commerce-config-research-sources）"
       ],
@@ -1703,8 +1725,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "先列任务目标、能力清单（会做、不会做、要审批）、工具清单（按影响分级）与停止条件，再画界面；不可撤销、动钱或对外发送的动作用审批卡片",
         "智能体会话同时读规则卡 agent-runtime-ui（服务器推送事件、事件类型、排队、重试熔断、断点续跑、上限）；visual 阶段用 `--card agent-ui --card agent-runtime-ui` 存进会话",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
@@ -1852,8 +1874,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "标签页图标与页头品牌标识：`py -X utf8 scripts/new_session.py icon \"<系统名>\"` 打印两者，模板的 `{{TAB_ICON}}`、`{{BRAND_MARK}}` 自动填好",
         "首屏图片的来源、风格与生成要求由 Luz-Design 决定（规则卡 `image-assets`、`interface-pattern`）；本卡只规定首屏要不要图、缺图时怎么办，且不用自动轮播",
         "页面文字来自用户或 Luz-Writing；本技能只负责结构、导航与界面",
@@ -1871,7 +1893,7 @@
     },
     "prototype": {
       "title": "可交互原型（功能匹配与成熟完整来源交接）",
-      "summary": "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+      "summary": "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
       "keywords": [
         "原型",
         "配置面板",
@@ -1902,17 +1924,18 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
-        "先读 Luz-Design 的 design-path 与 prototype-reference（`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py design-path prototype-reference`）；页面与组件从它的 `templates/app`、`templates/web` 按编号取（`template_registry.py list|show`），可运行前端用 `frontend.py init|seal|review|check`，完整包用 `ui_package.py check|export` 检查与导出。`add_mode.py` 只登记阶段并存规则卡，它写入的骨架仅供旧会话；System 不用骨架或内部库组装新页面。",
+        "商业项目的 scope 由 System 调 Crawl 真实搜索，两份 PDF 同批。design 由 System 主持，Dev 和 Design 协作四份 HTML。第二批确认后 Design 带用户走 demo，第三次确认后再生成四份基线文件。见 WORKFLOW.md 商业项目。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
+        "先读 Luz-Design design-path / prototype-reference（`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py design-path prototype-reference`）；页面与组件从它的 `templates/app`、`templates/web` 按编号取（`template_registry.py list|show`），可运行前端用 `frontend.py init|seal|review|check`，完整包用 `ui_package.py check|export` 检查与导出。`add_mode.py` 只登记阶段并存规则卡，它写入的骨架仅供旧会话；System 不用骨架或内部库组装新页面。",
         "用户明确要求严格沿用已有界面（source-locked）时保留原件，只改允许的文字，不改结构、样式、脚本和资产；功能不匹配就另选来源或记缺口。细则见 Luz-Design `references/ui-ownership.md`。",
         "需求、来源功能对应和原状态支持/缺口写入 BRIEF，独立或项目审批继续各自已有合同；不新增审批要求。"
       ],
       "checks": [
-        "成功来源有本次真实抓取正文、成熟完整布局、原件、依赖资产、版本许可及浏览器证据，只有网址或原子库可运行不算成功。",
-        "完整包只含明确允许的文字差异；原几何、样式、代码、状态与资产未改，文字溢出用缩短文案或另选来源解决。",
+        "显式 source-locked 项目：成功来源有本次真实抓取正文、成熟完整布局、原件、依赖资产、版本许可及浏览器证据，只有网址或原子库可运行不算成功。",
+        "显式 source-locked 项目：完整包只含明确允许的文字差异；原几何、样式、代码、状态与资产未改，文字溢出用缩短文案或另选来源解决。",
         "Luz-Design 的 `ui_package.py check` 验证当前完整包的字节、组件来源、审阅与证据；`publish.py` 发布时重新核验，并按包的真实类型绑定模板（`ui-component-output` 或 `frontend-*`）。不把旧内部库或历史维护报告当成熟来源准入。",
-        "只验证来源已有视口、浅深外观、交互和状态，缺少任务必需能力继续找来源或记缺口，不新增配置面板/主题。",
+        "显式 source-locked 项目：只验证来源已有视口、浅深外观、交互和状态，缺少任务必需能力继续找来源或记缺口，不新增配置面板/主题。",
         "BRIEF 有采用的规则、本次沉淀、实际来源范围、未覆盖项与明确维护边界；候选或模型操作不写作用户批准。",
         "具体质量指标见 Luz-Project/references/quality-rules.md；用 quality_rules.py list --owner luz-system --stage <本阶段> 读取范围、阈值、例外与证据，逐项评估，不自填三轴通过。"
       ]
@@ -2210,8 +2233,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "把运行事件表（每种运行状态由哪些事件进入与离开、各事件携带什么）和错误文案表写进系统设计；事件名与字段以本卡为准，不另起名字",
         "后端实现（事件日志与 `Last-Event-ID` 续传、心跳、队列与并发上限、幂等键、重试与熔断、检查点、取消与回滚、网关关闭缓冲）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md",
         "调研前先查经验库：`py -X utf8 scripts/experience.py search 智能体`（已采的调研来源记在经验 agent-research-sources）"
@@ -2364,8 +2387,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "对每个页面列出全部功能与按钮：先按“一个动作一个按钮”去重，再逐个写入口、反馈、结果、返回；对象写生命周期，状态写进出事件，流程写成功终点与失败恢复",
         "架构的交互字段照 Luz-Design 架构模板（`templates/documents/reading/system-architecture.html`）里的示例写；只读自查 `py -X utf8 scripts/check_interaction.py <会话目录>`（`validate_session.py` 也会调用）",
         "原型验收逐个操作走一遍“触发 → 反馈 → 结果 → 返回”，记录在 `raw/99-delivery/`",
@@ -2502,8 +2525,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "先在系统架构里写“平台能力清单”（基础与可选、启用理由）和“配置边界表”（运行硬上限留在配置文件并只读显示，业务配置进配置台）；对象与状态表、事件与接口意图表按本卡和 `platform-console-design.html` 的“事件与契约”写，事件名与字段不另起名字",
         "每类能力再读它自己的卡：排队 `queue-capacity`、定时 `scheduler-ui`、预警回传 `alert-loop`、规则与核算 `rule-engine-ui`、协同 `multi-agent`、知识库 `kb-console`、业务流画布 `workflow-canvas`；对话与运行界面读 `agent-ui` 与 `agent-runtime-ui`",
         "后端实现交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md；handoff 里把新对象（workflow、rule_set、schedule、alert_policy、queue_policy、knowledge_base、agent_team）作为可选字段写入",
@@ -2700,8 +2723,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "系统架构的“智能体运行时与底座”之外再写“队列与容量”：四级限额表、车道与权重、拒收响应体、预计等待算法、看板指标与告警阈值、死信处理；全局硬上限只读显示，租户与用户配额进配置台",
         "后端实现（队列、车道、公平出队、429 响应体、死信）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（接入层与总表；租户级键与车道是本页新增，需要 Luz-Dev 补）",
         "预计等待用同一个公式在前台和运营页显示；样本不足不显示秒数"
@@ -2874,8 +2897,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "架构里写计划任务表（触发、目标与版本策略、run_as、租户范围、misfire、overlap、并发、超时、重试、通知、依赖、defer_ok）和运行历史列；cron 编辑器按本卡“cron 编辑器”做常用与高级两种模式、人话预览和未来 5 次触发",
         "计划任务的运行是一次普通运行（trigger: schedule），默认进批量车道，走同样的排队、检查点、审批与审计；高风险写入仍须审批",
         "后端实现（触发器、fire_id 幂等、补跑、依赖、暂停）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md"
@@ -3038,8 +3061,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "架构里写预警策略表（来源、条件、severity、指纹维度、升级链、静默、归属、SLA、expire_after、blocking、options、decision_schema、allowed_adjustments）和预警状态机（open、acked、escalated、handled、expired）",
         "恢复载荷、校验顺序与错误码以本卡“预警回传”为准，不另起字段；阻断式预警复用审批的暂停与恢复，不新增第八种运行状态",
         "后端实现（检查点恢复、乐观锁、幂等、审计）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（输出护栏与人工审批）",
@@ -3243,8 +3266,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "架构里写规则集表（业务域、命中策略、变量目录、适用范围、生效区间、灰度）、配置读取与计算工具表（分级、输入输出、脱敏、缓存失效）和复核视图；金额一律定点或最小货币单位，阶梯显式选“分档累计”或“整体计价”",
         "数字由计算服务算，模型只取数、解释、复核；回答里的金额必须逐字出现在工具结果里；应用结果（发放、入账、改单）不做成工具",
         "后端实现（规则引擎、计算服务、配置发布事件、计算记录）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（工具层、输出护栏）与模块详设"
@@ -3412,8 +3435,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "架构里先写“是否需要多智能体”的判断表（工具与知识、权限边界、并行、上下文、独立评审、成本），通过才写团队：成员与工具白名单、交接路线（有向边）、模式、上限与预算",
         "交接载荷与事件以本卡为准；权限只继承不放大；交接的授权在程序里按解析后的参数检查",
         "后端实现（编排、交接、预算、追踪）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（意图识别与路由、编排）"
@@ -3558,8 +3581,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "架构里写知识库流程表（七个阶段）、权限表（库级、文档级、字段级、检索时预过滤）、评测集与引用校验；分块与嵌入的默认值与单位以架构登记为准，并与 Luz-Dev 智能体底座一致",
         "命中测试里的参数改动只对本次测试有效；要生效必须保存并产生新的索引版本",
         "后端实现（解析、分块、索引、检索、权限过滤、评测）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（知识库）"
@@ -3759,8 +3782,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "架构里写节点类型表、变量作用域表、流程图存储契约（nodes、edges、variables、settings、版本）和校验规则（阻断与警告）；权限、上限、审批、运行身份由程序控制，业务流只能收紧",
         "高风险写入工具之前必须有人工审批节点，程序在发布与运行时双重检查；循环必须有最大次数并不超过平台上限",
         "后端实现（流程执行器、校验器、版本存储、灰度）交给 Luz-Dev：https://github.com/luzern0414/Luz-Dev/blob/master/references/agent-foundation.md（编排：工作流优先）",
@@ -3888,8 +3911,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "原型的输入区标 `data-composer`，主按钮标 `data-composer-primary` 并写 `data-composer-action`（`send`、`queue`、`stop`、`voice`），状态写 `data-composer-state`（`idle`、`draft`、`running`、`running-draft`、`uploading`、`composing`）；旧会话骨架 `references/templates.txt` 的 agent-run-states.html 带一个按状态切换的输入区和输入法安全的回车处理，可作行为参照",
         "只读自查：`py -X utf8 scripts/check_interaction.py <会话目录>`（`validate_session.py` 也会调用）核对主按钮唯一、名称与动作一致、有状态播报区、回车处理考虑输入法组合、按钮切换不超过 150 毫秒、原型展示了不止一种状态",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
@@ -4041,8 +4064,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "视觉读 Luz-Design 的规则卡 `interface-visual`（以及按需 `interface-components`、`interface-layout`、`interface-pattern`、`interface-motion`、`interface-icons`）：`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\context.py <kind>`；本卡不决定颜色、字号、圆角阴影、图标图形、配图、栅格间距、动画时长",
         "先列出页面全部“两态”控件和全部会变更的列表，按“交互与排布的问题族”逐族排查，再画；原型的过渡写成 CSS 令牌，并带 `prefers-reduced-motion` 分支",
         "整卡可点时在标题处放链接并用伪元素铺满整卡，卡内次要动作用独立按钮，层级高于铺满的链接",
@@ -4059,8 +4082,8 @@
       ]
     },
     "nav-levels": {
-      "title": "多级目录与导航层级（侧栏、顶栏、面包屑、抽屉、树选择器、小程序分类）",
-      "summary": "层级上限与超过三级的出路、当前位置与祖先高亮、展开与图标规则、顶部加侧栏、面包屑与搜索直达、移动端抽屉、树形选择器、小程序左右联动分类",
+      "title": "多级目录与导航层级（侧栏、顶栏、面包屑、目录页、树选择器、小程序分类）",
+      "summary": "层级上限与超过三级的出路、当前位置与祖先高亮、展开与图标规则、顶部加侧栏、面包屑与搜索直达、移动目录页、树形选择器、小程序左右联动分类",
       "keywords": [
         "多级菜单",
         "侧栏",
@@ -4168,8 +4191,8 @@
         }
       ],
       "tools": [
-        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，Design 用 component_ui.py build/audit/review/check。",
-        "新产品 UI 的实现交 Luz-Design design-path / prototype-reference：默认 component-reuse：System 先定义需求、页面、动作、数据、权限、状态和组件能力；Design 先选统一框架，再查本地真实组件，缺口由 Luz-Crawl 搜索成熟线上来源。统一适配文字、颜色令牌和图表/配置数据；均无合适来源的新组件，取得绑定具体范围的人工批准后才写。完整行为和整页一致性共同验收。显式 source-locked 继续仅改允许文字，不混用证明。 本卡定义需求能力；交 Design 查本地和网络组件，缺口按具体手写批准处理，不虚构业务功能。",
+        "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
+        "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "先画导航树并数层级、列出每个层级的条目数，按“多级目录与导航层级”的方案表选方案；超过三级的需求先走重构信息架构，不加第 4 级",
         "哪个功能放在哪个入口先按“入口与内容分层”里“功能类型的默认入口位置”定；图标只给一级项",
         "架构文件的导航树和页面交互契约沿用 `py -X utf8 scripts/context.py interaction`",
@@ -4179,7 +4202,7 @@
         "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "导航树不超过三级；展开最长分支量高度不超过一屏；二、三级项没有图标，一级项都有图标",
         "逐个叶子页用深链接打开：当前项与祖先都高亮、面包屑与菜单同名、刷新后自动展开当前分支",
-        "只用键盘走完整棵树（上下左右方向键、回车、起止键）；图标栏状态逐项悬停核对；抽屉可由遮罩、退出键与系统返回关闭",
+        "只用键盘走完整棵树（上下左右方向键、回车、起止键）；图标栏状态逐项悬停核对；目录页返回时恢复来源位置与焦点",
         "小程序分类：分类数取 6、15、40 看左栏是否滚动并保持当前项可见；点击与滚动两个方向的联动都核对；返回后位置不丢",
         "`py -X utf8 scripts/check_interaction.py <会话目录>` 零 ERROR"
       ]

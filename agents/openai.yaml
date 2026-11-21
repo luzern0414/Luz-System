@@ -1,4 +1,4 @@
 interface:
   display_name: "Luz System"
-  short_description: "系统设计：需求与模块范围、架构、功能清单、界面功能与原型行为、现场硬件；外观归 Luz Design"
-  default_prompt: "使用 $luz-system 设计这个系统：先运行 py -X utf8 scripts/context.py list，一次读完本任务的规则卡，完成本阶段检索再产出；功能清单、业务逻辑和硬件清单写成数据文件，客户只拿 PDF 和 Excel；界面外观读 Luz Design 的 interface-visual 等卡，不在系统设计里写视觉数值；每个审批点停下等用户批准，发布前在 BRIEF 写明采用的规则和本次沉淀。"
+  short_description: "从需求推导业务模块和闭环，逐页定义入口、控件、数据、决策与阅读顺序"
+  default_prompt: "使用 $luz-system 设计这个系统：先运行 py -X utf8 scripts/context.py list，一次读完本任务的规则卡，完成本阶段检索再产出；功能清单、业务逻辑和硬件清单写成数据文件，客户只拿 PDF 和 Excel；界面外观读 Luz Design 的 interface-visual 等卡，不在系统设计里写视觉数值；商业项目主持范围和开发说明两批，第一批先调用 Crawl 真实搜索；按项目当前确认点等用户回复，发布前在 BRIEF 写明采用的规则和本次沉淀。"

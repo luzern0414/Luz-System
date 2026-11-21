@@ -87,7 +87,7 @@
 <h3>客户功能清单</h3>
 <ul>
 <li>唯一来源是 <code>data/client/features.json</code>：模块 <code>modules</code>（编号、名称、一句话说明）和功能 <code>features</code>（编号、所属模块、名称、使用端、角色、类型、功能说明、业务逻辑、标签、依赖、验收）。每个功能有状态：在范围内、范围外、已移除。人日的 <code>hours</code>、<code>hours_basis</code> 只在开启人日时才写，单价与报价只在开启报价时才有，且只来自人工提供的报价单 <code>quote.json</code>（见“人日与报价（可选，默认不写）”）。成品由 <code>Luz-Project</code> 经 <code>Luz-Design</code> 的表格脚本生成，不手改成品。</li>
-<li>成品表格文件默认只有一张工作表“功能清单”：使用端、使用角色、功能模块三级分组，由大到小，纵向合并，列为功能、功能说明、类型。开启人日时在类型之后加“工时（人天）”列；开启报价时才有第二张“报价清单”，在同一份清单上加报价（元），表下方依次是基础功能小计、可选功能小计、报价合计。没有序号列，没有功能编号，也没有业务规则列。</li>
+<li>对客 <code>Excel</code> 的列序、分组与报价约定见 <code>Luz-Project</code> 的 <code>references/client-documents.md</code>。表格合并与版式由 <code>Luz-Design</code> 负责。</li>
 <li>功能的稳定编号 <code>FN-001</code> 一类只在数据文件、变更台账和验收清单里使用，客户看的清单不出现编号。编号发布后永不复用；删除功能不删数据，把状态改为已移除。页面里的功能列表在完整项目中沿用这套编号，独立会话沿用架构里的编号。</li>
 <li>使用端只取固定的七个值：<code>miniprogram</code>、<code>web-admin</code>、<code>agent</code>、<code>website</code>、<code>mobile-app</code>、<code>api</code>、<code>hardware</code>，成品显示为中文端名。一个功能只属于一个端；同一能力在两个端都有时按端分别写，因为页面和交互不同。</li>
 <li>角色用客户的叫法（企业员工、核销员、平台管理员）；“全部角色”只用于确实对所有角色开放的功能。</li>

@@ -45,7 +45,9 @@ def load(path: str | Path | None = None, output_root: Path = PROJECT_OUTPUT_ROOT
     project = json.loads((root / "project.json").read_text(encoding="utf-8"))
     deliver = Path(project["deliver_root"]) if project.get("deliver_root") else root
     evidence = (project.get("crawl") or {}).get("evidence_index")
+    commercial = project.get("workflow") == "commercial-v1"
     return {
+        **({"workflow": project["workflow"], "stage": project.get("current_stage") or "scope"} if commercial else {}),
         "state_root": str(root),
         "deliver_root": str(deliver),
         "evidence_index": str(root / evidence) if evidence else None,
@@ -55,7 +57,9 @@ def load(path: str | Path | None = None, output_root: Path = PROJECT_OUTPUT_ROOT
 def doc_target(info: dict, area: str, stem: str, suffix: str) -> Path:
     """docs\\<area>\\NN-名称<suffix> in the project directory. `stem` is either 名称 or a full NN-名称; a file with the same
     name keeps its number, a new name takes the next free two-digit number (numbers are never reused)."""
-    folder = Path(info["deliver_root"]) / "docs" / DOC_AREAS[area]
+    areas = ({"development": "03-开发资料", "requirements": "02-对接资料", "acceptance": "02-对接资料"}
+             if info.get("workflow") == "commercial-v1" else DOC_AREAS)
+    folder = Path(info["deliver_root"]) / "docs" / areas[area]
     if NUMBERED.match(stem):
         return folder / f"{stem}{suffix}"
     numbers = []

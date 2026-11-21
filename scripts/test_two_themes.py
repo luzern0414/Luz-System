@@ -1,4 +1,4 @@
-"""通用页面不强制双主题或外观开关；既有双主题模板仍保持自身能力。"""
+"""产品模板默认白底；测试阅读页与历史双主题输入的兼容解析。"""
 from __future__ import annotations
 
 import re
@@ -89,41 +89,18 @@ class SkeletonTest(unittest.TestCase):
     PRODUCT = ("interactive-prototype.html",)
     READING = ("module-intake.html", "system-architecture.html", "system-design.html")
 
-    def test_product_skeletons_carry_both_themes_and_the_switch(self) -> None:
-        for name in self.PRODUCT:
-            text = read_template(ROOT, name)
-            with self.subTest(template=name):
-                self.assertIn("@media (prefers-color-scheme:dark){:root:not([data-theme=\"light\"])", text)
-                self.assertIn(':root[data-theme="dark"]{color-scheme:dark', text)
-                self.assertIn(':root[data-theme="light"]{color-scheme:light}', text)
-                self.assertIn('role="radiogroup" aria-label="外观"', text)
-                self.assertEqual(len(re.findall(r'<button type="button" role="radio"', text)), 3)
-                for label in ("跟随系统", "浅色", "深色"):
-                    self.assertIn(f">{label}</button>", text)
-                self.assertIn('"luz-theme"', text)
-                self.assertIn("window.luzTheme", text)
-                # the script runs before the style sheet, and the storage is guarded
-                self.assertLess(text.index("luz-theme"), text.index("<style>"))
-                self.assertRegex(text, r"try \{[^}]*localStorage")
-
-    def test_the_two_blocks_hold_the_same_variables(self) -> None:
-        for name in self.PRODUCT:
-            text = read_template(ROOT, name)
-            media = re.search(r'@media \(prefers-color-scheme:dark\)\{:root:not\(\[data-theme="light"\]\)\{(.*?)\}\}', text, re.S).group(1)
-            attr = re.search(r':root\[data-theme="dark"\]\{(.*?)\}', text, re.S).group(1)
-            self.assertEqual(media, attr, name)
-
-    def test_dark_values_are_the_theme_library_values(self) -> None:
-        import json
-        themes = ROOT.parent / "Luz-Design" / "references" / "themes.json"
-        if not themes.is_file():
-            self.skipTest("Luz-Design is not next to this skill")
-        data = json.loads(themes.read_text(encoding="utf-8"))
-        proto = read_template(ROOT, "interactive-prototype.html")
-        dark = data["themes"]["ai-agent"]["dark"]
-        for key in ("canvas", "surface", "action", "actionText", "actionTint", "line"):
-            self.assertIn(dark[key].lower(), proto.lower(), key)
-        self.assertIn(data["shared"]["dark"]["ink"].lower(), proto.lower())
+    def test_default_product_skeleton_preserves_white_surfaces_without_an_appearance_setting(self) -> None:
+        text = read_template(ROOT, "interactive-prototype.html")
+        self.assertIn("--canvas:#fff;", text)
+        self.assertIn("--surface:#fff;", text)
+        self.assertNotIn("prefers-color-scheme:dark", text)
+        self.assertNotIn('aria-label="外观"', text)
+        self.assertNotIn("luz-theme", text)
+        from new_session import theme_colors
+        primary, tint = theme_colors("企业服务", "enterprise-navy", product_seed=True)
+        filled = fill_icon_slots(text, "企业服务", theme="enterprise-navy", product_seed=True)
+        self.assertIn(primary, filled)
+        self.assertIn(tint, filled)
 
     def test_skeleton_styles_have_no_hard_coded_colours_outside_the_token_blocks(self) -> None:
         # Colours live in the token blocks; a literal white or pale tint elsewhere would stay light in the dark theme.
@@ -141,7 +118,7 @@ class SkeletonTest(unittest.TestCase):
                 self.assertNotRegex(text, r"color-scheme\s*:\s*dark")
                 self.assertNotIn("luz-theme", text)
 
-    def test_filled_prototype_validates_and_has_the_switch(self) -> None:
+    def test_filled_prototype_validates_without_an_appearance_switch(self) -> None:
         text = insert_agent_part(fill_icon_slots(read_template(ROOT, "interactive-prototype.html"), "订单助手"), ROOT)
         text = text.replace("{{ACTION_ID}}", "A-001").replace("{{PAGE_ID}}", "P-001")
         with tempfile.TemporaryDirectory() as temp:
@@ -151,7 +128,7 @@ class SkeletonTest(unittest.TestCase):
             warnings: list[str] = []
             root = validate_light_html(path, errors, min_px=12.0, warnings=warnings)
             self.assertEqual((errors, warnings), ([], []))
-            self.assertTrue(has_appearance_switch(root))
+            self.assertFalse(has_appearance_switch(root))
 
     def test_a_prototype_without_the_switch_is_not_recognised(self) -> None:
         text = read_template(ROOT, "interactive-prototype.html")

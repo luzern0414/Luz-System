@@ -75,6 +75,7 @@ def main() -> int:
     if shots:
         shots.mkdir(parents=True, exist_ok=True)
 
+    product_rules = (DESIGN / "application_state_rules.js").read_text(encoding="utf-8")
     with sync_playwright() as pw:
         browser = pw.chromium.launch(channel="msedge")
         for width, level in variants:
@@ -103,6 +104,8 @@ def main() -> int:
                     info = page.evaluate("(sel) => { const el = document.querySelector(sel); return { text: el ? el.innerText.trim().length : -1, over: document.documentElement.scrollWidth > innerWidth + 1 || (!!el && el.scrollWidth > el.clientWidth + 1) } }", AREA[a.target])
                     label = f"{a.target}:{p['id']}@{width}" + (f"/{level}" if level != "std" else "") + (f" [{scene}]" if scene else "")
                     found = list(errors)
+                    for issue in page.evaluate(product_rules):
+                        found.append(f"{issue['rule']} {issue['element']}: {issue['detail']}")
                     small = page.evaluate(SMALL, [AREA[a.target] + EXTRA[a.target], FLOOR[a.target]])
                     if small:
                         found.append(f"text under {FLOOR[a.target]} px in a control, label, cell or title: " + "; ".join(small))

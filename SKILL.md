@@ -1,20 +1,30 @@
 ---
 name: luz-system
-description: 设计 Luz 系统的需求、模块与业务规则、功能清单、首页与各端的入口归属、界面流程、原型行为或现场硬件时使用。产出前先读任务对应的 context.py 规则卡，并完成本阶段调研。界面外观与文档排版由 Luz-Design 负责，后端实现由 Luz-Dev 负责。
+description: 从模糊需求推导 Luz 系统的业务模块、角色、规则和闭环。定义各端每页自上而下的模块、入口、标签、按钮、卡片、字段、文案和图片用途，设计功能清单、原型行为或现场硬件。先用 scripts/context.py 读任务规则卡。界面视觉归 Luz-Design，后端实现归 Luz-Dev。
 ---
 
 # Luz 系统
 
 把需求写成可检查的业务模块、功能入口、角色权限、动作和状态。按[交接分工](../Luz-Design/references/ui-ownership.md)把界面功能合同交给 Luz-Design，把已批准的业务规则交给 Luz-Dev。
 
+用户只有一个想法时，先读 `context.py business-discovery`，从一件事的开始、办理、结果与恢复推导候选模块。做界面功能设计时，同读这张卡，按[页面模块与控件](references/system-design.html#page-structure)逐页确定内容、动作、主次与上下顺序。在业务方确认范围后进入正式会话。可运行[预约改期合同示例](examples/booking-change.ui.json)，参考[功能清单设计](references/function-list-design.html)。
+
 ## 调用协议
+
+商业系统按岗位列出模块与控件。每项功能记录入口、查询维度、业务对象、可执行动作、生效条件、关联记录和验证结果。第二批确认前确定原型操作范围，以及依赖实物或外部服务的验收条件。仓储系统中的商品、库存、收货上架、拣货发运各有独立入口，单据与库存流水通过单号关联。
+
+商业项目先读 `project.py next` 与 `project.py context <项目> <阶段> --skill luz-system`。System 主持范围和设计两批，详见[商业项目](WORKFLOW.md#商业项目)。独立设计由本会话审批，既有项目沿用创建时的矩阵。
+
+每个用户入口按[从入口推到实际页面](references/system-design.html#entry-pages)交一份可走查的路径。逐分支给出该角色会看到几种页面、每页承担哪个任务及从上到下有什么内容、何处跳转或就地反馈、办完与返回各到哪里。运行 `ui_requirements.py <合同> --entry <入口编号>` 可展开页面和内容。
+
+按[逐模块设计与经验](references/system-design.html#module-sheet)写清每个模块的功能逻辑、业务数据结构、页面布局顺序、交互和完整流程。开始时查[模块经验](experience/catalog.md#按模块查经验)，用 `experience.py search <模块名> <问题>` 找可复用的判断。五项均可按具体缺口调用 Luz-Crawl，结论回到相应模块。结束用 `experience.py note` 更新同一份经验 Markdown，记录依据、适用范围和下次怎样复核。
 
 按 [WORKFLOW.md](WORKFLOW.md) 执行。项目任务接入[项目流程](../Luz-Project/references/skill-architecture.md)，需要的阶段质量规则用 `quality_rules.py list --owner luz-system --stage <阶段>` 选取。
 
 1. `py -X utf8 scripts/context.py list` 选类型，`scripts/context.py <类型> [<类型> …]` 读所选规则卡。按手册用 `new_session.py` 建独立会话，有显式项目上下文时传 `--project <状态根>`。
 2. 按[阶段依据](../Luz-Crawl/references/evidence-policy.md)和[调用方法](../Luz-Crawl/references/preflight.md)运行 `crawl_preflight.py run --caller luz-system`。本地依据登记后 `check`。联网依据读正文、`conclude` 后 `check`。
 3. 按手册为该阶段和准确产出路径绑定 Design 模板。使用对应生成器登记哈希，运行 `validate_session.py --strict-production` 与 Design 的 `check_document.py`，再实看桌面与 390 px 手机。硬件清单另用 `hw_build.py`。
-4. 按[审批](WORKFLOW.md#审批)逐个确认模块范围、架构、系统设计、视觉、原型和硬件清单。独立会话批准绑定文件哈希。平台销售演示可按手册在生成前取得单次授权，各阶段照常产出和复核。
+4. 独立会话按[审批](WORKFLOW.md#审批)逐个确认模块范围、架构、系统设计、视觉、原型和硬件清单。独立会话批准绑定文件哈希。平台销售演示可按手册在生成前取得单次授权，各阶段照常产出和复核。
 5. `experience.py note` 写入或确认实践，BRIEF 写“采用的规则”和“本次沉淀”，`publish.py` 在阶段条件满足后发布。正式成果按[文档验收](../Luz-Design/references/document-evidence.md)复核。
 
 ## 规则页
@@ -34,6 +44,8 @@ description: 设计 Luz 系统的需求、模块与业务规则、功能清单�
 
 ## 项目与经验
 
-项目的架构阶段交界面功能说明、用 `entrances_check.py` 检查的 `entrances.json`，以及用 `ui_requirements.py` 检查的[动作与业务规则合同](references/handoff.md#动作归属与业务规则)。按 Project 手册登记 `rules` 与 `specialist`，交付文件由 Project 路由。
+商业项目的 design 阶段及既有项目的架构阶段交界面功能说明、用 `entrances_check.py` 检查的 `entrances.json`，以及用 `ui_requirements.py` 检查的[动作与业务规则合同](references/handoff.md#动作归属与业务规则)。按 Project 手册登记 `rules` 与 `specialist`，交付文件由 Project 路由。
 
 经验沿用同一个键确认。项目经验用 `--scope project`，维护经验用 `--scope maintenance`，已写入规则页的加 `--codified`。硬件样本用 `hw_experience.py add`。修改技能后用 `context.py check` 与 `validate_skill.py --package-only`。
+
+界面合同登记动作所属页面、受控内容、结果容器和返回位置。导航、选择器及填写页服从 [Design 成品要求](../Luz-Design/references/design/hard-rules.md)，颜色与具体组件由 Design 决定。

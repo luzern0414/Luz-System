@@ -1,0 +1,757 @@
+{
+  "schema": "luz-ui-requirements/2",
+  "page_structure_version": 2,
+  "modules": [
+    {
+      "id": "M-booking",
+      "name": "预约",
+      "owner": "排班负责人",
+      "object": "有效预约和可用时段",
+      "outcome": "每笔预约只有一个有效时间，档期不重复占用。",
+      "data_objects": [
+        {
+          "id": "D-booking",
+          "name": "有效预约",
+          "identity": "预约编号",
+          "access": "客户可读自己的预约，门店可读本店预约。排班模块在改期受理成功后更新其占用时段。",
+          "fields": [
+            {
+              "name": "预约编号",
+              "type": "标识",
+              "source": "预约创建时分配",
+              "rule": "必有且唯一，多次改期仍使用同一编号。"
+            },
+            {
+              "name": "生效时段",
+              "type": "时段引用",
+              "source": "当前已确认的预约",
+              "rule": "一个有效预约指向一个时段，等待及拒绝时保留原值。",
+              "reference": "D-slot"
+            }
+          ]
+        },
+        {
+          "id": "D-slot",
+          "name": "门店时段",
+          "identity": "时段编号",
+          "access": "客户仅查看可申请的时段，门店排班维护可用性。",
+          "fields": [
+            {
+              "name": "时段编号",
+              "type": "标识",
+              "source": "门店排班",
+              "rule": "在排班中唯一，多个申请可引用同一时段。"
+            },
+            {
+              "name": "开始时间",
+              "type": "日期时间",
+              "source": "门店排班",
+              "rule": "用门店当地时间展示。缺失时不可选择。"
+            },
+            {
+              "name": "可用状态",
+              "type": "枚举",
+              "source": "排班占用记录",
+              "rule": "本例取可用或已占用，门店同意时再核实。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M-requests",
+      "name": "改期受理",
+      "owner": "门店受理人员",
+      "object": "有独立状态的改期申请",
+      "outcome": "客户可知申请结果，确认后预约记录同步生效。",
+      "data_objects": [
+        {
+          "id": "D-change",
+          "name": "改期申请",
+          "identity": "申请编号",
+          "access": "客户可发起并查看本人申请。只有本店获授权人员可以受理，最终结果双方可见。",
+          "fields": [
+            {
+              "name": "申请编号",
+              "type": "标识",
+              "source": "首次提交时分配",
+              "rule": "一次申请使用同一编号，查询和重试沿用。"
+            },
+            {
+              "name": "所属预约",
+              "type": "预约引用",
+              "source": "客户打开的预约",
+              "rule": "一笔申请属于一个预约，同一预约可以有多笔历史申请。",
+              "reference": "D-booking"
+            },
+            {
+              "name": "申请时段",
+              "type": "时段引用",
+              "source": "客户选中的门店时段",
+              "rule": "提交时必选，收到申请不等于已占用。",
+              "reference": "D-slot"
+            },
+            {
+              "name": "受理状态",
+              "type": "枚举",
+              "source": "提交与门店处理结果",
+              "rule": "待确认可转为已同意或已拒绝。结果未知时按原申请查询。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "F-booking",
+      "module_id": "M-booking",
+      "need": "查看当前生效时间",
+      "acceptance": "等待或拒绝期间仍能查到原时间。",
+      "basis": {
+        "kind": "decision",
+        "ref": "此示例的预约约定",
+        "rationale": "仅演示需要门店确认且等待时不预留新档期的流程。"
+      }
+    },
+    {
+      "id": "F-request",
+      "module_id": "M-requests",
+      "need": "为自己的预约申请新时间",
+      "acceptance": "待处理状态下再次进入能查到同一申请。",
+      "basis": {
+        "kind": "decision",
+        "ref": "此示例的预约约定",
+        "rationale": "仅演示需要门店确认且等待时不预留新档期的流程。"
+      }
+    },
+    {
+      "id": "F-review",
+      "module_id": "M-requests",
+      "need": "受理本店的改期申请",
+      "acceptance": "同意时检查档期并更新有效预约，拒绝时原时间继续有效。",
+      "basis": {
+        "kind": "decision",
+        "ref": "此示例的预约约定",
+        "rationale": "仅演示需要门店确认且等待时不预留新档期的流程。"
+      }
+    }
+  ],
+  "pages": [
+    {
+      "id": "P-booking",
+      "entry_scope": "customer",
+      "route": "/appointments/:id",
+      "goal": "辨认当前有效预约并在允许时发起改期",
+      "focus": "当前哪个预约时间有效",
+      "entry": "从本人预约记录进入",
+      "exit": "返回原列表的日期与位置",
+      "feature_ids": [
+        "F-booking",
+        "F-request"
+      ],
+      "component_ids": [
+        "C-time",
+        "C-state",
+        "C-open"
+      ],
+      "sections": [
+        {
+          "id": "current",
+          "goal": "辨认当前有效时间与申请状态",
+          "component_ids": [
+            "C-time",
+            "C-state"
+          ]
+        },
+        {
+          "id": "change",
+          "goal": "在允许时打开选择新时段页",
+          "component_ids": [
+            "C-open"
+          ]
+        }
+      ],
+      "primary_action": "A-open",
+      "states": {
+        "default": "显示有效时间和适用动作。",
+        "loading": "读取对应预约，显示加载状态。",
+        "empty": "找不到该预约时提供返回本人列表的路径。",
+        "success": "显示待确认、已同意或已拒绝及当前有效时间。",
+        "error": "预约读取失败，在当前页重试或返回原列表。",
+        "disabled": "已有待处理申请时仍可查结果，不能重复发起。",
+        "permission_denied": "只提示无权访问，不展示预约或顾客资料。",
+        "offline": "保留已展示的时间并提示可能过期，恢复网络后核对方可开始改期。"
+      },
+      "title": "预约详情"
+    },
+    {
+      "id": "P-change",
+      "title": "选择新时段",
+      "entry_scope": "customer",
+      "parent_page_id": "P-booking",
+      "route": "/appointments/:id/change",
+      "goal": "为当前预约从多天的可用档期中选一个新时段并提交",
+      "focus": "正在为哪一笔原预约选择时间",
+      "entry": "从预约详情的申请改期按钮打开，沿用本人预约编号。",
+      "exit": "返回该笔预约详情。放弃时丢弃未提交选择，提交成功后移除选时页，再次返回可回原列表。",
+      "feature_ids": [
+        "F-booking",
+        "F-request"
+      ],
+      "component_ids": [
+        "C-original",
+        "C-slot",
+        "C-approval-note",
+        "C-submit"
+      ],
+      "sections": [
+        {
+          "id": "object",
+          "goal": "辨认原预约",
+          "component_ids": [
+            "C-original"
+          ]
+        },
+        {
+          "id": "times",
+          "goal": "按日期比较可用时段并单选",
+          "component_ids": [
+            "C-slot"
+          ]
+        },
+        {
+          "id": "send",
+          "goal": "知道何时生效，再提交",
+          "component_ids": [
+            "C-approval-note",
+            "C-submit"
+          ]
+        }
+      ],
+      "primary_action": "A-request",
+      "states": {
+        "default": "按日期列出真实可申请时段，选好后可提交。",
+        "loading": "保留原预约摘要，读取可用时间。",
+        "empty": "没有可选时段，允许刷新或返回原约。",
+        "success": "返回本笔预约详情，就地显示待门店确认。",
+        "error": "时段失效时留在此页，指出该项并刷新可选范围。",
+        "disabled": "尚未选择时说明提交条件。",
+        "permission_denied": "重新核对本人预约，失去权限时停止提交并提供返回。",
+        "offline": "保留本轮选择，联网后重查可用性。已发出的请求先查询同一申请。"
+      }
+    },
+    {
+      "id": "P-request",
+      "entry_scope": "staff",
+      "route": "/staff/changes/:id",
+      "goal": "处理本店的一笔待确认申请",
+      "focus": "原时间、申请时间及尚未处理的状态",
+      "entry": "从本店待处理记录进入",
+      "exit": "回到原队列位置",
+      "feature_ids": [
+        "F-booking",
+        "F-review"
+      ],
+      "component_ids": [
+        "C-comparison",
+        "C-accept",
+        "C-reject"
+      ],
+      "sections": [
+        {
+          "id": "comparison",
+          "goal": "核对原预约与申请数据",
+          "component_ids": [
+            "C-comparison"
+          ]
+        },
+        {
+          "id": "decision",
+          "goal": "做出受理决定",
+          "component_ids": [
+            "C-accept",
+            "C-reject"
+          ]
+        }
+      ],
+      "primary_action": "A-accept",
+      "states": {
+        "default": "可核对该申请并决定同意或拒绝。",
+        "loading": "读取对应预约，显示加载状态。",
+        "empty": "申请记录不存在时返回队列刷新。",
+        "success": "显示最终处理结果与有效时间。",
+        "error": "读取失败，提示重试并保留录入。",
+        "disabled": "已经处理时显示处理结果，不能再执行。",
+        "permission_denied": "只提示无权访问，不展示预约或顾客资料。",
+        "offline": "已显示的生效时间注明可能过期，恢复网络后核对结果再提交。"
+      },
+      "title": "处理改期申请"
+    }
+  ],
+  "components": [
+    {
+      "id": "C-time",
+      "page_ids": [
+        "P-booking"
+      ],
+      "feature_ids": [
+        "F-booking"
+      ],
+      "kind": "text",
+      "label": "当前有效时间",
+      "interaction": "display",
+      "purpose": "识别应按哪天到店。",
+      "behavior": "始终显示生效时间。",
+      "data_contract": "读取本人预约中的生效时间；缺失时表述为待核实。",
+      "acceptance": "等待确认时显示原时间。",
+      "states": [
+        "default",
+        "empty"
+      ]
+    },
+    {
+      "id": "C-state",
+      "page_ids": [
+        "P-booking"
+      ],
+      "feature_ids": [
+        "F-request"
+      ],
+      "kind": "text",
+      "label": "改期进度",
+      "interaction": "display",
+      "purpose": "区分申请和预约。",
+      "behavior": "已有申请时显示请求时间、状态和结果。",
+      "data_contract": "读取本预约的最新申请，没有申请则不显示该组附加文字。",
+      "acceptance": "拒绝结果能与有效时间同时辨认。",
+      "states": [
+        "default",
+        "empty"
+      ]
+    },
+    {
+      "id": "C-open",
+      "page_ids": [
+        "P-booking"
+      ],
+      "feature_ids": [
+        "F-request"
+      ],
+      "kind": "button",
+      "label": "申请改期",
+      "interaction": "action",
+      "purpose": "进入当前预约的选时任务。",
+      "behavior": "可改期时打开选时页并传入原预约编号。",
+      "data_contract": "读取原预约与现有申请状态。",
+      "acceptance": "打开同一预约，待处理期间不会再送一笔。",
+      "states": [
+        "default",
+        "disabled"
+      ]
+    },
+    {
+      "id": "C-original",
+      "page_ids": [
+        "P-change"
+      ],
+      "feature_ids": [
+        "F-booking",
+        "F-request"
+      ],
+      "kind": "text",
+      "label": "原预约时间",
+      "interaction": "display",
+      "purpose": "选时前核对正在修改的预约。",
+      "behavior": "与日期分组一同可读。",
+      "data_contract": "取原预约当前生效时间。",
+      "acceptance": "可判断正在为哪笔原约办理。",
+      "states": [
+        "default",
+        "loading"
+      ]
+    },
+    {
+      "id": "C-slot",
+      "page_ids": [
+        "P-change"
+      ],
+      "feature_ids": [
+        "F-request"
+      ],
+      "kind": "choice",
+      "label": "申请的新时间",
+      "interaction": "input",
+      "purpose": "提交候选时段。",
+      "behavior": "选择时只更新草稿，候选列表变动时保留可用项。",
+      "data_contract": "来源为本门店当前可选时段，旧值失效需重选。",
+      "acceptance": "没有可选项时给出原时间仍有效的提示。",
+      "states": [
+        "default",
+        "disabled",
+        "error"
+      ],
+      "required_when": "申请改期时必须选择新时段。",
+      "validation": "选择与原时段不同且当前可申请的时段。",
+      "options": "单选，不默认承诺新时段；来源为可用时段清单，过期选择提示重选。"
+    },
+    {
+      "id": "C-approval-note",
+      "page_ids": [
+        "P-change"
+      ],
+      "feature_ids": [
+        "F-request"
+      ],
+      "kind": "text",
+      "label": "须门店确认后生效",
+      "interaction": "display",
+      "purpose": "提交前知道审批对预约时间的影响。",
+      "behavior": "与提交动作相邻。",
+      "data_contract": "由本例审批约定提供。",
+      "acceptance": "可以辨认申请与生效是两个时点。",
+      "states": [
+        "default"
+      ]
+    },
+    {
+      "id": "C-submit",
+      "page_ids": [
+        "P-change"
+      ],
+      "feature_ids": [
+        "F-request"
+      ],
+      "kind": "button",
+      "label": "提交改期申请",
+      "interaction": "action",
+      "purpose": "发起申请。",
+      "behavior": "成功后移除选时页，回原预约详情看待确认状态。若档期过期，留在选时页重选。",
+      "data_contract": "当前预约编号、选定时段、本人身份。",
+      "acceptance": "重复点击不会出现两份待处理申请。",
+      "states": [
+        "default",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "id": "C-comparison",
+      "page_ids": [
+        "P-request"
+      ],
+      "feature_ids": [
+        "F-booking",
+        "F-review"
+      ],
+      "kind": "card",
+      "label": "核对改期申请",
+      "interaction": "display",
+      "purpose": "核实这笔申请涉及的对象与时间。",
+      "behavior": "只读展示原生效时间、申请时间与状态。",
+      "data_contract": "按申请编号关联本门店的有效预约和申请。",
+      "acceptance": "有效时间与候选时间标签清楚。",
+      "states": [
+        "default",
+        "empty"
+      ]
+    },
+    {
+      "id": "C-accept",
+      "page_ids": [
+        "P-request"
+      ],
+      "feature_ids": [
+        "F-review"
+      ],
+      "kind": "button",
+      "label": "同意改期",
+      "interaction": "action",
+      "purpose": "核定新档并生效。",
+      "behavior": "重新核对档期后决定。",
+      "data_contract": "申请编号、当前状态、新档期实际占用。",
+      "acceptance": "新档时段被占时保留原约。",
+      "states": [
+        "default",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "id": "C-reject",
+      "page_ids": [
+        "P-request"
+      ],
+      "feature_ids": [
+        "F-review"
+      ],
+      "kind": "button",
+      "label": "拒绝改期",
+      "interaction": "action",
+      "purpose": "结束申请并保留原约。",
+      "behavior": "清楚告知本次处理的影响。",
+      "data_contract": "本门店待处理申请以及有效原约。",
+      "acceptance": "客户随后能查到拒绝和原时间。",
+      "states": [
+        "default",
+        "disabled",
+        "error"
+      ]
+    }
+  ],
+  "action_groups": [
+    {
+      "id": "customer-change",
+      "owner_page_id": "P-booking",
+      "feature_ids": [
+        "F-request"
+      ]
+    },
+    {
+      "id": "staff-review",
+      "owner_page_id": "P-request",
+      "feature_ids": [
+        "F-review"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "A-open",
+      "page_id": "P-booking",
+      "component_id": "C-open",
+      "feature_id": "F-request",
+      "target_page_id": "P-change",
+      "name": "申请改期",
+      "permission": "本人可改期的有效预约。",
+      "precondition": "没有待处理申请。",
+      "result": "打开选时页，带入此预约。",
+      "error": "预约状态已变化或当前无法读取。",
+      "recovery": "停在预约详情并重新读取状态。"
+    },
+    {
+      "id": "A-request",
+      "page_id": "P-change",
+      "component_id": "C-submit",
+      "feature_id": "F-request",
+      "name": "提交改期申请",
+      "permission": "本人有效预约",
+      "precondition": "没有待处理申请且已选择仍可申请的新时间。",
+      "result": "创建一笔待确认申请；原约有效，等待阶段不预留新档。",
+      "error": "选择已失效时不创建申请；网络结果未知时按原预约查询。",
+      "recovery": "保留原约和可用输入，重选或查询同一申请后继续。"
+    },
+    {
+      "id": "A-accept",
+      "page_id": "P-request",
+      "component_id": "C-accept",
+      "feature_id": "F-review",
+      "name": "同意改期",
+      "permission": "本店有受理权限的员工",
+      "precondition": "申请待处理，且新档期在确认时仍可用。",
+      "result": "同时确认申请、占用新档并释放原档，客户可查到新有效时间。",
+      "error": "时段冲突则原约不变，申请仍待处理；他人已处理时显示真实结果。",
+      "recovery": "刷新申请，可继续处理或拒绝；结果未知先查当前状态。"
+    },
+    {
+      "id": "A-reject",
+      "page_id": "P-request",
+      "component_id": "C-reject",
+      "feature_id": "F-review",
+      "name": "拒绝改期",
+      "permission": "本店有受理权限的员工",
+      "precondition": "该申请仍待处理。",
+      "result": "记录为已拒绝，原预约继续有效。",
+      "error": "他人已处理时展示已生效的决定。",
+      "recovery": "回到申请记录核实结果，不重复处理。"
+    }
+  ],
+  "journeys": [
+    {
+      "id": "J-accept",
+      "module_ids": [
+        "M-booking",
+        "M-requests"
+      ],
+      "page_ids": [
+        "P-booking",
+        "P-change",
+        "P-request"
+      ],
+      "action_ids": [
+        "A-open",
+        "A-request",
+        "A-accept"
+      ],
+      "expected": "客户查到新时间，门店的待办已结束。",
+      "recovery": "冲突或结果未知时回到同一预约核实，不覆盖有效记录。"
+    },
+    {
+      "id": "J-reject",
+      "module_ids": [
+        "M-booking",
+        "M-requests"
+      ],
+      "page_ids": [
+        "P-booking",
+        "P-change",
+        "P-request"
+      ],
+      "action_ids": [
+        "A-open",
+        "A-request",
+        "A-reject"
+      ],
+      "expected": "客户查到已拒绝及仍有效的原时间。",
+      "recovery": "并发处理时以已记录的结果恢复，客户可按规则重新申请。"
+    }
+  ],
+  "non_ui_features": [],
+  "entries": [
+    {
+      "id": "E-customer-record",
+      "context": "本人预约编号、来源列表的日期筛选和滚动位置。进入时重新核对记录与访问权限。",
+      "label": "预约列表中的一条记录",
+      "source": "客户在“我的预约”列表点开本次预约，本次计数从点入后的页面开始。",
+      "page_id": "P-booking",
+      "return_to": "回到预约列表的原日期、筛选与滚动位置。",
+      "paths": [
+        {
+          "when": "只看有效时间或已有待处理申请",
+          "steps": [],
+          "result": "留在详情看时间和进度，可返回原列表。"
+        },
+        {
+          "when": "允许改期且提交成功",
+          "steps": [
+            {
+              "action_id": "A-open",
+              "page_id": "P-change"
+            },
+            {
+              "action_id": "A-request",
+              "page_id": "P-booking",
+              "history": "return"
+            }
+          ],
+          "result": "回到同一详情，显示待门店确认和仍有效的原时间，再返回时回到列表。"
+        },
+        {
+          "when": "提交时档期已失效",
+          "steps": [
+            {
+              "action_id": "A-open",
+              "page_id": "P-change"
+            },
+            {
+              "action_id": "A-request",
+              "page_id": "P-change"
+            }
+          ],
+          "result": "留在选时页显示过期原因，刷新时段后可重新选择。"
+        },
+        {
+          "when": "选时后放弃",
+          "steps": [
+            {
+              "action_id": "A-open",
+              "page_id": "P-change"
+            },
+            {
+              "back": true,
+              "page_id": "P-booking"
+            }
+          ],
+          "result": "回同一预约，未提交的选择丢弃，原约和申请状态均不变。"
+        }
+      ]
+    },
+    {
+      "id": "E-change",
+      "context": "沿用原预约编号与当前生效时间，进入时读取本店可申请的时段。",
+      "label": "申请改期",
+      "source": "本人预约详情的申请改期按钮。",
+      "source_action_id": "A-open",
+      "page_id": "P-change",
+      "return_to": "返回发起改期的预约详情并恢复原位置。",
+      "paths": [
+        {
+          "when": "成功发出申请",
+          "steps": [
+            {
+              "action_id": "A-request",
+              "page_id": "P-booking",
+              "history": "return"
+            }
+          ],
+          "result": "回看同一个预约，看到已送出、待门店确认。"
+        },
+        {
+          "when": "没有可选时间",
+          "steps": [],
+          "result": "留在选时页，可刷新或返回原预约。"
+        },
+        {
+          "when": "时段已失效",
+          "steps": [
+            {
+              "action_id": "A-request",
+              "page_id": "P-change"
+            }
+          ],
+          "result": "错误贴近原选项，保留上下文供重选。"
+        },
+        {
+          "when": "未提交而返回",
+          "steps": [
+            {
+              "back": true,
+              "page_id": "P-booking"
+            }
+          ],
+          "result": "丢弃临时选择，回预约详情。"
+        }
+      ]
+    },
+    {
+      "id": "E-store-queue",
+      "context": "本店范围、申请编号、来源队列的筛选和滚动位置。只开放授权员工可处理的申请。",
+      "label": "门店待处理记录",
+      "source": "门店人员在本店待处理队列点开一条改期申请。",
+      "page_id": "P-request",
+      "return_to": "回门店队列，保留筛选并刷新已处理记录。",
+      "paths": [
+        {
+          "when": "同意且档期仍可用",
+          "steps": [
+            {
+              "action_id": "A-accept",
+              "page_id": "P-request"
+            }
+          ],
+          "result": "就在此页显示已同意与新有效时间。"
+        },
+        {
+          "when": "拒绝申请",
+          "steps": [
+            {
+              "action_id": "A-reject",
+              "page_id": "P-request"
+            }
+          ],
+          "result": "就在此页显示已拒绝，原时间继续有效。"
+        },
+        {
+          "when": "档期冲突或已由同事处理",
+          "steps": [
+            {
+              "action_id": "A-accept",
+              "page_id": "P-request"
+            }
+          ],
+          "result": "留在同一记录核对最新结果，阻止重复处理。"
+        }
+      ]
+    }
+  ]
+}

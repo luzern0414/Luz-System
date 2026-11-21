@@ -254,18 +254,18 @@ class SessionFlowTests(unittest.TestCase):
             root = tool_root(temp)
             session = prepare_approved_system(root)
             rules = session / "raw" / "00-rules"
-            self.assertEqual(sorted(p.name for p in rules.glob("*.md")), ["interaction.md", "remote-config.md", "system-design.md"])
+            self.assertEqual(sorted(p.name for p in rules.glob("*.md")), ["business-discovery.md", "interaction.md", "remote-config.md", "system-design.md"])
             add_mode(root, session, "visual", skill_root=ROOT, allow_live_crawl_offline=True)
-            self.assertEqual(sorted(p.name for p in rules.glob("*.md")), ["admin-list.md", "interaction.md", "miniprogram.md", "remote-config.md", "system-design.md"])
+            self.assertEqual(sorted(p.name for p in rules.glob("*.md")), ["admin-list.md", "business-discovery.md", "interaction.md", "miniprogram.md", "remote-config.md", "system-design.md"])
             approve_artifact(session, "visual", "02-visual/visual-board.html")
             add_mode(root, session, "prototype", skill_root=ROOT, allow_live_crawl_offline=True, cards=["admin-dashboard"])
             self.assertEqual(sorted(p.name for p in rules.glob("*.md")),
-                             ["admin-dashboard.md", "admin-list.md", "interaction.md", "miniprogram.md", "prototype.md", "remote-config.md", "system-design.md"])
+                             ["admin-dashboard.md", "admin-list.md", "business-discovery.md", "interaction.md", "miniprogram.md", "prototype.md", "remote-config.md", "system-design.md"])
             self.assertTrue((rules / "prototype.md").read_text(encoding="utf-8").startswith("<!-- rules-sha256: "))
             # Named surface cards replace the visual defaults; the stage card always comes with its mode.
             other = create_session(root, "官网", ["system"], skill_root=ROOT, session_kind="system", system_name="官网",
                                    modules=["首页"], cards=["website"])
-            self.assertEqual(sorted(p.name for p in (other / "raw" / "00-rules").glob("*.md")), ["interaction.md", "remote-config.md", "system-design.md", "website.md"])
+            self.assertEqual(sorted(p.name for p in (other / "raw" / "00-rules").glob("*.md")), ["business-discovery.md", "interaction.md", "remote-config.md", "system-design.md", "website.md"])
             hardware = create_session(root, "门店硬件选型清单", ["hardware"], skill_root=ROOT)
             self.assertTrue((hardware / "raw" / "00-rules" / "hardware.md").is_file())
             with self.assertRaises(ValueError) as caught:

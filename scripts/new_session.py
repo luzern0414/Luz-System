@@ -21,8 +21,7 @@ SKILL_ROOT = Path(__file__).resolve().parents[1]
 # The skill holds rules, templates and scripts; every session it creates is an output and lives here.
 OUTPUT_ROOT = Path(r"E:\Skill输出\Luz-System")
 INVALID = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
-# Luz-System owns system design, product visual, interactive prototype and hardware.
-# Posters, brand visuals and document layout belong to Luz-Design (D:\Codes\Luz-Design).
+# System owns product behavior and hardware. The visual and prototype session stages consume Design packages.
 MODE_NAMES = ("system", "visual", "prototype", "hardware")
 OTHER_SKILL_MODES = {"document": "Luz-Design", "poster": "Luz-Design"}
 HW_REQUIREMENTS = """# 硬件需求
@@ -44,7 +43,7 @@ APPROVAL_MODES = ("per_stage", "authorization")
 MODE_CARDS = {"system": "system-design", "prototype": "prototype", "hardware": "hardware"}
 # The closed-loop interaction rules (ui-standards.html 页面交互契约, 功能闭环, 操作反馈) come with the stages that write
 # the architecture and build the prototype; every system with a client writes a configuration list (config-design.html).
-MODE_EXTRA_CARDS = {"system": ("interaction", "remote-config"), "prototype": ("interaction",)}
+MODE_EXTRA_CARDS = {"system": ("business-discovery", "interaction", "remote-config"), "prototype": ("interaction",)}
 DEFAULT_SURFACE_CARDS = ("admin-list", "miniprogram")
 
 # Tab icon and brand mark (Luz-Design references/visual-design.html 网页图标与品牌标识; ui-standards.html 页头):
@@ -79,10 +78,17 @@ def pick_icon(subject: str) -> str:
     return next((icon for words, icon in ICON_KEYWORDS if any(w in lowered for w in words)), "grid")
 
 
-def theme_colors(subject: str, theme: str | None = None, themes_json: Path = THEMES_JSON) -> tuple[str, str]:
+def theme_colors(subject: str, theme: str | None = None, themes_json: Path = THEMES_JSON, *, product_seed: bool = False) -> tuple[str, str]:
     """(primary, lightest tint) of the theme named or matched from the subject; neutral blue when none matches."""
     try:
-        themes = json.loads(themes_json.read_text(encoding="utf-8")).get("themes", {})
+        data = json.loads(themes_json.read_text(encoding="utf-8"))
+        if product_seed:
+            design_scripts = SKILL_ROOT.parent / "Luz-Design" / "scripts"
+            if str(design_scripts) not in sys.path:
+                sys.path.append(str(design_scripts))
+            from export_tokens import application_themes
+            data = application_themes(data)
+        themes = data.get("themes", {})
     except (OSError, ValueError):
         return FALLBACK_COLORS
     lowered = subject.casefold()
@@ -99,8 +105,8 @@ def theme_colors(subject: str, theme: str | None = None, themes_json: Path = THE
     return FALLBACK_COLORS
 
 
-def tab_icon_svg(subject: str, *, icon: str | None = None, theme: str | None = None, attrs: str = "") -> str:
-    primary, tint = theme_colors(subject, theme)
+def tab_icon_svg(subject: str, *, icon: str | None = None, theme: str | None = None, attrs: str = "", product_seed: bool = False) -> str:
+    primary, tint = theme_colors(subject, theme, product_seed=product_seed)
     shapes = TAB_ICONS[icon or pick_icon(subject)]
     head = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"{attrs}>'
     return (head + f'<rect width="32" height="32" rx="8" fill="{tint}"/>'
@@ -280,7 +286,7 @@ def init_mode(skill_root: Path, session: Path, mode: str, *, system_name: str | 
         else:
             prototype = "\n".join(line for line in prototype.split("\n") if line.strip() != AGENT_PART_MARK)
         manifest = json.loads((session / "99-delivery" / "MANIFEST.json").read_text(encoding="utf-8"))
-        prototype = (fill_icon_slots(prototype, session_subject(session))
+        prototype = (fill_icon_slots(prototype, session_subject(session), product_seed=True)
             .replace("{{SYSTEM_NAME}}", html.escape(str(manifest.get("system_name", "交互原型"))))
             .replace("{{ARCHITECTURE_SHA256}}", architecture_hash)
             .replace("{{ACTION_ID}}", action_ids[0])
@@ -488,12 +494,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--system-name", help="Required in system mode; provide the exact system name supplied by the user")
     parser.add_argument("--modules", help="Comma-separated exact module names supplied by the user")
     parser.add_argument("--root", help="Output root override, primarily for tests")
-    parser.add_argument("--card", action="append", help="Extra rule card for this task (repeatable): system-design, client-docs, function-list, admin-list, admin-dashboard, admin-form, miniprogram, agent-ui, agent-runtime-ui, platform-console, queue-capacity, scheduler-ui, alert-loop, rule-engine-ui, multi-agent, kb-console, workflow-canvas, website, prototype, hardware, interaction, agent-composer, interaction-patterns, nav-levels; each mode adds its own card (system and prototype also add interaction)")
+    parser.add_argument("--card", action="append", help="Extra rule card for this task (repeatable): business-discovery, system-design, client-docs, function-list, admin-list, admin-dashboard, admin-form, miniprogram, agent-ui, agent-runtime-ui, platform-console, queue-capacity, scheduler-ui, alert-loop, rule-engine-ui, multi-agent, kb-console, workflow-canvas, website, prototype, hardware, interaction, agent-composer, interaction-patterns, nav-levels; each mode adds its own card (system and prototype also add interaction)")
     parser.add_argument("--approval-mode", choices=APPROVAL_MODES, default="per_stage",
                         help="per_stage (default): a person approves each stage; authorization: a platform demo session where a "
                              "person signs one authorization before generation (APPROVALS.json authorizations)")
     parser.add_argument("--project", help="Project task: the project's state root, project directory or Luz-Project session folder "
                         f"(default: the environment variable {project_link.ENV_VAR}). The session then holds process files only; the files in the project's docs are made by Luz-Project (project.py document / client ...), publish.py refuses")
+    parser.add_argument("--stage", help="项目当前业务阶段，默认取项目状态")
     args = parser.parse_args(argv)
     root = Path(args.root).resolve() if args.root else OUTPUT_ROOT
     kind = args.session_kind
@@ -501,6 +508,10 @@ def main(argv: list[str] | None = None) -> int:
         kind = "system"
     try:
         project = project_link.load(args.project)
+        if args.stage:
+            if not project:
+                raise ValueError("--stage 需要项目上下文")
+            project["stage"] = args.stage
         folder = create_session(
             root,
             args.name,
@@ -517,8 +528,9 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     print(str(folder))
     if project:
+        command = "project.py build" if project.get("workflow") == "commercial-v1" else "project.py document / client"
         print(f"PROJECT: 本会话只放过程文件（raw）；{project['deliver_root']}\\docs 里的文件由 Luz-Project 的命令生成"
-              "（project.py document / client …，用户逐个审批），publish.py 在项目任务里不写 docs", file=sys.stderr)
+              f"（{command}，文件与确认批次以 project.py next 为准），publish.py 在项目任务里不写 docs", file=sys.stderr)
     print_card_hint(folder)
     return 0
 

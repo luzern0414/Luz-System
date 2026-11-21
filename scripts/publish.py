@@ -275,6 +275,9 @@ PROJECT_STAGE_DOCS = {
 def project_refusal(stage: str, project: dict) -> str:
     """Why a project session does not publish, and the Luz-Project command that makes the file of this stage."""
     target = project.get("state_root") or "<项目>"
+    if project.get("workflow") == "commercial-v1":
+        return (f"商业项目由 Luz-Project 按批次交付。运行 project.py next \"{target}\" 查看已确认输入、本批成果与下一步。"
+                "System 将合同与自检结果交给阶段负责人。")
     head = ("publish refused, project mode: 项目任务不由 publish.py 写 docs（也不再要求会话里的 APPROVALS.json）；docs 里的文件由 Luz-Project 生成，"
             "用户在那里逐个审批（project.py next / approve --doc）。")
     if stage in PROJECT_STAGE_DOCS:

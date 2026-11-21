@@ -650,10 +650,26 @@ def render() -> None:
     notes = load_notes(NOTES)["notes"]
     src = {s["id"]: s for s in sources}
     lines = ["# Luz System 经验库", "",
-             "每次调用开始先读本页并运行 `py -X utf8 scripts/experience.py search`；能复用的来源用 `reuse` 复制进会话，只为缺口做新的调研。"
-             "每次调用结束用 `note` 记下偏好、教训与有效信息（同一主题替换原条），交付后运行 `harvest` 与 `add` 沉淀新经验。本页由 `scripts/experience.py` 生成，修改请改 JSON。", ""]
+             "每次调用先运行 `py -X utf8 scripts/experience.py search <关键词>`，核对当前模块与业务条件。可复用的来源用 `reuse` 复制进会话。用户要求搜索或证据不足时用 Luz-Crawl。"
+             "结束用 `note` 写入或确认同键经验，交付后可用 `harvest` 与 `add` 记录其他来源和模式。命令会同步更新本页。", ""]
+    lines += ["## 按模块查经验", "",
+              "从真实办理、字段、读写责任及状态变化中记录经验。先用模块名和问题检索，例如 `py -X utf8 scripts/experience.py search 改期受理 布局`。",
+              "用已有的 `note` 命令写回，键取 `模块-模块名-维度-问题`，依据写进 `--why`。同键复用可确认或修订。项目经验带 `--scope project`，后续采用前核对条件。", "",
+              "| 模块 | 维度与问题 | 可复用做法 | 依据与适用条件 | 最近确认 |", "|---|---|---|---|---|"]
+    module_keys = set()
+    for item in sorted(notes, key=lambda n: n["key"]):
+        parts = item["key"].split("-", 3)
+        if len(parts) != 4 or parts[0] != "模块" or not all(parts):
+            continue
+        _, module, aspect, topic = parts
+        scope = {"project": "仅该项目", "maintenance": "技能维护"}.get(item.get("scope"), item.get("scope") or "通用")
+        basis = item.get("why") or "待复核"
+        cells = (module, f"{aspect} · {topic}", item["text"], f"{scope}。{basis}", item["last_confirmed"])
+        lines.append("| " + " | ".join(str(v).replace("|", "&#124;").replace("\n", " ") for v in cells) + " |")
+        module_keys.add(item["key"])
+    lines.append("")
     for kind, label in NOTE_KINDS.items():
-        group = sorted((n for n in notes if n["kind"] == kind), key=lambda n: n["key"])
+        group = sorted((n for n in notes if n.get("kind") == kind and n["key"] not in module_keys), key=lambda n: n["key"])
         if not group:
             continue
         lines += [f"## {label}（{len(group)}/{NOTE_CAPS[kind]}）", ""]

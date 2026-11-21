@@ -36,6 +36,17 @@ class NotesTest(unittest.TestCase):
     def notes(self) -> list[dict]:
         return experience.load_notes(experience.NOTES)["notes"]
 
+    def test_module_note_is_findable_and_keeps_its_scope_in_markdown(self):
+        key = "模块-改期受理-数据结构-有效时间"
+        experience.note("fact", key, "本例保存原时段", "对照申请 | 预约。", scope="project")
+        experience.note("fact", key, "本例保存当前有效时段", "对照申请 | 预约。", scope="project")
+        found = experience.search_notes(experience.load_notes(experience.NOTES), ["改期受理", "数据结构"])
+        self.assertEqual([n["key"] for n in found], [key])
+        catalog = experience.CATALOG.read_text(encoding="utf-8")
+        self.assertEqual(catalog.count("| 改期受理 | 数据结构 · 有效时间 |"), 1)
+        self.assertIn("仅该项目。对照申请 &#124; 预约。", catalog)
+        self.assertNotIn("本例保存原时段", catalog)
+
     def test_same_key_replaces_and_keeps_one_previous(self) -> None:
         self.assertEqual(experience.note("preference", "表头对齐", "表头左对齐")[0], "added")
         self.assertEqual(experience.note("preference", "表头对齐", "表头与数据居中")[0], "replaced")

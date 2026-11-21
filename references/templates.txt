@@ -287,52 +287,15 @@ main{width:min(1120px,calc(100% - 40px));margin:0 auto;padding:48px 0 72px}h1{ma
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{SYSTEM_NAME}}</title>
 <link rel="icon" href="{{TAB_ICON}}">
-<script>
-// 外观（浅色与深色两套主题）：先于样式执行。读本机记住的选择（键 luz-theme，取值 light / dark，没有这个键即“跟随系统”），
-// 选了浅色或深色就设置 <html data-theme>，跟随系统时移除该属性，由 prefers-color-scheme 决定；三个 role="radio" 按钮是控件，window.luzTheme.set('system' | 'light' | 'dark') 也可调用。
-(function () {
-  var KEY = "luz-theme", root = document.documentElement, GROUP = '[role="radiogroup"][aria-label="外观"] [role="radio"]';
-  function get() { try { var v = localStorage.getItem(KEY); return v === "light" || v === "dark" ? v : "system"; } catch (e) { return "system"; } }
-  function apply(mode) { if (mode === "light" || mode === "dark") { root.setAttribute("data-theme", mode); } else { root.removeAttribute("data-theme"); } }
-  function sync() {
-    var mode = get();
-    document.querySelectorAll(GROUP).forEach(function (b) { var on = b.getAttribute("data-theme-mode") === mode; b.setAttribute("aria-checked", String(on)); b.tabIndex = on ? 0 : -1; });
-  }
-  function set(mode) {
-    try { if (mode === "light" || mode === "dark") { localStorage.setItem(KEY, mode); } else { localStorage.removeItem(KEY); } } catch (e) {}
-    apply(mode);
-    sync();
-  }
-  apply(get());
-  window.luzTheme = { get: get, set: set };
-  document.addEventListener("DOMContentLoaded", sync);
-  document.addEventListener("click", function (e) { var b = e.target.closest && e.target.closest(GROUP); if (b) { set(b.getAttribute("data-theme-mode")); } });
-  document.addEventListener("keydown", function (e) {
-    var keys = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }, b = e.target.closest && e.target.closest(GROUP);
-    if (!b || !(e.key in keys)) { return; }
-    var all = Array.prototype.slice.call(b.parentNode.querySelectorAll('[role="radio"]')), next = all[(all.indexOf(b) + keys[e.key] + all.length) % all.length];
-    e.preventDefault();
-    next.focus();
-    set(next.getAttribute("data-theme-mode"));
-  });
-})();
-</script>
 <style>
-:root{color-scheme:light;--canvas:#f7f9fc;--surface:#fff;--ink:#172033;--muted:#526071;--line:#d9e2eb;--accent:#245b83;--soft:#e8f1f8;--on-accent:#fff;--accent-text:#245b83;--disabled-bg:#d5dde5;--disabled-ink:#4a5562;--faint:#6b7785;--edge:#3d495a;--danger:#a8071a;--danger-tint:#fff1f0;--danger-edge:#ffccc7;--warning-tint:#fff7e6;--warning-edge:#ffd591}
-/* 第二套主题（深色）：取主题库 themes.json 的 dark 映射与 shared.dark（canvas、surface、ink、ink2、line、action、onAction、actionText、actionTint、状态色与 Tint），下面是 ai-agent 的示例值；
-   换主题时整块换成该主题的 dark 值，两处写同一份变量。浅色是基准，深色不是浅色取反。 */
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--canvas:#0D101A;--surface:#191C28;--ink:#F5EFEA;--muted:#DCD1CF;--line:#343947;--accent:#576AE1;--soft:#232944;--on-accent:#fff;--accent-text:#A8BBFF;--disabled-bg:#2B2E39;--disabled-ink:#B2AAA8;--faint:#B2AAA8;--edge:#DCD1CF;--danger:#FF9191;--danger-tint:#3B1C1C;--danger-edge:#804545;--warning-tint:#382009;--warning-edge:#764D25}}
-:root[data-theme="dark"]{color-scheme:dark;--canvas:#0D101A;--surface:#191C28;--ink:#F5EFEA;--muted:#DCD1CF;--line:#343947;--accent:#576AE1;--soft:#232944;--on-accent:#fff;--accent-text:#A8BBFF;--disabled-bg:#2B2E39;--disabled-ink:#B2AAA8;--faint:#B2AAA8;--edge:#DCD1CF;--danger:#FF9191;--danger-tint:#3B1C1C;--danger-edge:#804545;--warning-tint:#382009;--warning-edge:#764D25}
-:root[data-theme="light"]{color-scheme:light}
+:root{color-scheme:light;--canvas:#fff;--surface:#fff;--ink:#172033;--muted:#526071;--line:#d9e2eb;--accent:#245b83;--soft:#e8f1f8;--on-accent:#fff;--accent-text:#245b83;--disabled-bg:#d5dde5;--disabled-ink:#4a5562;--faint:#6b7785;--edge:#3d495a;--danger:#a8071a;--danger-tint:#fff1f0;--danger-edge:#ffccc7;--warning-tint:#fff7e6;--warning-edge:#ffd591}
 *{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:16px/1.55 "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif}main{width:min(980px,calc(100% - 40px));margin:0 auto;padding:44px 0}h1{margin:0 0 28px;font-size:32px}h2{margin:0 0 14px;font-size:22px}section{margin:0 0 18px;padding:22px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}button{min-height:44px;padding:10px 16px;border:0;border-radius:9px;background:var(--accent);color:var(--on-accent);font:inherit;cursor:pointer}[disabled]{background:var(--disabled-bg);color:var(--disabled-ink);cursor:not-allowed}.view{padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--canvas)}.state{display:inline-block;margin:5px;padding:5px 9px;border:1px solid var(--line);border-radius:99px;background:var(--surface)}@media(max-width:720px){main{width:min(100% - 28px,980px)}h1{font-size:28px}}
 .brand{display:flex;align-items:center;gap:12px}.brand-mark{flex:0 0 auto;width:32px;height:32px}section>svg{display:block;width:24px;height:24px;margin-bottom:12px;color:var(--accent-text)}
 .table-wrap{max-height:520px;margin-top:12px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .list-table{width:100%;border-collapse:collapse;font-size:14px;line-height:22px}.list-table th,.list-table td{padding:11px 16px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}.list-table td:first-child{text-align:left}.list-table th{position:sticky;top:0;background:var(--soft);font-weight:600}
 .pagination{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;margin:12px 0 16px;font-size:14px}.pagination button{min-height:32px;min-width:32px;padding:0 8px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font-size:14px}.pagination button[aria-current="page"]{border-color:var(--accent);background:var(--accent);color:var(--on-accent);font-weight:600}.pagination button[disabled]{background:var(--surface);color:var(--faint)}.pagination select,.pagination input{height:32px;padding:0 8px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:inherit}.pg-pages{display:flex;gap:8px}.pg-gap{min-width:32px;text-align:center;color:var(--muted)}.pg-jump input{width:64px;margin:0 6px}
 *{-webkit-tap-highlight-color:transparent}:focus-visible{outline:2px solid var(--ink);outline-offset:2px}input,select,textarea{outline:0}input:focus-visible,select:focus-visible,textarea:focus-visible{outline:0}input:focus,select:focus,textarea:focus{border-color:var(--edge)}
-.cfg{display:flex;flex-wrap:wrap;align-items:center;gap:12px}.cfg-label{font-weight:600}
 .seg{display:inline-flex;overflow:hidden;border:1px solid var(--line);border-radius:9px}.seg [role="radio"]{min-height:40px;padding:0 16px;border:0;border-radius:0;background:var(--surface);color:var(--ink)}
-.seg [role="radio"]+[role="radio"]{border-left:1px solid var(--line)}.seg [role="radio"][aria-checked="true"]{background:var(--soft);color:var(--accent-text);font-weight:600}
 </style>
 </head>
 <body>
@@ -347,9 +310,9 @@ main{width:min(1120px,calc(100% - 40px));margin:0 auto;padding:48px 0 72px}h1{ma
 <div class="pagination" data-page-size="20" aria-label="分页">
 <span class="pg-total">共 <span id="pg-total">0</span> 条</span>
 <select id="pg-size" aria-label="每页条数"><option value="10">10 条/页</option><option value="20" selected>20 条/页</option><option value="50">50 条/页</option><option value="100">100 条/页</option></select>
-<button type="button" id="pg-prev" data-arg="上一页" data-action-id="{{ACTION_ID}}" data-page-id="{{PAGE_ID}}" aria-label="上一页">‹</button>
+<button type="button" id="pg-prev" data-arg="上一页" data-action-id="{{ACTION_ID}}" data-page-id="{{PAGE_ID}}" aria-label="上一页">上一页</button>
 <span class="pg-pages" id="pg-pages"></span>
-<button type="button" id="pg-next" data-arg="下一页" data-action-id="{{ACTION_ID}}" data-page-id="{{PAGE_ID}}" aria-label="下一页">›</button>
+<button type="button" id="pg-next" data-arg="下一页" data-action-id="{{ACTION_ID}}" data-page-id="{{PAGE_ID}}" aria-label="下一页">下一页</button>
 <label class="pg-jump" id="pg-jump">跳至<input type="number" min="1" id="pg-jump-input" aria-label="页码">页</label>
 </div>
 </div>
@@ -361,15 +324,6 @@ main{width:min(1120px,calc(100% - 40px));margin:0 auto;padding:48px 0 72px}h1{ma
 <button type="button" data-action-id="{{ACTION_ID}}" data-page-id="{{PAGE_ID}}" data-state-kind="禁用" disabled>禁用</button>
 </section>
 <!-- AGENT_PART -->
-<section id="prototype-config" aria-labelledby="config-title">
-<h2 id="config-title">场景配置</h2>
-<div class="cfg"><span class="cfg-label">全局 · 外观</span>
-<div class="seg" role="radiogroup" aria-label="外观">
-<button type="button" role="radio" aria-checked="true" data-theme-mode="system">跟随系统</button>
-<button type="button" role="radio" aria-checked="false" data-theme-mode="light">浅色</button>
-<button type="button" role="radio" aria-checked="false" data-theme-mode="dark">深色</button>
-</div></div>
-</section>
 </main>
 <script>
 // List pagination (admin-design.html 分页): default 20, 10/20/50/100 条/页, page and page_size kept in the address,
