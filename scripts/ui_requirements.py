@@ -85,10 +85,22 @@ def ownership_errors(data, groups):
                 errors.append(f'{feature}: assigned multiple action groups within {scopes[owner]}')
             homes[pair] = owner
 
+    operations = {}
     for action in groups['actions'].values():
         key, feature, page = action['id'], action.get('feature_id'), action.get('page_id')
         if not text(page) or page not in pages:
             continue  # the ordinary action validator reports this
+        if 'operation_id' in action:
+            operation = action['operation_id']
+            if not text(operation):
+                errors.append(f'{key}: operation_id must name a business operation')
+            else:
+                operation = operation.strip()
+                pair = (scopes[page], operation)
+                if pair in operations:
+                    errors.append(f'{key}: operation {operation} is already declared by {operations[pair]}')
+                else:
+                    operations[pair] = key
         if not text(feature) or feature not in groups['features']:
             errors.append(f'{key}: feature_id must identify the function performed or opened')
             continue
@@ -277,6 +289,56 @@ def module_detail_errors(data, groups):
     return errors
 
 
+def tab_navigation_errors(data, groups):
+    """Check explicitly declared tab roots and keep each role's task in one tab."""
+    pages = groups['pages']
+    scopes = {pid: page.get('entry_scope', 'default') for pid, page in pages.items()}
+    tab_scopes = {scopes[pid] for pid, page in pages.items() if 'tab_root_id' in page and text(scopes[pid])}
+    if not tab_scopes:
+        return []
+    errors, tabs = [], {}
+    for pid, page in pages.items():
+        scope, root = scopes[pid], page.get('tab_root_id')
+        if not text(scope) or scope not in tab_scopes:
+            continue
+        if (not text(root) or root not in pages or pages[root].get('tab_root_id') != root
+                or scopes[root] != scope):
+            errors.append(f'{pid}: tab_root_id must reference a root in the same entry_scope')
+            continue
+        tabs[pid] = root
+        if root == pid and page.get('parent_page_id') is not None:
+            errors.append(f'{pid}: tab root must not have a parent_page_id')
+
+    entries = data.get('entries')
+    if not isinstance(entries, list):
+        entries = []
+    independent_entries = {
+        row['page_id'] for row in entries
+        if isinstance(row, dict) and 'source_action_id' not in row and text(row.get('page_id'))
+    }
+    for pid, root in tabs.items():
+        parent = pages[pid].get('parent_page_id')
+        if text(parent) and parent in tabs and tabs[parent] != root:
+            errors.append(f'{pid}: parent_page_id crosses tab roots')
+        if pid == root and pid not in independent_entries:
+            errors.append(f'{pid}: tab root needs an independent entry')
+
+    for aid, action in groups['actions'].items():
+        page, target = action.get('page_id'), action.get('target_page_id')
+        if text(page) and page in tabs and text(target) and target in pages and tabs.get(target) != tabs[page]:
+            errors.append(f'{aid}: action crosses tab roots')
+
+    for jid, journey in groups['journeys'].items():
+        scope_roots = {}
+        page_ids = journey.get('page_ids')
+        for pid in page_ids if isinstance(page_ids, list) else []:
+            if text(pid) and pid in tabs:
+                scope, root = scopes[pid], tabs[pid]
+                if scope_roots.setdefault(scope, root) != root:
+                    errors.append(f'{jid}: journey spans multiple tab roots in {scope}')
+    return errors
+
+
 def entry_errors(data, groups):
     """Follow each entrance one screen at a time. A role handoff starts a separate entrance."""
     entries = data.get('entries')
@@ -296,6 +358,7 @@ def entry_errors(data, groups):
             errors.append(f'{eid}: unknown landing page')
             continue
         scope = pages[first].get('entry_scope', 'default')
+        tab_root = pages[first].get('tab_root_id')
         origin = None
         if 'source_action_id' in entry:
             aid = entry['source_action_id']
@@ -304,6 +367,9 @@ def entry_errors(data, groups):
             if (action.get('target_page_id') != first or not text(origin) or origin not in pages
                     or pages[origin].get('entry_scope', 'default') != scope):
                 errors.append(f'{eid}: source_action_id must open the landing page in the same role')
+                continue
+            if pages[origin].get('tab_root_id') != tab_root:
+                errors.append(f'{eid}: source_action_id crosses tab roots')
                 continue
             used_navigation.add(aid)
         reached.add(first)
@@ -324,6 +390,9 @@ def entry_errors(data, groups):
                 target = step.get('page_id')
                 if not text(target) or target not in pages or pages[target].get('entry_scope', 'default') != scope:
                     errors.append(f'{eid}: unknown destination or cross-role page in path')
+                    break
+                if pages[target].get('tab_root_id') != tab_root:
+                    errors.append(f'{eid}: path crosses tab roots')
                     break
                 triggers = [k for k in ('action_id', 'back', 'event') if k in step]
                 if len(triggers) != 1 or ('back' in step and 'history' in step):
@@ -402,9 +471,12 @@ def entry_view(data, entry_id):
         groups = [{'goal': s['goal'], 'controls': [labels[c] for c in s['component_ids']]} for s in page['sections']]
         screens.append({k: page[k] for k in ('id','title','goal','entry','focus','exit','states')}
                        | {'ordered_content': groups, 'primary_action': page.get('primary_action')})
-    return {k: entry[k] for k in ('id','label','source','context','return_to')} | {
+    result = {k: entry[k] for k in ('id','label','source','context','return_to')} | {
         'entry_scope': pages[first].get('entry_scope', 'default'), 'landing_page': first,
         'page_count': len(screens), 'pages': screens, 'paths': branches}
+    if 'tab_root_id' in pages[first]:
+        result['tab_root_id'] = pages[first]['tab_root_id']
+    return result
 
 
 def module_view(data, module_id):
@@ -594,12 +666,15 @@ def validate(data, *, require_page_structure=False, require_module_details=False
         errors.extend(page_structure_errors(data, groups))
     if data.get('page_structure_version') == 2:
         errors.extend(module_detail_errors(data, groups))
+        errors.extend(tab_navigation_errors(data, groups))
         errors.extend(entry_errors(data, groups))
         for pid, page in groups['pages'].items():
             if not text(page.get('title')):
                 errors.append(f'{pid}: title must name this screen in the entrance path')
     elif require_module_details:
         errors.append('page_structure_version 2 is required for module details')
+    if data.get('page_structure_version') != 2 and any('tab_root_id' in page for page in groups['pages'].values()):
+        errors.append('page_structure_version 2 is required to declare tab roots')
     return list(dict.fromkeys(errors))
 
 

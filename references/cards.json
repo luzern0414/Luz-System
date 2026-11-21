@@ -11,16 +11,19 @@
       "preference_keywords": ["业务推导", "模块归属", "业务闭环"],
       "sections": [
         {"page":"system-design.html","title":"系统设计规范","path":["核心规则","从需求推导业务"]},
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","成熟系统与界面取证"]},
         {"page":"system-design.html","title":"系统设计规范","path":["核心规则","逐模块设计与经验"]},
         {"page":"system-design.html","title":"系统设计规范","path":["核心规则","从入口推到实际页面"]},
         {"page":"system-design.html","title":"系统设计规范","path":["核心规则","业务模块与规则归属"]},
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","业务逻辑与结果"]},
         {"page":"system-design.html","title":"系统设计规范","path":["核心规则","页面模块与控件"]},
+        {"page":"ui-standards.html","title":"界面通用规范","path":["核心规则","二、功能架构","入口与内容分层","一级标签与任务边界"]},
         {"page":"handoff.md","title":"交接","path":["页面结构与控件"]}
       ],
       "tools": [
         "商业项目的 scope 由 System 调 Crawl 真实搜索，两份 PDF 同批。design 由 System 主持，Dev 和 Design 协作四份 HTML。第二批确认后 Design 带用户走 demo，第三次确认后再生成四份基线文件。见 WORKFLOW.md 商业项目。",
         "范围未定时先在对话中给出候选和待决事项。新合同用 scripts/ui_requirements.py <合同> --require-module-details；用 --module <模块编号> 读同一模块的五项。开始查 experience.py search <模块> <问题>，结束用 note 更新经验目录。"],
-      "checks": ["每页能从第一组读到结果；每个功能性文字、图片、输入和动作能追到本页组与业务功能。跨角色场景核对移交和异常。"]
+      "checks": ["每页能从第一组读到结果；每个功能性文字、图片、输入和动作能追到本页组与业务功能。逐个一级标签走入口、办理、结果和返回；跨角色按各自入口走交接和异常。"]
     },
     "system-design": {
       "title": "系统设计（需求 → 模块范围 → 架构 → 系统设计页）",
@@ -44,7 +47,9 @@
         "运行时"
       ],
       "sections": [
-        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","从需求推导业务"]},
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","成熟系统与界面取证"]},
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","架构视图与部署"]},
+        {"page":"system-design.html","title":"系统设计规范","path":["核心规则","业务逻辑与结果"]},
         {
           "page": "system-design.html",
           "title": "系统设计规范",
@@ -98,20 +103,6 @@
           "path": [
             "核心规则",
             "架构的交互字段"
-          ]
-        },
-        {
-          "page": "system-design.html",
-          "title": "系统设计规范",
-          "path": [
-            "平台矩阵"
-          ]
-        },
-        {
-          "page": "system-design.html",
-          "title": "系统设计规范",
-          "path": [
-            "输出契约"
           ]
         },
         {
@@ -178,6 +169,7 @@
       ],
       "tools": [
         "商业项目的 scope 由 System 调 Crawl 真实搜索，两份 PDF 同批。design 由 System 主持，Dev 和 Design 协作四份 HTML。第二批确认后 Design 带用户走 demo，第三次确认后再生成四份基线文件。见 WORKFLOW.md 商业项目。",
+        "范围与页面尚需推导时同读 business-discovery。各阶段和分端产物按 WORKFLOW.md 及系统设计规范的平台矩阵和输出契约。",
         "先读 ../Luz-Design/references/component-reuse.md；System 合同用 ui_requirements.py 检查，新前端由 Design 用 frontend.py init/seal/review/check 核实证据，已登记的旧包按原合同检查。",
         "System 定义已确认的页面、动作、权限、数据、状态和组件能力。Design 优先沿用现有框架和成熟组件，本地缺口交 Crawl 查官方来源。布局与业务连接按需实现，复杂控件确需自研时记录来源、理由和针对性验证。用户限定来源或变更超出已确认范围时先征得确认，显式 source-locked 遵守约定的可改内容。",
         "建会话：`py -X utf8 scripts/new_session.py --name \"<名称>\" --modes system --system-name \"<系统名>\" --modules \"<模块1>,<模块2>\"`（有现场设备用 `--modes system,hardware`）；生成 BRIEF、模块确认页 `raw/01-system/01-module-intake.html` 与本卡，模块由人批准后才往下做",
@@ -200,6 +192,7 @@
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <系统设计页.html>` 零 ERROR（阅读页的版式按 Luz-Design 文件设计规范“网页文件 › 排版参数”，不加 --allow interface）",
         "独立会话：模块、架构、系统设计各由人批准，`raw/99-delivery/APPROVALS.json` 记录哈希；脚本和模型不能代替批准。既有逐文件项目模式：`01-系统架构.html` 由用户经 `project.py approve --doc` 逐个审批，会话里的批准账本不替代它",
         "浏览器 1440 与 390 宽打开系统设计页：第一行是主标题、无说明文字、手机上可操作",
+        "功能合同标出各一级标签归属。走相同端、角色和对象的主入口、成功、失败及返回，核对任务在同一栈完成、正式动作唯一。角色换手分别走入口并核对同一单据。",
         "`py -X utf8 scripts/check_interaction.py <会话目录>` 零 ERROR（写了交互契约的架构缺项即报错），WARN 逐条处理或在架构里写明理由"
       ]
     },
@@ -1290,7 +1283,7 @@
         "来源锁定任务的行为/状态要求只核对原来源已有能力，不为通过旧通用卡改结构、样式、脚本或资产。功能不匹配另选已核验完整来源或记缺口。",
         "`py -X utf8 scripts/validate_session.py <会话目录>` 零 ERROR",
         "`py -X utf8 D:\\Codes\\Luz-Design\\scripts\\check_document.py <页面.html> --allow interface` 零 ERROR",
-        "浏览器在 390 宽逐个标签与二级页走一遍：只有标签栏切换标签、各标签保留自己的页面栈、二级页返回打开它的页面",
+        "浏览器在 390 宽逐个标签与二级页走一遍，真机复核原生路由：用户在标签栏切换，各标签在所属栈办理、回查与恢复。按约定恢复对象、筛选、滚动及草稿。",
         "视觉层的验收（聚焦框、字体与图标、对比度、点击区域、组件库的真实组件）按上面所读 Luz-Design 规则卡里的检查执行，本卡不重复",
         "外观与主题按已确认需求和来源能力确定，不默认要求双主题或外观三选一。验证所有实际支持的主题；仅在已确认需求要求时检查主题切换和选择记忆，要求浅色与深色时分别验收两套。取值由 Luz-Design 规则卡 `interface-components` 规定；需要深色审计时运行 `py -X utf8 D:\\Codes\\Luz-Design\\scripts\\audit_rendered.py <页面.html> --scheme dark`（页面靠 `data-theme` 属性切换主题时加 `--dark-attr data-theme=dark`），浅色按实际支持情况验收。显式 source-locked 保留来源能力，不为通过通用规则新增主题或控件。",
         "完整可配置模板库逐页记录：来源/版本/许可/平台、入口目标、动作与具体结果、关闭返回、原生参数、依赖和未覆盖范围；新增模板显示于对应端的真实配置与预览。不能只测首页或用成功提示代替保存。",

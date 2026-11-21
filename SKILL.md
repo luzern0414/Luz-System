@@ -15,7 +15,9 @@ description: 从模糊需求推导 Luz 系统的业务模块、角色、规则�
 
 商业项目先读 `project.py next` 与 `project.py context <项目> <阶段> --skill luz-system`。System 主持范围和设计两批，详见[商业项目](WORKFLOW.md#商业项目)。独立设计由本会话审批，既有项目沿用创建时的矩阵。
 
-每个用户入口按[从入口推到实际页面](references/system-design.html#entry-pages)交一份可走查的路径。逐分支给出该角色会看到几种页面、每页承担哪个任务及从上到下有什么内容、何处跳转或就地反馈、办完与返回各到哪里。运行 `ui_requirements.py <合同> --entry <入口编号>` 可展开页面和内容。
+每个用户入口按[从入口推到实际页面](references/system-design.html#entry-pages)交可走查路径。各页只承担一个主要职责，同一端与角色中的同一业务动作有一个正式办理位置。一级标签的办理、结果与返回在本栈完成，用户通过一级导航主动切换，其他角色从自己的待办接手。运行 `ui_requirements.py <合同> --entry <入口编号>` 可展开页面、内容与标签归属。
+
+商业系统先核对[成熟系统与界面取证](references/system-design.html#research-evidence)，再完成角色和功能、[架构视图与部署](references/system-design.html#architecture-views)、[业务逻辑与结果](references/system-design.html#business-logic)。功能编号连接入口、规则、接口、状态、数据与验收结果。仓储的完整示例与检查表见[系统设计规范](references/handbooks/系统设计规范.pdf)。
 
 按[逐模块设计与经验](references/system-design.html#module-sheet)写清每个模块的功能逻辑、业务数据结构、页面布局顺序、交互和完整流程。开始时查[模块经验](experience/catalog.md#按模块查经验)，用 `experience.py search <模块名> <问题>` 找可复用的判断。五项均可按具体缺口调用 Luz-Crawl，结论回到相应模块。结束用 `experience.py note` 更新同一份经验 Markdown，记录依据、适用范围和下次怎样复核。
 

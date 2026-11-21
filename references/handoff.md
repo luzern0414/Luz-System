@@ -26,14 +26,17 @@ It must contain stable references to:
 | `modules[].data_objects[]` | 每个对象用合同内唯一的 `id`、业务名称 `name`、唯一标识字段名 `identity`、读写权限 `access` 和 `fields[]` 定义。逐字段写 `name, type, source, rule`。规则按需交代必填、缺失、值域、单位及更新时机，引用合同内对象用 `reference` 指向其编号，关系数量写入字段规则。只读外部信息或无业务数据的模块可列空数组，在 `data_note` 说明来源或原因。 |
 | `journeys[].module_ids` | 列出实际参与流程的模块，包含各动作的所属模块。只读模块也可以参与。纯后台模块可在 `internal_flow` 写触发、输入、业务结果和失败处理，在 `non_ui_features` 留下没有页面的原因。 |
 | `entries[]` 与 `pages[].title` | 每个入口写 `id, label, source, context, page_id, return_to`（编号、名称、来源、带入的对象或筛选、落地页、回程）。合同内跳转按钮作为入口时用 `source_action_id` 绑定真实动作。每页有可理解的名称 `title`。 |
+| 带一级标签的页面 | 同端、同角色工作区内共用一个 `entry_scope`。所有标签及其子页用 `tab_root_id` 指向所属一级页，一级页指向自身。为每个根登记独立入口，`source` 写一级导航，省略 `source_action_id`。用户主动切换标签属于导航操作，办理按钮与事件保留在当前栈。 |
 | 同一路由内的不同屏 | 向导或原生应用的两个屏幕可以共用同一 `route`。若各有独立任务、内容与回退，在各页给不同的 `view_key`，沿用各自的页面编号。同页筛选、错误或短确认用所在页的状态表达。 |
 | `entries[].paths[]` | 每条分支有 `when, steps, result`。第一屏来自入口的 `page_id`。只阅读可用空步骤。每步写目标 `page_id` 和其一：本页按钮 `action_id`、`back: true` 或触发自动变化的 `event`。留在同页仍可记录错误或反馈；成功回已有页用 `history: "return"`，替换当前页用 `"replace"`，通常进入新页用默认 `"push"`。另一角色用独立入口，由业务流程衔接。 |
 | `pages[].sections[]` | 按阅读顺序排列。每组有页内唯一的 `id`、说明这组用途的 `goal` 与有序的 `component_ids`。本页全部功能控件各归一组，组内第一个对象未必最重要。用 `pages[].focus` 说明该角色第一眼要认出的事实或动作。 |
 | `components[]` | 每项有 `kind, label, interaction`，如按钮 button、链接 link、标签 tab、卡片 card、字段 input、选项 choice、文字 text、图片 image。按需要扩展 kind。用原有的 `purpose, behavior, data_contract, acceptance` 说明含义、数据来源、条件与验收。装饰样式由 Design 独立处理。相同行项或选项集合用可重复模板表达。 |
 | `interaction` | `display` 是展示，`input` 是采集或选择，`action` 是带人去一个地方或触发办理。输入写 `required_when, validation`，选择再写 `options`（枚举或来源、选择数量、默认值、失效规则）。输入型控件可绑定即时动作。可操作控件在每个使用它的页面绑定本页的动作；纯展示项没有自己的动作。 |
-| `actions[]` 与 `journeys[]` | 沿用动作的执行者、前提、成功结果、失败和恢复，跨页写目的地。把条件分支和数据影响写在所属规则、动作与数据说明，跨角色时写谁接手、什么仍有效。流程记录实际完成标志及异常恢复。静态文本和只读页面按其用途验收。 |
+| `actions[]` 与 `journeys[]` | 写执行者、前提、成功结果、失败、恢复与跨页目的地。以 `operation_id` 标识实际执行的业务写操作。同一端及角色只声明一次，行级控件用一个模板。流程在同一端及角色中使用一个标签栈。跨角色按可查的业务记录衔接，分别写各自的入口、结果和恢复。 |
 
 本例中，预约详情先显示生效时间和办理状态，再给出“申请改期”入口。选时页按日期展示档期，提交后回原详情看结果。纯阅读公告可以只有一个只读组。页数、组数、卡片数、列数和标签数量随任务而定。运行 `py -X utf8 scripts/ui_requirements.py examples/booking-change.ui.json --module M-requests` 查看改期受理的功能、字段、页面内容组、控件、动作与跨人流程。模块视图直接读取同一合同。
+
+例如收货一级页 `P-receipts` 的 `tab_root_id` 是自身，收货详情、扫码确认和结果都引用它。库存有自己的 `P-stock`。收货时查某条库存资料用本栈的只读详情或选择器，带着对象回当前步骤。校验会核对已声明的根、动作、路径、各角色旅程与重复操作标识。既有合同可继续按原字段读取，实际的控件、返回及恢复需用当前成品走查。
 
 ### 动作归属与业务规则
 

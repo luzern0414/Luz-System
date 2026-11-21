@@ -38,6 +38,67 @@ class OwnershipTests(unittest.TestCase):
     def structured_contract(self):
         return json.loads((Path(__file__).resolve().parents[1] / 'examples' / 'booking-change.ui.json').read_text(encoding='utf-8'))
 
+    def tab_contract(self):
+        data = self.structured_contract()
+        booking, form, staff = data['pages']
+        booking['tab_root_id'] = form['tab_root_id'] = booking['id']
+        staff['tab_root_id'] = staff['id']
+        help_page = dict(booking, id='P-help', tab_root_id='P-help', title='预约须知', route='/booking-help',
+                         goal='查看预约须知', focus='提前多久到店', primary_action=None,
+                         read_only_reason='仅查阅说明', feature_ids=['F-booking'], component_ids=['C-help'],
+                         sections=[dict(id='help', goal='说明到店要求', component_ids=['C-help'])])
+        data['pages'].append(help_page)
+        time = next(c for c in data['components'] if c['id'] == 'C-time')
+        data['components'].append(dict(time, id='C-help', label='到店时间说明', page_ids=['P-help']))
+        data['entries'].append(dict(id='E-help', label='须知', source='顾客端一级标签', context='当前门店',
+                                    page_id='P-help', return_to='须知标签根页',
+                                    paths=[dict(when='打开须知', steps=[], result='读到到店要求')]))
+        data['journeys'].append(dict(id='J-help', module_ids=['M-booking'], page_ids=['P-help'], action_ids=[],
+                                      expected='读到到店要求', recovery='回须知根页'))
+        return data
+
+    def test_tab_roots_keep_role_handoffs_and_are_visible_in_the_entry_view(self):
+        data = self.tab_contract()
+        self.assertEqual(validate(data, require_module_details=True), [])
+        booking = entry_view(data, 'E-customer-record')
+        self.assertEqual(booking['tab_root_id'], 'P-booking')
+        self.assertEqual(entry_view(data, 'E-help')['tab_root_id'], 'P-help')
+
+    def test_tab_pages_declare_their_root_and_roots_have_an_independent_entry(self):
+        data = self.tab_contract()
+        data['pages'][1].pop('tab_root_id')
+        self.assertIn('tab_root_id', '\n'.join(validate(data)))
+        data['pages'][1]['tab_root_id'] = 'P-help'
+        self.assertIn('parent_page_id crosses tab roots', '\n'.join(validate(data)))
+        data['entries'].pop()
+        self.assertIn('P-help: tab root needs an independent entry', '\n'.join(validate(data)))
+        data['pages'][1]['tab_root_id'] = 'P-request'
+        self.assertIn('tab_root_id must reference a root in the same entry_scope', '\n'.join(validate(data)))
+
+    def test_tab_switches_from_actions_events_and_journeys_are_rejected(self):
+        data = self.tab_contract()
+        next(a for a in data['actions'] if a['id'] == 'A-open')['target_page_id'] = 'P-help'
+        data['entries'][0]['paths'][0]['steps'].append({'event':'办理成功', 'page_id':'P-help'})
+        data['journeys'][0]['page_ids'].append('P-help')
+        messages = '\n'.join(validate(data))
+        self.assertIn('A-open: action crosses tab roots', messages)
+        self.assertIn('E-customer-record: path crosses tab roots', messages)
+        self.assertIn('journey spans multiple tab roots in customer', messages)
+
+    def test_an_identical_operation_has_one_execution_point_per_role(self):
+        data = self.tab_contract()
+        request = next(a for a in data['actions'] if a['id'] == 'A-request')
+        request['operation_id'] = 'submit-reschedule'
+        # Same effect exposed by a second control outside the canonical subpage.
+        data['actions'].append(dict(request, id='A-duplicate', page_id='P-booking', component_id='C-open'))
+        data['journeys'][0]['action_ids'].append('A-duplicate')
+        self.assertIn('operation submit-reschedule is already declared', '\n'.join(validate(data)))
+        # A shared identifier with a distinct role may legally target its own work queue.
+        data['actions'].pop()
+        data['journeys'][0]['action_ids'].pop()
+        next(a for a in data['actions'] if a['id'] == 'A-accept')['operation_id'] = 'submit-reschedule'
+        self.assertEqual(validate(data), [])
+
     def test_new_contract_and_legacy_review(self):
         self.assertEqual(validate(self.structured_contract(), require_page_structure=True), [])
         self.assertEqual(validate(account_contract()), [])

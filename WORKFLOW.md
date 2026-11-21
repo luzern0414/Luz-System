@@ -26,7 +26,7 @@ Project 的 `workflow = commercial-v1` 启用下表。先取本阶段的 context
 | 智能体 | 任务成功条件、允许的工具和数据、权限、失败及用户接管 | 有写操作核对确认与审计，有知识检索核对来源和访问范围 |
 | 运营系统 | 运营对象、活动规则、名单、执行结果与角色 | 有触达、权益或资金时检查同意、去重、撤回和核销 |
 
-跨系统交接记录共同对象、权威数据源、状态和责任。按已有规则卡细化；资料冲突或调研得到的新能力标明待确认。
+按[成熟系统与界面取证](references/system-design.html#research-evidence)实际阅读官方流程和真实页面图，记录角色、终端、版本和对应问题。以相关场景依次核对入口、办理、结果、异常和返回。静态观察、厂商标明的行为和自行实操分别记录。跨系统交接用共同对象、权威数据源、状态和责任衔接。资料冲突或调研得到的新能力标明待确认。
 
 ## 目录
 
@@ -91,6 +91,7 @@ py -X utf8 scripts/new_session.py --name "<名称>" --modes system --system-name
 产物 `raw/01-system/03-system-architecture.html`，带稳定的角色、功能、页面、导航、组件、动作、流程、状态和页面数据编号。小节：范围与角色权限、模块与功能、页面与路由、导航树、组件与动作、交互流程与异常、界面状态、页面数据、追溯矩阵、验收标准。
 
 - 每个页面写交互契约：`data-entry`、`data-goal`、`data-primary-action`、`data-exit`、`data-states`；动作写 `data-feedback`，破坏性动作写 `data-confirm` 或 `data-undo`；对象写 `data-lifecycle`，状态写 `data-transitions`，流程写 `data-success`。`py -X utf8 scripts/check_interaction.py "<会话>"` 对缺项、孤岛页面和重复入口报错。
+- 按[架构视图与部署](references/system-design.html#architecture-views)写系统边界、运行单元、责任数据、通信、部署和恢复。在[业务逻辑与结果](references/system-design.html#business-logic)的代表路径上复核权限、事务、事件、终点、失败与对账。
 - 用户要求的功能引用 REQ 编号；推断的功能至少引用两条调研记录，确认前保持未确认。
 - 有智能体时写“智能体运行时与底座”；有平台配置台时写对应的清单项，并读对应规则卡。
 - 有界面时同时交入口表 `entrances.json`：`py -X utf8 scripts/entrances_check.py <entrances.json> [--features features.json]`，格式见 `py -X utf8 scripts/entrances_check.py --schema`。
@@ -106,7 +107,7 @@ py -X utf8 scripts/new_session.py --name "<名称>" --modes system --system-name
 
 外观归 Luz-Design。本技能只提供已批准的页面、入口、标签栏、组件和动作，不为迁就外观增删或移动它们；要改就退回系统设计。
 
-新编功能合同按[页面结构与控件](references/handoff.md#页面结构与控件)写模块数据字典、业务规则、逐页阅读顺序、控件与流程，交视觉前运行 `py -X utf8 scripts/ui_requirements.py <合同> --require-module-details`。加 `--module <模块编号>` 可单看该模块的五项。用 `--entry <入口编号>` 对照各分支实际经过的页面数、逐页承载的内容和回程，已有合同可按原版本复核。结束将本阶段实际采用、纠正或验证的模块经验用 `experience.py note` 写回目录，并在简报注明键与适用范围。
+新编功能合同按[页面结构与控件](references/handoff.md#页面结构与控件)写模块数据字典、业务规则、逐页阅读顺序、控件与流程。含一级标签时标注每个标签内各页的 `tab_root_id`，业务链跨角色按各自入口记录。交视觉前运行 `py -X utf8 scripts/ui_requirements.py <合同> --require-module-details`。加 `--module <模块编号>` 可单看该模块的五项。用 `--entry <入口编号>` 对照各分支实际经过的页面数、内容、标签归属和回程，已有合同可按原版本复核。结束将本阶段实际采用、纠正或验证的模块经验用 `experience.py note` 写回目录，并在简报注明键与适用范围。
 
 1. `py -X utf8 scripts/add_mode.py "<会话>" visual --card admin-list --card miniprogram`，之后 `add_mode.py "<会话>" prototype`。它检查上游批准、登记阶段并存规则卡：visual 默认存 `admin-list` 和 `miniprogram`，智能体会话用 `--card agent-ui --card agent-runtime-ui`；prototype 存 `prototype` 和 `interaction`。它同时写入的 `02-visual/visual-board.html`、`03-prototype/interactive-prototype.html` 是旧会话的占位骨架，不是成品。
 2. 把界面需求写成 `luz-ui-requirements/2` 合同（[动作归属与业务规则](references/handoff.md#动作归属与业务规则)）并检查：`py -X utf8 scripts/ui_requirements.py <文件>`。Luz-Design 在自己的会话里按组件复用合同构建、审阅，并通过 `ui_package.py check`。

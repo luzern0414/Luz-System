@@ -111,7 +111,7 @@ RULE_PAGES = [
     ("hardware-design.html", "hardware", "硬件设计规范"),
 ]
 TEMPLATE_NAMES = ("brief.md", "research.md", "module-intake.html", "system-architecture.html", "system-design.html", "visual-board.html", "interactive-prototype.html", "approvals.json", "manifest.json",)
-REFERENCE_SUBDIRS = {"hardware"}
+REFERENCE_SUBDIRS = {"hardware", "handbooks"}
 # The skill keeps five folders (agents, references, scripts, experience, examples); sessions are outputs and live in OUTPUT_ROOT.
 ALLOWED_TOP_LEVEL = {".git", ".gitignore", "LICENSE", "NOTICE", "README.md", "SKILL.md", "WORKFLOW.md", "agents", "references", "scripts", "experience", "examples"}
 TITLE_SEPARATOR_RE = re.compile(r"[,，:：;；|｜/／·・、\\\-–—]")
@@ -465,8 +465,14 @@ def main(argv: list[str] | None = None) -> int:
         if item.name not in ALLOWED_TOP_LEVEL and item.name not in {"__pycache__", ".pytest_cache"}:
             errors.append(f"unexpected top-level item in the skill: {item.name} (the skill keeps only LICENSE, NOTICE, README.md, SKILL.md, WORKFLOW.md, agents, references, scripts, experience, examples)")
     for item in (ROOT / "references").iterdir() if (ROOT / "references").is_dir() else []:
-        if item.is_dir() and item.name not in REFERENCE_SUBDIRS:
+        if not item.is_dir():
+            continue
+        if item.name not in REFERENCE_SUBDIRS:
             errors.append(f"references must stay flat: {item.name}/")
+        elif item.name == "handbooks":
+            for handbook in item.iterdir():
+                if not handbook.is_file() or handbook.suffix.lower() != ".pdf":
+                    errors.append(f"handbooks/ can only contain PDF handbooks: {handbook.name}")
 
     skill = ROOT / "SKILL.md"
     if skill.is_file():
